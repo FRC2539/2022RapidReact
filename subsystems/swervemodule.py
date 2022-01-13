@@ -14,43 +14,40 @@ import math
 
 import constants
 
+from wpimath.kinematics import SwerveModuleState
+from wpimath.geometry import Rotation2d
+
 
 class SwerveModule:
     def __init__(
         self,
+        name,
         driveMotorID,
         turnMotorID,
         canCoderID,
         speedLimit,
         offset,
+        offsetBasis,
         invertedDrive=False,
-    ):  # Get the ports of the devices for a module.
-
+    ):
         """
         The class constructor.
-
-        TODO:
-        - Organize method definitions into logical order.
-        - Get the position of the motor on startup with CANCoder,
-          then, convert that to IntegratedSensor ticks, and
-          set that as the integrated sensor's current
-          position. At that point, we should be able to use
-          the TalonFX and its integrated sensor to
-          control the position.
-        - NOTE Reverse rear encoders?
         """
 
+        # Name the module (e.g. front left)
+        self.moduleName = name
+
+        # Create the drive motor of this specific module.
         self.driveMotor = WPI_TalonFX(driveMotorID)  # Declare and setup drive motor.
 
+        # Configure the drive motor of this module.
         self.driveMotor.setNeutralMode(NeutralMode.Brake)
         self.driveMotor.setSafetyEnabled(False)
         self.driveMotor.setInverted(invertedDrive)
         self.driveMotor.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
         )
-
         self.driveMotor.setSelectedSensorPosition(0)
-
         self.driveMotor.configMotionCruiseVelocity(
             constants.drivetrain.driveMotionCruiseVelocity, 0
         )
@@ -58,27 +55,43 @@ class SwerveModule:
             constants.drivetrain.driveMotionAcceleration, 0
         )
 
+        # Define the PID vairiables for the drive motor.
         self.dPk = constants.drivetrain.dPk  # P gain for the drive.
-        self.dIk = constants.drivetrain.dIk  # I gain for the drive
-        self.dDk = constants.drivetrain.dDk  # D gain for the drive
-        self.dFk = constants.drivetrain.dFFk  # Feedforward gain for the drive
-        self.dIZk = constants.drivetrain.dIZk  # Integral Zone for the drive
+        self.dIk = constants.drivetrain.dIk  # I gain for the drive.
+        self.dDk = constants.drivetrain.dDk  # D gain for the drive.
+        self.dFk = constants.drivetrain.dFFk  # Feedforward gain for the drive.
+        self.dIZk = constants.drivetrain.dIZk  # Integral Zone for the drive.
 
-        self.sdPk = constants.drivetrain.sdPk  # P gain for the drive.
-        self.sdIk = constants.drivetrain.sdIk  # I gain for the drive
-        self.sdDk = constants.drivetrain.sdDk  # D gain for the drive
-        self.sdFk = constants.drivetrain.sdFFk  # Feedforward gain for the drive
-        self.sdIZk = constants.drivetrain.sdIZk  # Integral Zone for the drive
+        self.sdPk = constants.drivetrain.sdPk  # Secondary P gain for the drive.
+        self.sdIk = constants.drivetrain.sdIk  # Secondary I gain for the drive.
+        self.sdDk = constants.drivetrain.sdDk  # Secondary D gain for the drive.
+        self.sdFk = (
+            constants.drivetrain.sdFFk
+        )  # Secondary Feedforward gain for the drive.
+        self.sdIZk = (
+            constants.drivetrain.sdIZk
+        )  # Secondary Integral Zone for the drive.
 
-        self.cancoder = CANCoder(canCoderID)  # Declare and setup the remote encoder.
+        # Declare and setup the remote encoder.
+        self.cancoder = CANCoder(canCoderID)
         self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
-        # self.cancoder.setPositionToAbsolute()
 
-        if offset is not None:
-            self.cancoder.configMagnetOffset(offset)
+        # Stores the offset for this module
+        self.offset = offset
 
-        self.turnMotor = WPI_TalonFX(turnMotorID)  # Declare and setup turn motor.
+        # Sets the magnet offset of the CANCoder. This can be determined through the Pheonix Tuner.
+        if self.offset is not None:
+            self.cancoder.configMagnetOffset(self.offset)
 
+        # Store the offset basis for zeroing the CANCoder.
+        # This is used to determine the offset in combination
+        # with the getAbsoluteWheelAngle method
+        self.offsetBasis = offsetBasis
+
+        # Declare and setup the turn motor of this module.
+        self.turnMotor = WPI_TalonFX(turnMotorID)
+
+        # Configure the turn motor of this module.
         self.turnMotor.setNeutralMode(NeutralMode.Brake)
         self.turnMotor.setSafetyEnabled(False)
 
@@ -114,14 +127,16 @@ class SwerveModule:
 
         self.wheelDiameter = (
             constants.drivetrain.wheelDiameter
-        )  # The diamter, in inches, of our driving wheels.
+        )  # The diamter, in inches, of our module wheels.
+
         self.circ = (
             self.wheelDiameter * math.pi
-        )  # The circumference of our driving wheel.
+        )  # The circumference of our module's wheel.
 
         self.driveMotorGearRatio = (
             constants.drivetrain.driveMotorGearRatio
         )  # 6.86 motor rotations per wheel rotation (on y-axis).
+
         self.turnMotorGearRatio = (
             constants.drivetrain.turnMotorGearRatio
         )  # 12.8 motor rotations per wheel rotation (on x-axis).
@@ -157,11 +172,40 @@ class SwerveModule:
         # )
         pass
 
+    def setModuleState(self, moduleState):
+        """
+        Sets the swerve module to the given swerve module state
+        Angle - angle of swerve module
+        Speed - meters per second
+        (Speeds are supposed to be in meters per second
+        Here we use them for percents)
+        """
+        self.setWheelAngle(moduleState.angle.degrees())
+        self.setWheelSpeed(moduleState.speed)
+
+    def getModuleState(self):
+        """
+        Returns the state of the swerve module as a generic
+        Swerve Module State object.
+        Angle - angle of swerve module
+        Speed - meters per second
+        """
+        return SwerveModuleState(
+            self.getWheelSpeed(),
+            Rotation2d.fromDegrees(self.getWheelAngle()),
+        )
+
     def getWheelAngle(self):
         """
         Get wheel angle relative to the robot.
         """
         return self.cancoder.getPosition()  # Returns absolute position of CANCoder.
+
+    def getAbsoluteWheelAngle(self):
+        """
+        Get the absolute angle of the wheel's CANCoder.
+        """
+        return self.cancoder.getAbsolutePosition()
 
     def setWheelAngle(self, angle):
         """
@@ -194,28 +238,23 @@ class SwerveModule:
             TalonFXControlMode.MotionMagic, angle
         )  # self.turnMotor.getSelectedSensorPosition(0) + diff)
 
-    def getWheelSpeed(self, inIPS=True):
+    def getWheelSpeed(self):
         """
         Get the drive speed of this specific module.
         """
-        if inIPS:
-            return self.ticksPerTenthToInchesPerSecond(
+        return self.inchesToMeters(
+            self.ticksPerTenthToInchesPerSecond(
                 self.driveMotor.getSelectedSensorVelocity()
             )
-        # Returns ticks per 0.1 seconds (100 mS).
-
-        return self.driveMotor.getSelectedSensorVelocity()
+        )
 
     def setWheelSpeed(self, speed):
         """
-        This will set the speed of the drive motor to a set velocity. 'speed' is given as a
-        percent, which is multiplied by 'self.speedLimit', a max speed in inches per second.
+        Sets the wheel speed to a speed given in meters per second.
         """
         self.driveMotor.set(
             TalonFXControlMode.Velocity,
-            self.inchesPerSecondToTicksPerTenth(
-                speed * self.speedLimit
-            ),  # Set half of the normal speed temporarily.
+            self.inchesPerSecondToTicksPerTenth(self.metersToInches(speed)),
         )
 
     def getWheelPercent(self):
@@ -226,7 +265,7 @@ class SwerveModule:
 
     def setWheelPercent(self, speed):
         """
-        Does just what it sounds like.
+        Does just what it sounds like. Sets a percent output to the drive motor.
         """
         self.driveMotor.set(TalonFXControlMode.PercentOutput, speed)
 
@@ -292,7 +331,7 @@ class SwerveModule:
 
     def inchesPerSecondToTicksPerTenth(self, inchesPerSecond):
         """
-        Convert a common velocity to falcon-interprettable
+        Convert a common velocity to falcon-interprettable.
         """
         return self.inchesToDriveTicks(inchesPerSecond / 10)
 
@@ -311,6 +350,18 @@ class SwerveModule:
         # Take a position, makes it a percent, and then multiplies it by the
         # total number of ticks (motor units) in one full wheel rotation.
 
+    def getDriveMotor(self):
+        """
+        Returns the drive motor of the module.
+        """
+        return self.driveMotor
+
+    def getTurnMotor(self):
+        """
+        Returns the turn motor of the module.
+        """
+        return self.turnMotor
+
     def setModuleProfile(self, profile, drive=True, turn=True):
         """
         Which PID profile to use.
@@ -322,7 +373,7 @@ class SwerveModule:
 
     def setDriveCruiseVelocity(self, slow):
         """
-        Sets the motion magic cruise control max speed for the drive motor
+        Sets the motion magic cruise control max speed for the drive motor.
         """
 
         if slow:
@@ -333,6 +384,12 @@ class SwerveModule:
             self.driveMotor.configMotionCruiseVelocity(
                 constants.drivetrain.driveMotionCruiseVelocity, 0
             )
+
+    def setVariableDriveCruiseVelocity(self, speed):
+        """
+        Sets the mm speed of the drive motors to any given speed.
+        """
+        self.driveMotor.configMotionCruiseVelocity(speed, 0)
 
     def inchesToMeters(self, num):
         """

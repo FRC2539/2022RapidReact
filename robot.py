@@ -16,6 +16,7 @@ from commands.autonomouscommandgroup import AutonomousCommandGroup
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
+from subsystems.climber import Climber as climber
 from subsystems.cougarsystem import CougarSystem
 
 import math
@@ -77,7 +78,6 @@ class KryptonBot(TimedCommandRobot):
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert("Fatal Error: %s" % error)
-
 
     @classmethod
     def subsystems(cls):
