@@ -1,10 +1,26 @@
 from .logitechdualshock import LogitechDualShock
+from .thrustmasterjoystick import ThrustmasterJoystick
 from . import logicalaxes
 
-from custom.config import Config
+from commands2 import InstantCommand
+
 
 from commands.drivetrain.drivecommand import DriveCommand
+
+from commands.drivetrain.togglefieldorientationcommand import (
+    ToggleFieldOrientationCommand,
+)
+from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
+from commands.drivetrain.setspeedcommand import SetSpeedCommand
+
+from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
+
+from commands.drivetrain.resetautostatecommand import ResetAutoStateCommand
+
 from commands.resetcommand import ResetCommand
+
+import constants
+import robot
 
 
 def init():
@@ -19,16 +35,69 @@ def init():
     """
 
     # The controller for driving the robot
-    driveController = LogitechDualShock(0)
+    driveControllerOne = ThrustmasterJoystick(0)  # The left hand controller
+    driveControllerTwo = ThrustmasterJoystick(1)  # The right hand controller
 
-    logicalaxes.driveX = driveController.LeftX
-    logicalaxes.driveY = driveController.LeftY
-    logicalaxes.driveRotate = driveController.RightX
+    logicalaxes.forward = driveControllerOne.Y
+    logicalaxes.strafe = driveControllerOne.X
 
-    driveController.Back.whenPressed(ResetCommand())
-    driveController.X.toggleWhenPressed(DriveCommand())
+    logicalaxes.rotate = driveControllerTwo.X
+
+    # driveControllerOne.RightThumb.whileHeld()
+    # driveControllerOne.LeftThumb.whileHeld()
+
+    driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
+
+    # driveControllerOne.Trigger.whenPressed()
+
+    # driveControllerTwo.LeftThumb.whileHeld()
+    # driveControllerTwo.RightThumb.whileHeld()
+
+    # driveControllerTwo.BottomThumb.whenPressed()
+
+    # driveControllerTwo.Trigger.whileHeld()
+
+    # driveControllerTwo.LeftTopLeft.whileHeld()
+    # driveControllerTwo.LeftBottomLeft.whileHeld()
+
+    # driveControllerOne.LeftTopRight.whileHeld()
+    # driveControllerOne.LeftBottomRight.whileHeld()
+    # driveControllerOne.LeftBottomLeft.whileHeld()
+    driveControllerOne.LeftTopLeft.whenPressed(ResetAutoStateCommand())
+
+    # driveControllerOne.RightTopLeft.whileHeld()
+    # driveControllerOne.RightBottomLeft.whileHeld()
+    # driveControllerOne.RightBottomRight.whileHeld()
+
+    # driveControllerOne.RightBottomLeft.whileHeld()
+    # driveControllerOne.RightBottomMiddle.whenPressed()
+    # driveControllerOne.RightBottomRight.whileHeld()
+    # driveControllerOne.RightTopRight.whenPressed(AutomatedColorControlCommand())
+
+    # driveControllerTwo.LeftBottomMiddle.whileHeld()
+    # driveControllerTwo.LeftTopMiddle.whileHeld()
+    # driveControllerTwo.LeftTopMiddle.whileHeld()
 
     # The controller for non-driving subsystems of the robot
-    componentController = LogitechDualShock(1)
+    componentController = LogitechDualShock(2)
+
+    # logicalaxes.TURRETmOVE = componentController.LeftX
 
     componentController.Back.whenPressed(ResetCommand())
+
+    # componentController.LeftTrigger.whileHeld()
+    # componentController.LeftBumper.whileHeld()
+    # componentController.RightTrigger.whileHeld()
+    # componentController.RightBumper.whileHeld()
+
+    # componentController.A.whenPressed()
+    # componentController.X.whileHeld()
+    # componentController.B.whileHeld()
+    # componentController.Y.whileHeld()
+
+    # componentController.DPadUp.whenPressed()
+    # componentController.DPadDown.whenPressed()
+    # componentController.DPadRight.whenPressed()
+    # componentController.DPadLeft.whenPressed()
+
+    # componentController.Start.toggleWhenPressed()
