@@ -1,8 +1,12 @@
+from decimal import Decimal, getcontext
+
 from ctre import (
     CANCoderConfiguration,
     AbsoluteSensorRange,
     SensorInitializationStrategy,
 )
+
+import math
 
 
 class Constants:
@@ -22,6 +26,13 @@ IDs for the CANbus, sensors, PWM, and the liking.
 
 drivetrain = Constants()
 shooter = Constants()
+limelight = Constants()
+
+# Drivtrain Cougar Course Decimal Control
+drivetrain.decimalPlaces = 36
+
+# Drivetrain Cougar Course graph data
+drivetrain.coursesToGraph = {}
 
 # Drive Velocity Control
 drivetrain.dPk = 0.0085
@@ -31,10 +42,10 @@ drivetrain.dFFk = 0.25  # 1?
 drivetrain.dIZk = 0
 
 # Drive Position Control
-drivetrain.sdPk = 0.45  # 0.1
+drivetrain.sdPk = 0.5  # 0.1
 drivetrain.sdIk = 0
 drivetrain.sdDk = 0
-drivetrain.sdFFk = 0.1
+drivetrain.sdFFk = 0.18  # 0.15
 drivetrain.sdIZk = 0
 
 # Turn Position Control
@@ -51,8 +62,10 @@ drivetrain.stDk = 0
 drivetrain.stFFk = 0
 drivetrain.stIZk = 0
 
-# The angle of the gyro.
-drivetrain.flatAngle = 0
+# PID for holonomic drive controller
+drivetrain.hPk = 2
+drivetrain.hIk = 0
+drivetrain.hDk = 0.03
 
 # Gear ratios on the drivetrain.
 drivetrain.driveMotorGearRatio = 6.86
@@ -61,7 +74,7 @@ drivetrain.turnMotorGearRatio = 12.8
 # Motion magic velocities and accelerations
 drivetrain.driveMotionAcceleration = 13500
 drivetrain.driveMotionCruiseVelocity = 18500
-drivetrain.slowDriveMotionCruiseVelocity = 11000
+drivetrain.slowDriveMotionCruiseVelocity = 2000
 
 drivetrain.turnMotionAcceleration = 1000
 drivetrain.turnMotionCruiseVelocity = 800
@@ -80,9 +93,12 @@ drivetrain.trackWidth = 23.5
 # Center of the robot to the center of a wheel in inches.
 drivetrain.robotRadius = 16.84251
 
-drivetrain.speedLimit = (
-    30.0  # in inches per second (if you have feet per second, multiply by 12!)
-)
+drivetrain.autoSpeedLimit = 2
+
+drivetrain.speedLimit = 1.3  # meters per second (50 in/s)
+drivetrain.maxAcceleration = 1.3  # m/s^2
+drivetrain.angularSpeedLimit = math.pi * 1 / 3  # Radians per second
+drivetrain.maxAngularAcceleration = math.pi * 1 / 3  # Rad/s^2
 
 drivetrain.encoderConfig = CANCoderConfiguration()
 drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360
@@ -95,10 +111,20 @@ drivetrain.mostRecentPath = []  # Updated in record auto.
 
 drivetrain.preBuild = {1: ".barrelracing.json"}
 
+drivetrain.autoPeriodicPeriod = 0.005  # Period to run auto code at a higher rate
+
 # Constants for the shooter below.
 
-shooter.kP = 1
+shooter.kP = 1.5
 shooter.kI = 0
-shooter.kD = 0.01
-shooter.kF = 0.0495
+shooter.kD = 0.1
+shooter.kF = 0.05
 shooter.IZone = 0
+
+# Constants for the limelight below.
+
+limelight.xOffset = 0
+limelight.yOffset = 3
+
+limelight.xOffsetStep = 0.5
+limelight.yOffsetStep = 0.5

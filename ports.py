@@ -1,4 +1,5 @@
 
+
 """
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -21,3 +22,5 @@ drivetrain.backLeftMotorID = 2
 drivetrain.backRightMotorID = 4
 
 climber = PortsList()
+
+limelight = PortsList()

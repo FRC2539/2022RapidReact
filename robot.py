@@ -17,6 +17,7 @@ from commands.autonomouscommandgroup import AutonomousCommandGroup
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.climber import Climber as climber
+from subsystems.limelight import Limelight as limelight
 from subsystems.cougarsystem import CougarSystem
 
 import math

@@ -20,9 +20,6 @@ printsDisabled = []
 This is a 'middle man' class. Subsystems should inherit from this class.
 print control does indeed work, please use it. The network table crap kinda
 doesn't work yet though. 
-
-TODO: 
-- Network table and subsystem integration. 
 """
 
 
@@ -109,12 +106,21 @@ class CougarSystem(SubsystemBase):
                     "Unrecognizable Data Type . . . \nShould be a: boolean, int, float, string, list of bools, \nlist of strings, list of numbers."
                 )
 
-    def get(self, valueName):
+    def makePersistent(self, key):
+        """
+        Make the given key persist even
+        when the robot is off.
+        """
+        self.table.setPersistent(key)
+
+    def get(self, valueName, defaultVal=None):
         """
         Get the value of the key with the
         given name.
         """
-        return self.table.getValue(valueName, None)  # Returns None if it doesn't exist.
+        return self.table.getValue(
+            valueName, defaultVal
+        )  # Returns None if it doesn't exist.
 
     def hasChanged(self, valueName, compareTo):
         """
@@ -140,7 +146,7 @@ class CougarSystem(SubsystemBase):
         The callable should take nothing (or use a lambda),
         and return the desired, updated value. For example, if
         you wanted RPM: "self.motor.getRPM", or
-        something of the liking.
+        something of the liking. Call this method in the constructor.
         """
 
         if not callable(call):

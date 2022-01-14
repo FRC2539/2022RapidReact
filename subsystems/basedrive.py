@@ -1,14 +1,11 @@
-from .cougarsystem import *
-
 import math
 
 from networktables import NetworkTables
-from ctre import ControlMode, NeutralMode, WPI_TalonFX, FeedbackDevice
+from ctre import ControlMode, NeutralMode, WPI_TalonSRX, FeedbackDevice
 from navx import AHRS
 
-from custom.config import Config
+from .cougarsystem import *
 import ports
-import constants
 
 
 class BaseDrive(CougarSystem):
@@ -18,7 +15,7 @@ class BaseDrive(CougarSystem):
     without knowing what type of drive system we have should be implemented here.
     """
 
-    def __init__(self, name):
+    def __init__(self, name="Drivetrain"):
         super().__init__(name)
 
         """
@@ -26,23 +23,23 @@ class BaseDrive(CougarSystem):
         since the PID loops will provide braking.
         """
         try:
-            self.motors = [
-                WPI_TalonFX(ports.drivetrain.frontLeftMotorID),
-                WPI_TalonFX(ports.drivetrain.frontRightMotorID),
-                WPI_TalonFX(ports.drivetrain.backLeftMotorID),
-                WPI_TalonFX(ports.drivetrain.backRightMotorID),
+            self.motors = [  # This actually won't be used this year.
+                WPI_TalonSRX(ports.drivetrain.frontLeftDriveID),
+                WPI_TalonSRX(ports.drivetrain.frontRightDriveID),
+                WPI_TalonSRX(ports.drivetrain.backLeftDriveID),
+                WPI_TalonSRX(ports.drivetrain.backRightDriveID),
             ]
 
         except AttributeError:
             self.motors = [
-                WPI_TalonFX(ports.drivetrain.leftMotorID),
-                WPI_TalonFX(ports.drivetrain.rightMotorID),
+                WPI_TalonSRX(ports.drivetrain.frontLeftDriveID),
+                WPI_TalonSRX(ports.drivetrain.frontRightDriveID),
             ]
 
         for motor in self.motors:
-            motor.setNeutralMode(NeutralMode.Brake)
+            motor.setNeutralMode(NeutralMode.Coast)
             motor.setSafetyEnabled(False)
-            motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
+            motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
         """
         Subclasses should configure motors correctly and populate activeMotors.
@@ -52,38 +49,42 @@ class BaseDrive(CougarSystem):
 
         """Initialize the navX MXP"""
         self.navX = AHRS.create_spi()
-        self.resetGyro()
-        self.flatAngle = constants.drivetrain.flatAngle
+
+        self.flatAngle = 0
 
         """A record of the last arguments to move()"""
         self.lastInputs = None
 
-        self.speedLimit = self.get("Normal Speed", 45)
-        self.deadband = self.get("Deadband", 0.05)
+        self.setUseEncoders()
+        self.maxSpeed = 10  # Config("DriveTrain/maxSpeed")
+        self.speedLimit = 10  # Config("DriveTrain/normalSpeed")
+        self.deadband = 0.05  # Config("DriveTrain/deadband", 0.05)
+        self.maxPercentVBus = 1
 
-        self.wheelBase = (
-            constants.drivetrain.wheelBase
-        )  # These are distances across the robot; horizontal, vertical, diagonal.
+        """Allow changing CAN Talon settings from dashboard"""
+        self._publishPID("Speed", 0)
+        self._publishPID("Position", 1)
 
-        self.trackWidth = constants.drivetrain.trackWidth
-        self.r = math.sqrt(self.wheelBase ** 2 + self.trackWidth ** 2)
+        """Return motor temperatues"""
+        # self.constantlyUpdate(
+        #     "Motor Temperatures",
+        #     lambda: [motor.getTemperature() for motor in self.motors],
+        # )
 
-        self.wheelDiameter = (
-            constants.drivetrain.wheelDiameter
-        )  # The diamter, in inches, of our driving wheels.
-        self.circ = (
-            self.wheelDiameter * math.pi
-        )  # The circumference of our driving wheel.
+        self.autoPeriodicFunctions = []
 
-        self.driveMotorGearRatio = (
-            constants.drivetrain.driveMotorGearRatio
-        )  # 6.86 motor rotations per wheel rotation (on y-axis).
-        self.turnMotorGearRatio = (
-            constants.drivetrain.turnMotorGearRatio
-        )  # 12.8 motor rotations per wheel rotation (on x-axis).
+    def addAutoPeriodicFunction(self, callback):
+        self.autoPeriodicFunctions.append(callback)
 
-        # Tell the robot to use encoders.
-        self.useEncoders = True
+    def removeAutoPeriodicFunction(self, callback):
+        self.autoPeriodicFunctions.remove(callback)
+
+    def callAutoPeriodicFunctions(self):
+        """
+        Calls all of the functions that need to be updated at a faster rate for autonomous.
+        """
+        for function in self.autoPeriodicFunctions:
+            function()
 
     def initDefaultCommand(self):
         """
@@ -102,6 +103,7 @@ class BaseDrive(CougarSystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         """
+
         if [x, y, rotate] == self.lastInputs:
             return
 
@@ -124,8 +126,22 @@ class BaseDrive(CougarSystem):
             speeds = [x / maxSpeed for x in speeds]
 
         """Use speeds to feed motor output."""
-        for motor, speed in zip(self.activeMotors, speeds):
-            motor.set(ControlMode.Velocity, speed * self.speedLimit)
+        if self.useEncoders:
+            if not any(speeds):
+                """
+                When we are trying to stop, clearing the I accumulator can
+                reduce overshooting, thereby shortening the time required to
+                come to a stop.
+                """
+                for motor in self.activeMotors:
+                    motor.setIntegralAccumulator(0, 0, 0)
+
+            for motor, speed in zip(self.activeMotors, speeds):
+                motor.set(ControlMode.Velocity, speed * self.speedLimit)
+
+        else:
+            for motor, speed in zip(self.activeMotors, speeds):
+                motor.set(ControlMode.PercentOutput, speed * self.maxPercentVBus)
 
     def setPositions(self, positions):
         """
@@ -136,11 +152,12 @@ class BaseDrive(CougarSystem):
         if not self.useEncoders:
             raise RuntimeError("Cannot set position. Encoders are disabled.")
 
-        for motor in self.motors:
-            motor.set(
-                TalonFXControlMode.MotionMagic,
-                self.getModulePosition(False) + self.inchesToTicks(distance),
-            )
+        self.stop()
+        for motor, position in zip(self.activeMotors, positions):
+            motor.selectProfileSlot(1, 0)
+            motor.configMotionCruiseVelocity(int(self.speedLimit), 0)
+            motor.configMotionAcceleration(int(self.speedLimit), 0)
+            motor.set(ControlMode.MotionMagic, position)
 
     def averageError(self):
         """Find the average distance between setpoint and current position."""
@@ -174,25 +191,19 @@ class BaseDrive(CougarSystem):
         """Set all PID values to 0 for profiles 0 and 1."""
         for motor in self.activeMotors:
             motor.configClosedLoopRamp(0, 0)
+            for profile in range(2):
+                motor.config_kP(profile, 0, 0)
+                motor.config_kI(profile, 0, 0)
+                motor.config_kD(profile, 0, 0)
+                motor.config_kF(profile, 0, 0)
+                motor.config_IntegralZone(profile, 0, 0)
 
-            # Drive PIDs here.
-            motor.config_kP(0, 0, 0)
-            motor.config_kI(0, 0, 0)
-            motor.config_kD(0, 0, 0)
-            motor.config_kF(0, 0, 0)
-            motor.config_IntegralZone(0, 0, 0)
-
-            # Position control PIDs here.
-            motor.config_kP(1, 0, 0)
-            motor.config_kI(1, 0, 0)
-            motor.config_kD(1, 0, 0)
-            motor.config_kF(1, 0, 0)
-            motor.config_IntegralZone(1, 0, 0)
-
-    def resetGyro(self):
+    def resetGyro(self, angle=0):
         """Force the navX to consider the current angle to be zero degrees."""
+        self.setGyroAngle(angle)
 
-        self.setGyroAngle(0)
+    def setModuleSpeed(self, speed):
+        pass
 
     def setGyroAngle(self, angle):
         """Tweak the gyro reading."""
@@ -218,39 +229,24 @@ class BaseDrive(CougarSystem):
 
         return degrees
 
-    def inchesToTicks(self, inches):
+    def getAngleRelativeTo(self, targetAngle, currentAngle):
         """
-        Convert inches to the robot's understandable 'tick' unit.
+        Returns the anglular distance from the given target. Values will be
+        between -180 and 180, inclusive.
         """
-        wheelRotations = (
-            inches / self.circ
-        )  # Find the number of wheel rotations by dividing the distance into the circumference.
-        motorRotations = (
-            wheelRotations * self.gearRatio
-        )  # Find out how many motor rotations this number is.
-        return motorRotations * 2048  # 2048 ticks in one Falcon rotation.
+        degrees = targetAngle - currentAngle
+        while degrees > 180:
+            degrees -= 360
+        while degrees < -180:
+            degrees += 360
 
-    def ticksToInches(self, ticks):
-        """
-        Convert 'ticks', robot units, to the imperial unit, inches.
-        """
-        motorRotations = ticks / 2048
-        wheelRotations = motorRotations / self.gearRatio
-        return (
-            wheelRotations * self.circ
-        )  # Basically just worked backwards from the sister method above.
+        return degrees
 
-    def inchesPerSecondToTicksPerTenth(self, inchesPerSecond):
-        """
-        Convert a common velocity to falcon-interprettable
-        """
-        return self.inchesToDriveTicks(inchesPerSecond / 10)
+    def inchesToTicks(self, distance):
+        """Converts a distance in inches into a number of encoder ticks."""
+        rotations = distance / (math.pi * Config("DriveTrain/wheelDiameter"))
 
-    def ticksPerTenthToInchesPerSecond(self, ticksPerTenth):
-        """
-        Convert a robot velocity to a legible one.
-        """
-        return self.driveTicksToInches(ticksPerTenth * 10)
+        return int(rotations * Config("DriveTrain/ticksPerRotation", 4096))
 
     def resetTilt(self):
         self.flatAngle = self.navX.getPitch()
@@ -262,25 +258,21 @@ class BaseDrive(CougarSystem):
         """Reads acceleration from NavX MXP."""
         return self.navX.getWorldLinearAccelY()
 
-    def getSpeeds(self, inInchesPerSecond=True):
+    def getSpeeds(self):
         """Returns the speed of each active motors."""
-        if inInchesPerSecond:
-            return [
-                self.ticksPerTenthToInchesPerSecond(motor.getSelectedSensorVelocity())
-                for motor in self.activeMotors
-            ]
+        return [x.getSelectedSensorVelocity(0) for x in self.activeMotors]
 
-        # Returns ticks per 0.1 seconds (100 mS).
-        return [motor.getSelectedSensorVelocity() for motor in self.activeMotors]
-
-    def getPositions(self, inInches=True):
+    def getPositions(self):
         """Returns the position of each active motor."""
-        if inInchesPerSecond:
-            return [
-                self.ticksToInches(self.getSelectedSensorPosition(0))
-                for x in self.activeMotors
-            ]
         return [x.getSelectedSensorPosition(0) for x in self.activeMotors]
+
+    def getFrontClearance(self):
+        """Override this in drivetrain if a distance sensor is attached."""
+        raise NotImplementedError
+
+    def getRearClearance(self):
+        """Override this in drivetrain if a rear distance sensor is attached."""
+        raise NotImplementedError
 
     def setUseEncoders(self, useEncoders=True):
         """
@@ -296,7 +288,84 @@ class BaseDrive(CougarSystem):
         mode depending on if encoders are enabled.
         """
 
+        if speed <= 0:
+            raise ValueError("DriveTrain speed must be greater than 0")
+
         self.speedLimit = speed
+        if speed > self.maxSpeed:
+            self.maxSpeed = speed
+
+        """If we can't use encoders, attempt to approximate that speed."""
+        self.maxPercentVBus = speed / self.maxSpeed
+
+    def enableSimpleDriving(self):
+        """
+        Allow the robot to drive without encoders or any input from Config.
+        """
+
+        self.speedLimit = 1
+        self.maxSpeed = 1
+        self.setUseEncoders(False)
+
+    def _publishPID(self, table, profile):
+        """
+        Read the PID value from the first active CAN Talon and publish it to the
+        passed NetworkTable.
+        """
+
+        table = NetworkTables.getTable("DriveTrain/%s" % table)
+
+        talon = self.activeMotors[0]
+
+        # TODO: If CTRE ever gives us back the ability to query PID values, send
+        # them to NetworkTables here. In the meantime, we just persist the last
+        # values that were set via NetworkTables
+
+        def updatePID(table, key, value, isNew):
+            """
+            Loops over all active motors and updates the appropriate setting. To
+            avoid using a very long if structure inside the loop, we use getattr
+            to access the methods of the motor by name.
+            """
+
+            table.setPersistent(key)
+
+            if key == "RampRate":
+                for motor in self.activeMotors:
+                    motor.configClosedLoopRamp(value, 0)
+
+                return
+
+            if key == "P":
+                for motor in self.activeMotors:
+                    motor.config_kP(1, value, 0)
+
+                return
+
+            funcs = {
+                "I": "config_kI",
+                "D": "config_kD",
+                "F": "config_kF",
+                "IZone": "config_IntegralZone",
+            }
+
+            for motor in self.activeMotors:
+                getattr(motor, funcs[key])(0, value, 0)
+                getattr(motor, funcs[key])(1, value, 0)
+
+        table.addSubTableListener(updatePID, localNotify=True)
+
+    def inchesToMeters(self, num):
+        """
+        Converts translational units, from inches to meters.
+        """
+        return num * 0.0254
+
+    def metersToInches(self, num):
+        """
+        Convers translational units, from meters to inches.
+        """
+        return num * 39.3701
 
     def _configureMotors(self):
         """

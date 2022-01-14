@@ -1,14 +1,15 @@
 from commands2 import CommandBase
 
+import constants
 import robot
 from controller import logicalaxes
-from custom.config import Config, MissingConfigError
 from custom import driverhud
 import math
 
-logicalaxes.registerAxis("driveX")
-logicalaxes.registerAxis("driveY")
-logicalaxes.registerAxis("driveRotate")
+
+logicalaxes.registerAxis("forward")
+logicalaxes.registerAxis("strafe")
+logicalaxes.registerAxis("rotate")
 
 
 class DriveCommand(CommandBase):
@@ -17,34 +18,35 @@ class DriveCommand(CommandBase):
 
         self.addRequirements(robot.drivetrain)
 
+        robot.drivetrain.resetGyro()
+        robot.drivetrain.resetOdometry()
+
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
+        robot.drivetrain.resetEncoders()
 
-        self.lastY = None
+        self.lastX = None
         self.slowed = False
 
     def execute(self):
         # Avoid quick changes in direction
-        y = logicalaxes.driveY.get()
-        if self.lastY is None:
-            self.lastY = y
+        x = logicalaxes.forward.get()
+        if self.lastX is None:
+            self.lastX = x
         else:
             cooldown = 0.05
-            self.lastY -= math.copysign(cooldown, self.lastY)
+            self.lastX -= math.copysign(cooldown, self.lastX)
 
             # If the sign has changed, don't move
-            if self.lastY * y < 0:
-                y = 0
+            if self.lastX * x < 0:
+                x = 0
 
-            if abs(y) > abs(self.lastY):
-                self.lastY = y
+            if abs(x) > abs(self.lastX):
+                self.lastX = x
 
-        tilt = robot.drivetrain.getTilt()
-        correction = tilt / 20
-        if abs(correction) < 0.2:
-            correction = 0
+        # x - forward and backward axis (these axes are relative to the field)
+        # y - side to side axis
+        # rotate - counterclockwise rotation is positive
 
-        robot.drivetrain.move(
-            logicalaxes.driveX.get(), y - correction, logicalaxes.driveRotate.get()
-        )
+        robot.drivetrain.move(x, logicalaxes.strafe.get(), logicalaxes.rotate.get())

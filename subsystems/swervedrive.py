@@ -21,8 +21,6 @@ from wpilib.controller import PIDController, ProfiledPIDControllerRadians
 
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
-from wpimath.spline import QuinticHermiteSpline
-
 from controller import logicalaxes
 
 from .cougarsystem import *
@@ -297,6 +295,20 @@ class SwerveDrive(BaseDrive):
         Get the odometry's idea of the position
         """
         return self.swerveOdometry.getPose()
+
+    def getPoseRotation(self):
+        """
+        Get the angle of the robot from the odometry (kalman filter),
+        rather than from the gyro alone.
+        """
+        return self.getSwervePose().rotation()
+
+    def getPoseTranslation(self):
+        """
+        Get the translation of the robot from the odometry (kalman filter),
+        rather than from the encoders alone.
+        """
+        return self.getSwervePose().translation()
 
     def getChassisSpeeds(self):
         """
