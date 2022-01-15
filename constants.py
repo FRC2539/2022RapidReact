@@ -109,8 +109,6 @@ drivetrain.encoderConfig.sensorDirection = False
 
 drivetrain.mostRecentPath = []  # Updated in record auto.
 
-drivetrain.preBuild = {1: ".barrelracing.json"}
-
 drivetrain.autoPeriodicPeriod = 0.005  # Period to run auto code at a higher rate
 
 # Constants for the shooter below.
@@ -124,7 +122,7 @@ shooter.IZone = 0
 # Constants for the limelight below.
 
 limelight.xOffset = 0
-limelight.yOffset = 3
+limelight.yOffset = 0
 
 limelight.xOffsetStep = 0.5
 limelight.yOffsetStep = 0.5

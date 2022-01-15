@@ -7,6 +7,8 @@ from navx import AHRS
 from .cougarsystem import *
 import ports
 
+import constants
+
 
 class BaseDrive(CougarSystem):
     """
@@ -244,7 +246,7 @@ class BaseDrive(CougarSystem):
 
     def inchesToTicks(self, distance):
         """Converts a distance in inches into a number of encoder ticks."""
-        rotations = distance / (math.pi * Config("DriveTrain/wheelDiameter"))
+        rotations = distance / (math.pi * constants.drivetrain.wheelDiameter)
 
         return int(rotations * Config("DriveTrain/ticksPerRotation", 4096))
 

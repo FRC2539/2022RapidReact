@@ -15,7 +15,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         super().__init__()
 
         ds = DriverStation.getInstance()
-        msg = ds.getGameSpecificMessage()
+        self.msg = ds.getGameSpecificMessage()
 
         self.currentAuto = autoconfig.getAutoProgram()
         toRun = self.currentAuto
@@ -37,7 +37,4 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         pass
 
     def interrupted(self):
-        robot.intake.dontIntakeBalls()
-        robot.chamber.stop()
-        robot.conveyor.stop()
-        robot.shooter.stopShooter()
+        pass
