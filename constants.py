@@ -27,6 +27,7 @@ IDs for the CANbus, sensors, PWM, and the liking.
 drivetrain = Constants()
 shooter = Constants()
 limelight = Constants()
+climber = Constants()
 
 # Drivtrain Cougar Course Decimal Control
 drivetrain.decimalPlaces = 36
@@ -126,3 +127,9 @@ limelight.yOffset = 0
 
 limelight.xOffsetStep = 0.5
 limelight.yOffsetStep = 0.5
+
+# Constants for the climber
+
+climber.speed = 1  # 100% Speed
+climber.upperLimit = 515000
+climber.lowerLimit = 14000  # Give some wiggle room.

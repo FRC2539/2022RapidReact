@@ -1,6 +1,9 @@
 from .cougarsystem import CougarSystem
 import ports
 import math
+import constants
+from wpilib import Compressor, DoubleSolenoid
+from ctre import WPI_TalonFX, NeutralMode, FeedbackDevice
 
 
 class Climber(CougarSystem):
@@ -9,9 +12,98 @@ class Climber(CougarSystem):
     def __init__(self):
         super().__init__("Climber")
 
+        # Create the controller for the compressor
+        self.compressor = Compressor(ports.climberPneumatics.pcmID)
+        self.compressor.setClosedLoopControl(True)
+
+        # Create the controller for the solenoid
+        self.climberSolenoid = DoubleSolenoid(
+            ports.climberPneumatics.pcmID,
+            ports.climberPneumatics.forwardChannel,
+            ports.climberPneumatics.reverseChannel,
+        )
+
+        # Create the controller for the climber motor
+        self.climberMotor = WPI_TalonFX(ports.climber.motorID)
+
+        # Configure the climber motor
+        self.climberMotor.setNeutralMode(NeutralMode.Brake)
+        self.climberMotor.setSafetyEnabled(False)
+        self.climberMotor.setInverted(False)
+        self.climberMotor.configSelectedFeedbackSensor(
+            FeedbackDevice.IntegratedSensor, 0, 0
+        )
+        self.climberMotor.setSelectedSensorPosition(
+            0
+        )  # Start at zero so we don't risk over-driving downwards.
+
+        # Standard speed of the climber, up and down.
+        self.speed = constants.climber.speed
+
+        # Climber limits.
+        self.upperLimit = constants.climber.upperLimit
+        self.lowerLimit = constants.climber.lowerLimit
+
     def periodic(self):
         """
         Loops when nothing else is running in
         this subsystem. Do not call this!
         """
         self.feed()
+
+    def raiseClimber(self):
+        """
+        Raises the climber using the climber motor.
+        """
+        if not self.atUpperLimit():
+            self.climberMotor.set(self.speed)
+        else:
+            self.stopClimber()
+
+    def lowerClimber(self):
+        """
+        Lowers the climber using the climber motor.
+        """
+        if not self.atLowerLimit():
+            self.climberMotor.set(-self.speed)
+        else:
+            self.stopClimber()
+
+    def stopClimber(self):
+        """
+        Stops the climber motor.
+        """
+        self.climberMotor.stopMotor()
+
+    def atUpperLimit(self):
+        """
+        Returns true if the integrated encoder says we have
+        reached our max height limit.
+        """
+        return self.climberMotor.getSelectedSensorPosition() >= self.upperLimit
+
+    def atLowerLimit(self):
+        """
+        Returns true if the integrated encoder says we have
+        reached our lower limit (if the climber is lowered
+        all the way; ideally, we shouldn't need this).
+        """
+        return self.climberMotor.getSelectedSensorPosition() <= self.lowerLimit
+
+    def extendClimberArm(self):
+        """
+        Extends the climber arm solenoid, raising it to its vertical position.
+        """
+        self.climberSolenoid.set(DoubleSolenoid.Value.kForward)
+
+    def retractClimberArm(self):
+        """
+        Retracts the climber arm solenoid, lowering it to its angled position.
+        """
+        self.climberSolenoid.set(DoubleSolenoid.Value.kReverse)
+
+    def toggleClimberArm(self):
+        self.climberSolenoid.toggle()
+
+    def isSolenoidOff(self):
+        return self.climberSolenoid.get() == DoubleSolenoid.Value.kOff
