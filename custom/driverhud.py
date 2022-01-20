@@ -4,9 +4,10 @@ information from the dashboard and provide it to the program.
 """
 
 from wpilib import SmartDashboard, DriverStation, SendableChooser
-from wpilib.command import Scheduler
 from wpilib import DriverStation
 from networktables import NetworkTables
+
+import sys, os
 
 autonChooser = None
 
@@ -23,6 +24,25 @@ def init():
 
     if autonChooser is not None and not RobotBase.isSimulation():
         raise RuntimeError("Driver HUD has already been initialized")
+
+    # Import here to avoid circular import
+    from commands.autonomouscommandgroup import AutonomousCommandGroup
+    from commands.drivetrain.resettiltcommand import ResetTiltCommand
+    from commands.tools.configurepidcommandgroup import ConfigurePIDCommandGroup
+
+    """
+    Add commands to the autonChooser to make them available for selection by the
+    driver. It is best to choose a command that will not break anything if run
+    at the wrong time as the default command.
+    """
+    # autonChooser = SendableChooser()
+    # a = AutonomousCommandGroup()
+    # autonChooser.setDefaultOption("Autonomous", a)
+
+    # SmartDashboard.putData("Autonomous Program", autonChooser)
+
+    # showCommand(ResetTiltCommand())
+    # showCommand(ConfigurePIDCommandGroup())
 
 
 def getAutonomousProgram():
@@ -54,6 +74,18 @@ def showAlert(msg, type="Alerts"):
     messages = [x for x in messages if x]
     messages.append(msg)
     SmartDashboard.putStringArray(type, messages)
+
+
+def checkSystem():
+    p = sys.path[0]
+    cp = p
+    for c in p[::-1]:
+        if c == "\\":
+            break
+        else:
+            cp = cp[:-1]
+
+    os.system("python3 " + cp + ".clients.py")
 
 
 def showInfo(msg):

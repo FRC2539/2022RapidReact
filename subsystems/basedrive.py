@@ -1,7 +1,7 @@
 import math
 
 from networktables import NetworkTables
-from ctre import ControlMode, NeutralMode, WPI_TalonSRX, FeedbackDevice
+from ctre import ControlMode, NeutralMode, WPI_TalonFX, FeedbackDevice
 from navx import AHRS
 
 from .cougarsystem import *
@@ -26,16 +26,16 @@ class BaseDrive(CougarSystem):
         """
         try:
             self.motors = [  # This actually won't be used this year.
-                WPI_TalonSRX(ports.drivetrain.frontLeftDriveID),
-                WPI_TalonSRX(ports.drivetrain.frontRightDriveID),
-                WPI_TalonSRX(ports.drivetrain.backLeftDriveID),
-                WPI_TalonSRX(ports.drivetrain.backRightDriveID),
+                WPI_TalonFX(ports.drivetrain.frontLeftDriveID),
+                WPI_TalonFX(ports.drivetrain.frontRightDriveID),
+                WPI_TalonFX(ports.drivetrain.backLeftDriveID),
+                WPI_TalonFX(ports.drivetrain.backRightDriveID),
             ]
 
         except AttributeError:
             self.motors = [
-                WPI_TalonSRX(ports.drivetrain.frontLeftDriveID),
-                WPI_TalonSRX(ports.drivetrain.frontRightDriveID),
+                WPI_TalonFX(ports.drivetrain.frontLeftDriveID),
+                WPI_TalonFX(ports.drivetrain.frontRightDriveID),
             ]
 
         for motor in self.motors:

@@ -2,7 +2,7 @@ from .cougarsystem import CougarSystem
 import ports
 import math
 import constants
-from wpilib import Compressor, DoubleSolenoid
+from wpilib import Compressor, DoubleSolenoid, PneumaticsModuleType
 from ctre import WPI_TalonFX, NeutralMode, FeedbackDevice
 
 
@@ -12,13 +12,18 @@ class Climber(CougarSystem):
     def __init__(self):
         super().__init__("Climber")
 
+        pneumaticsModuleType = PneumaticsModuleType.CTREPCM
+
         # Create the controller for the compressor
-        self.compressor = Compressor(ports.climberPneumatics.pcmID)
+        self.compressor = Compressor(
+            ports.climberPneumatics.pcmID, pneumaticsModuleType
+        )
         self.compressor.setClosedLoopControl(True)
 
         # Create the controller for the solenoid
         self.climberSolenoid = DoubleSolenoid(
             ports.climberPneumatics.pcmID,
+            pneumaticsModuleType,
             ports.climberPneumatics.forwardChannel,
             ports.climberPneumatics.reverseChannel,
         )

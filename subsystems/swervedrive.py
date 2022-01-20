@@ -16,8 +16,8 @@ from wpimath.trajectory import (
 )
 
 
-from wpilib.controller import HolonomicDriveController
-from wpilib.controller import PIDController, ProfiledPIDControllerRadians
+from wpimath.controller import HolonomicDriveController
+from wpimath.controller import PIDController, ProfiledPIDControllerRadians
 
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 

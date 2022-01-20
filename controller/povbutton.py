@@ -1,4 +1,4 @@
-from wpilib.buttons import Button
+from commands2.button import Button
 
 
 class POVButton(Button):
