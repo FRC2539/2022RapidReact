@@ -19,6 +19,9 @@ from commands.drivetrain.resetautostatecommand import ResetAutoStateCommand
 
 from commands.resetcommand import ResetCommand
 
+from commands.intake.intakecommand import IntakeCommand
+from commands.intake.rejectcommand import RejectCommand
+
 import constants
 import robot
 
@@ -50,8 +53,8 @@ def init():
 
     # driveControllerOne.Trigger.whenPressed()
 
-    # driveControllerTwo.LeftThumb.whileHeld()
-    # driveControllerTwo.RightThumb.whileHeld()
+    driveControllerTwo.LeftThumb.whileHeld(IntakeCommand())
+    driveControllerTwo.RightThumb.whileHeld(RejectCommand())
 
     # driveControllerTwo.BottomThumb.whenPressed()
 

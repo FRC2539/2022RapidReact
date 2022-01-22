@@ -45,3 +45,7 @@ climberPneumatics.reverseChannel = 2
 
 climber = PortsList()
 climber.motorID = 12
+
+intake = PortsList()
+
+intake.motorID = 21

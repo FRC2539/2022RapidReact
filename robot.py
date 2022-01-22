@@ -17,8 +17,10 @@ from commands.autonomouscommandgroup import AutonomousCommandGroup
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 
-# from subsystems.limelight import Limelight as limelight
-from subsystems.climber import Climber as climber
+from subsystems.limelight import Limelight as limelight
+from subsystems.intake import Intake as intake
+
+# from subsystems.climber import Climber as climber
 
 
 import math
