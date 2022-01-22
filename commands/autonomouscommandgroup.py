@@ -9,8 +9,12 @@ import robot, constants
 
 from commands import autoconfig
 
+from commands.drivetrain.movecommand import MoveCommand
+
 
 class AutonomousCommandGroup(SequentialCommandGroup):
+    """Note: add a 0 at the end of the auto name to set it as default."""
+
     def __init__(self):
         super().__init__()
 
@@ -27,14 +31,8 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         eval("self." + toRun + "()")  # Runs the method
 
-    def example(self):
-        """
-        Define the function using the name of the autonomous program. It should
-        then appear on the driverstation. Put a exclamation point in front of the chosen
-        default one! If there is no default selected, the default will be the auto first
-        in alphabetical order.
-        """
-        pass
+    def moveAndTurn(self):
+        self.addCommands(MoveCommand(1))
 
     def interrupted(self):
         pass

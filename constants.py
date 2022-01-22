@@ -96,9 +96,9 @@ drivetrain.robotRadius = 16.84251
 
 drivetrain.autoSpeedLimit = 2
 
-drivetrain.speedLimit = 1.3  # meters per second (50 in/s)
+drivetrain.speedLimit = 2  # meters per second (50 in/s)
 drivetrain.maxAcceleration = 1.3  # m/s^2
-drivetrain.angularSpeedLimit = math.pi * 1 / 3  # Radians per second
+drivetrain.angularSpeedLimit = math.pi * 2 / 3  # Radians per second
 drivetrain.maxAngularAcceleration = math.pi * 1 / 3  # Rad/s^2
 
 drivetrain.encoderConfig = CANCoderConfiguration()

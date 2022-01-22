@@ -147,19 +147,19 @@ class SwerveDrive(BaseDrive):
         # Sync that value with network tables
         self.put("sendOffsets", self.sendOffsets)
 
-        # Add Drive Motor Temperatures to the dashboard debug.
-        self.constantlyUpdate(
-            "Drive Motor Temperatures",
-            lambda: [
-                module.getDriveMotor().getTemperature() for module in self.modules
-            ],
-        )
+        # # Add Drive Motor Temperatures to the dashboard debug.
+        # self.constantlyUpdate(
+        #     "Drive Motor Temperatures",
+        #     lambda: [
+        #         module.getDriveMotor().getTemperature() for module in self.modules
+        #     ],
+        # )
 
-        # Add Turn Motor Temperatures to the dashboard debug.
-        self.constantlyUpdate(
-            "Turn Motor Temperatures",
-            lambda: [module.getTurnMotor().getTemperature() for module in self.modules],
-        )
+        # # Add Turn Motor Temperatures to the dashboard debug.
+        # self.constantlyUpdate(
+        #     "Turn Motor Temperatures",
+        #     lambda: [module.getTurnMotor().getTemperature() for module in self.modules],
+        # )
 
         self.hPk = constants.drivetrain.hPk
         self.hIk = constants.drivetrain.hIk
