@@ -71,29 +71,35 @@ class Limelight(CougarSystem):
         """
         self.put(name, val)
 
+    def getLatency(self):
+        """
+        Returns the current latency of the limelight
+        """
+        return self.get("tl")
+
     def getRawY(self):
         """
-        Returns the raw x-value, correcting for the limelight rotation.
-        """
-        return self.get("tx")
-
-    def getY(self):
-        """
-        Return the x-value to correct for the limelight being rotated.
-        """
-        return self.get("tx") + constants.limelight.yOffset
-
-    def getRawX(self):
-        """
-        Returns the raw y-value, correcting for the limelight rotation.
+        Returns the raw y-value
         """
         return self.get("ty")
 
+    def getY(self):
+        """
+        Return the y-value 
+        """
+        return self.get("ty") + constants.limelight.yOffset
+
+    def getRawX(self):
+        """
+        Returns the raw x-value
+        """
+        return self.get("tx")
+
     def getX(self):
         """
-        Return the y-value to correct for the limelight being rotated.
+        Return the x-value
         """
-        return self.get("ty") + constants.limelight.xOffset
+        return self.get("tx") + constants.limelight.xOffset
 
     def getA(self):
         """
@@ -101,19 +107,37 @@ class Limelight(CougarSystem):
         """
         return self.get("ta")
 
-    def getTape(self):
+    def getWidth(self):
         """
-        Return whether or not tape is being detected by the limelight.
+        Returns the approximate width of the bounding box
+        """
+        return self.get("thor")
+
+    def getHeight(self):
+        """
+        Returns the approximate height of the bounding box
+        """
+        return self.get("tvert")
+
+    def isVisionTargetDetected(self):
+        """
+        Returns whether or not tape is being detected by the limelight.
         """
         return self.get("tv") == 1
 
-    def takeSnapShot(self):
+    def takeSnapshots(self):
         """
-        Have the limelight take a snapshot.
+        Have the limelight take snapshots.
         These can be viewed by connecting to the limelight
         with a USB cable.
         """
         self.put("snapshot", 1)
+
+    def stopTakingSnapshots(self):
+        """
+        Stops the limelight from continuing to take snapshots.
+        """
+        self.put("snapshot", 0)
 
     def updateYOffset(self):
         """
@@ -139,9 +163,24 @@ class Limelight(CougarSystem):
         """
         self.put("xOffsetStep", constants.limelight.xOffsetStep)
 
+    def calculateDistance(self):
+        """
+        Calculates the approximate distance to the target.
+        
+        Notes:
+        This algorithm only works with a statically mounted limelight.
+        The limelight constants must be correct (limelight height, angle, target height).
+        """
+
+        totalAngle = constants.limelight.limelightAngle + math.radians(self.getY())
+
+        return constants.limelight.heightOffset / math.tan(totalAngle)
+
     def isAimed(self):
         """
         Returns true if the limelight is on target.
+
+        Note: Best used when the limelight moves with a shooter or mechanism.
         """
         return (
             abs(self.getY()) < self.aimedDeadband

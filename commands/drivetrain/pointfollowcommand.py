@@ -21,7 +21,7 @@ class PointFollowCommand(CommandBase):
 
     # TODO: currently overshooting, try decreasing speed and adding more hidden points
 
-    def __init__(self, poses, matchHeading=False):
+    def __init__(self, poses, linearVelocity=None, matchHeading=False):
         super().__init__()
 
         # Store the given points
@@ -37,9 +37,6 @@ class PointFollowCommand(CommandBase):
         # Set a tolerance of 5 cm, and 5 degrees
         self.tolerance = Pose2d(Translation2d(0.05, 0.05), Rotation2d.fromDegrees(5))
 
-        # Create static chassis speeds (for stopping at the end)
-        self.staticSpeeds = ChassisSpeeds(0, 0, 0)
-
         # Create a location to store the starting pose of the robot
         self.initialPose = Pose2d()
 
@@ -48,7 +45,7 @@ class PointFollowCommand(CommandBase):
         self.angleRef = Rotation2d()
 
         # Set the desired linear velocity for the auto
-        self.linearVelocity = constants.drivetrain.speedLimit
+        self.linearVelocity = linearVelocity if linearVelocity is not None else constants.drivetrain.speedLimit 
 
         # Create a variable to track the current desired pose
         self.currentPose = 0
@@ -91,7 +88,7 @@ class PointFollowCommand(CommandBase):
 
     def end(self, interrupted):
         # Stop the robot
-        robot.drivetrain.setChassisSpeeds(self.staticSpeeds)
+        robot.drivetrain.stop()
 
     def getRobotPose(self):
         return robot.drivetrain.getSwervePose()

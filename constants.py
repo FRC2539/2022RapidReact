@@ -125,8 +125,15 @@ shooter.IZone = 0
 limelight.xOffset = 0
 limelight.yOffset = 0
 
-limelight.xOffsetStep = 0.5
-limelight.yOffsetStep = 0.5
+limelight.xOffsetStep = 0
+limelight.yOffsetStep = 0
+
+limelight.targetHeight = 2.62 # in meters (bottom of tape is 2.58, top is 2.64)
+limelight.limelightHeight = 0.635 # meters (height of limelight camera from the ground)
+limelight.heightOffset = limelight.targetHeight - limelight.limelightHeight
+
+limelight.limelightAngle = math.radians(10) # 10 degrees (angle in radians)
+
 
 # Constants for the climber
 

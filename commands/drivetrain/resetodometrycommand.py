@@ -10,4 +10,5 @@ class ResetOdometryCommand(InstantCommand):
         self.addRequirements(robot.drivetrain)
 
     def initialize(self):
+        robot.drivetrain.resetEncoders()
         robot.drivetrain.resetOdometry()
