@@ -122,6 +122,7 @@ class SwerveDrive(BaseDrive):
             self.addOrchestraInstrument(module.getDriveMotor())
             self.addOrchestraInstrument(module.getTurnMotor())
 
+        # TODO switch to pose estimator
         self.swerveOdometry = SwerveDrive4Odometry(
             self.swerveKinematics,
             -self.navX.getRotation2d(),  # Flip the angle to match the orientation of odometry
@@ -147,36 +148,28 @@ class SwerveDrive(BaseDrive):
         # Sync that value with network tables
         self.put("sendOffsets", self.sendOffsets)
 
-        # # Add Drive Motor Temperatures to the dashboard debug.
-        # self.constantlyUpdate(
-        #     "Drive Motor Temperatures",
-        #     lambda: [
-        #         module.getDriveMotor().getTemperature() for module in self.modules
-        #     ],
-        # )
-
-        # # Add Turn Motor Temperatures to the dashboard debug.
-        # self.constantlyUpdate(
-        #     "Turn Motor Temperatures",
-        #     lambda: [module.getTurnMotor().getTemperature() for module in self.modules],
-        # )
-
         self.hPk = constants.drivetrain.hPk
         self.hIk = constants.drivetrain.hIk
         self.hDk = constants.drivetrain.hDk
 
-        self.driveController = HolonomicDriveController(
-            PIDController(self.hPk, self.hIk, self.hDk),
-            PIDController(self.hPk, self.hIk, self.hDk),
-            ProfiledPIDControllerRadians(
-                self.hPk,
-                self.hIk,
-                self.hDk,
-                TrapezoidProfileRadians.Constraints(
-                    constants.drivetrain.angularSpeedLimit,
-                    constants.drivetrain.maxAngularAcceleration,
-                ),
+        xController = PIDController(self.hPk, self.hIk, self.hDk)
+        yController = PIDController(self.hPk, self.hIk, self.hDk)
+
+        thetaController = ProfiledPIDControllerRadians(
+            self.hPk,
+            self.hIk,
+            self.hDk,
+            TrapezoidProfileRadians.Constraints(
+                constants.drivetrain.angularSpeedLimit,
+                constants.drivetrain.maxAngularAcceleration,
             ),
+        )
+        thetaController.enableContinuousInput(-math.pi, math.pi)
+
+        self.driveController = HolonomicDriveController(
+            xController,
+            yController,
+            thetaController,
         )
 
         self.trajectoryConfig = TrajectoryConfig(
@@ -185,22 +178,13 @@ class SwerveDrive(BaseDrive):
 
         self.trajectoryConfig.setKinematics(self.swerveKinematics)
 
-        # self.trajectory = TrajectoryGenerator.generateTrajectory(
-        # Pose2d(0, 0, Rotation2d(0)),
-        # [
-        # Translation2d(1, -1),
-        # ],
-        # Pose2d(2, 0, Rotation2d(0)),
-        # self.trajectoryConfig,
-        # )
-
         self.trajectory = TrajectoryGenerator.generateTrajectory(
-            [
-                Pose2d(0, 0, Rotation2d(0)),
-                Pose2d(0, -2, Rotation2d.fromDegrees(0)),
-                Pose2d(10, -2, Rotation2d.fromDegrees(0)),
-                Pose2d(2, 0, Rotation2d.fromDegrees(0)),
+            Pose2d(0, 0, Rotation2d(0)),
+            [   
+                Translation2d(1, 0),
+                Translation2d(1, -1),
             ],
+            Pose2d(2, -1, Rotation2d.fromDegrees(180))
             self.trajectoryConfig,
         )
 
