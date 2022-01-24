@@ -19,7 +19,7 @@ class DriveCommand(CommandBase):
         self.addRequirements(robot.drivetrain)
 
         robot.drivetrain.resetGyro()
-        robot.drivetrain.resetOdometry()
+        robot.drivetrain.resetPoseEstimate()
 
     def initialize(self):
         robot.drivetrain.stop()
