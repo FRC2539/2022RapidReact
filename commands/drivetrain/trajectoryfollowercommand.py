@@ -39,9 +39,6 @@ class TrajectoryFollowerCommand(CommandBase):
         self.timer.start()
 
     def execute(self):
-        # Update the pose estimator
-        robot.drivetrain.updateOdometry()
-
         # Get the current estimated robot pose
         currentPose = robot.drivetrain.getSwervePose()
 

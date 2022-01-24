@@ -3,11 +3,12 @@ from decimal import Decimal, getcontext
 import math
 
 from wpimath.kinematics import (
-    SwerveDrive4Odometry,
     SwerveDrive4Kinematics,
     SwerveModuleState,
     ChassisSpeeds,
 )
+
+from wpimath.estimator import SwerveDrive4PoseEstimator
 
 from wpimath.trajectory import (
     TrajectoryGenerator,
@@ -15,6 +16,7 @@ from wpimath.trajectory import (
     TrapezoidProfileRadians,
 )
 
+from wpilib import Timer
 
 from wpimath.controller import HolonomicDriveController
 from wpimath.controller import PIDController, ProfiledPIDControllerRadians
@@ -122,14 +124,17 @@ class SwerveDrive(BaseDrive):
             self.addOrchestraInstrument(module.getDriveMotor())
             self.addOrchestraInstrument(module.getTurnMotor())
 
-        # TODO switch to pose estimator
-        self.swerveOdometry = SwerveDrive4Odometry(
+        self.swervePoseEstimator = SwerveDrive4PoseEstimator(
+            -self.navX.getRotation2d(),
+            Pose2d(), # Default the starting location to (0, 0) theta = 0
             self.swerveKinematics,
-            -self.navX.getRotation2d(),  # Flip the angle to match the orientation of odometry
-            Pose2d(0, 0, Rotation2d(0)),
         )
 
-        self.resetOdometry()
+        # TODO get rid of rando variables and the send offsets stuff
+        # TODO remove the need to reset the gyro to different positions 
+        # (keep auto and teleop consistent)
+
+        self.resetPoseEstimate()
         self.resetGyro()
         self.PosX = 0
         self.PosY = 0
@@ -152,6 +157,7 @@ class SwerveDrive(BaseDrive):
         self.hIk = constants.drivetrain.hIk
         self.hDk = constants.drivetrain.hDk
 
+        # TODO separate the pid values 
         xController = PIDController(self.hPk, self.hIk, self.hDk)
         yController = PIDController(self.hPk, self.hIk, self.hDk)
 
@@ -166,6 +172,7 @@ class SwerveDrive(BaseDrive):
         )
         thetaController.enableContinuousInput(-math.pi, math.pi)
 
+        # Create a drive controller for autonomous
         self.driveController = HolonomicDriveController(
             xController,
             yController,
@@ -178,6 +185,7 @@ class SwerveDrive(BaseDrive):
 
         self.trajectoryConfig.setKinematics(self.swerveKinematics)
 
+        # Create a sample trajectory
         self.trajectory = TrajectoryGenerator.generateTrajectory(
             Pose2d(0, 0, Rotation2d(0)),
             [   
@@ -196,8 +204,8 @@ class SwerveDrive(BaseDrive):
 
         self.feed()
 
-        # Update's the robot's odometry.
-        # self.updateOdometry()
+        # Update's the robot's pose estimate.
+        self.updatePoseEstimate()
 
         # Update networktables.
         self.put("wheelAngles", self.getModuleAngles())
@@ -252,15 +260,15 @@ class SwerveDrive(BaseDrive):
         while abs(self.navX.getRoll()) > 5:
             pass
 
-    def updateOdometry(self):
+    def updatePoseEstimate(self):
         """
-        Updates the WPILib odometry object
+        Updates the WPILib pose estimate object
         using the gyro and the module states.
         """
 
         states = self.getModuleStates()
 
-        self.swerveOdometry.update(
+        self.swervePoseEstimator.update(
             -self.navX.getRotation2d(),
             states[0],  # 0
             states[1],  # 1
@@ -268,28 +276,43 @@ class SwerveDrive(BaseDrive):
             states[3],  # 3
         )
 
-    def resetOdometry(self, pose=Pose2d(0, 0, Rotation2d(0))):
+    def addVisionPoseEstimate(self, pose, latency):
         """
-        Resets the odometry to a given position, typically the one used when starting a trajectory.
+        Updates the pose estimator using a pose estimate
+        coming from a vision system.
+
+        Parameters:
+            pose - a Pose2d object
+            latency - (sec) how long ago the measurement was taken (i.e. limelight latency)
         """
-        self.swerveOdometry.resetPosition(pose, -self.navX.getRotation2d())
+        # Calculate the time the image data was captured
+        timestamp = Timer.getFPGATimestamp() - latency
+
+        self.swervePoseEstimator.addVisionMeasurement(pose, timestamp)
+
+    def resetPoseEstimate(self, pose=Pose2d()):
+        """
+        Resets the pose estimate to a given position, typically the one used when starting a trajectory.
+        """
+        self.resetEncoders()
+        self.swervePoseEstimator.resetPosition(pose, -self.navX.getRotation2d())
 
     def getSwervePose(self):
         """
-        Get the odometry's idea of the position
+        Get the current pose estimate
         """
-        return self.swerveOdometry.getPose()
+        return self.swervePoseEstimator.getPose()
 
     def getPoseRotation(self):
         """
-        Get the angle of the robot from the odometry (kalman filter),
+        Get the angle of the robot from the pose estimate (kalman filter),
         rather than from the gyro alone.
         """
         return self.getSwervePose().rotation()
 
     def getPoseTranslation(self):
         """
-        Get the translation of the robot from the odometry (kalman filter),
+        Get the translation of the robot from the pose estimate (kalman filter),
         rather than from the encoders alone.
         """
         return self.getSwervePose().translation()

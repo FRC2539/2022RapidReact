@@ -127,6 +127,12 @@ shooter.IZone = 0
 
 # Constants for the limelight below.
 
+# 11 ms, the approximate time taken for a limelight to take a photo
+# Add this value to the limelight latency from Network Tables to get total latency,
+# which can be used to latency compensate a vision measurement
+# See here for more information: https://docs.limelightvision.io/en/latest/networktables_api.html
+limelight.captureLatency = 0.011 
+
 limelight.xOffset = 0
 limelight.yOffset = 0
 

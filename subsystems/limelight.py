@@ -73,9 +73,15 @@ class Limelight(CougarSystem):
 
     def getLatency(self):
         """
-        Returns the current latency of the limelight
+        Returns the current latency of the limelight (in ms)
         """
         return self.get("tl")
+
+    def getLatencySeconds(self):
+        """
+        Returns the current latency of the limelight in seconds
+        """
+        return self.getLatency() / 1000
 
     def getRawY(self):
         """

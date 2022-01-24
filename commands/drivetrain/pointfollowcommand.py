@@ -63,9 +63,6 @@ class PointFollowCommand(CommandBase):
         print(self.poses)
 
     def execute(self):
-        # Update our estimate of the position of the robot
-        robot.drivetrain.updateOdometry()
-
         # Calculate the chassis speeds (x', y', omega) to reach the desired pose
         chassisSpeeds = self.driveController.calculate(
             self.getRobotPose(), self.desiredPose, self.linearVelocity, self.angleRef

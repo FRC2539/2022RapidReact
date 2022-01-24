@@ -1,7 +1,7 @@
 from commands2 import SequentialCommandGroup
 
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
-from commands.drivetrain.resetodometrycommand import ResetOdometryCommand
+from commands.drivetrain.resetposeestimatecommand import ResetPoseEstimateCommand
 
 
 class ResetAutoStateCommand(SequentialCommandGroup):
@@ -9,5 +9,5 @@ class ResetAutoStateCommand(SequentialCommandGroup):
         super().__init__()
 
         self.addCommands(
-            ZeroGyroCommand(driveOrientation=False), ResetOdometryCommand()
+            ZeroGyroCommand(driveOrientation=False), ResetPoseEstimateCommand()
         )
