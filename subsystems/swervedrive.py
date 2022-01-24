@@ -133,6 +133,9 @@ class SwerveDrive(BaseDrive):
         # TODO get rid of rando variables and the send offsets stuff
         # TODO remove the need to reset the gyro to different positions 
         # (keep auto and teleop consistent)
+        # added the constant, just need to always reset it relative to the "offset"
+        # Basically when starting auto, grab the angle, and subtract it from "offset"
+        # Then reset the gyro to that angle
 
         self.resetPoseEstimate()
         self.resetGyro()
