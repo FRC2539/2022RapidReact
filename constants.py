@@ -117,7 +117,7 @@ drivetrain.mostRecentPath = []  # Updated in record auto.
 
 drivetrain.autoPeriodicPeriod = 0.005  # Period to run auto code at a higher rate
 
-drivetrain.gyroOffset = 180
+drivetrain.gyroOffset = 90
 
 # Constants for the shooter below.
 
@@ -133,7 +133,7 @@ shooter.IZone = 0
 # Add this value to the limelight latency from Network Tables to get total latency,
 # which can be used to latency compensate a vision measurement
 # See here for more information: https://docs.limelightvision.io/en/latest/networktables_api.html
-limelight.captureLatency = 0.011 
+limelight.captureLatency = 0.011
 
 limelight.xOffset = 0
 limelight.yOffset = 0
@@ -141,11 +141,11 @@ limelight.yOffset = 0
 limelight.xOffsetStep = 0
 limelight.yOffsetStep = 0
 
-limelight.targetHeight = 2.62 # in meters (bottom of tape is 2.58, top is 2.64)
-limelight.limelightHeight = 0.635 # meters (height of limelight camera from the ground)
+limelight.targetHeight = 2.62  # in meters (bottom of tape is 2.58, top is 2.64)
+limelight.limelightHeight = 0.635  # meters (height of limelight camera from the ground)
 limelight.heightOffset = limelight.targetHeight - limelight.limelightHeight
 
-limelight.limelightAngle = math.radians(10) # 10 degrees (angle in radians)
+limelight.limelightAngle = math.radians(10)  # 10 degrees (angle in radians)
 
 
 # Constants for the climber

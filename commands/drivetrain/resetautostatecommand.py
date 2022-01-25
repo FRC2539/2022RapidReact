@@ -5,9 +5,7 @@ from commands.drivetrain.resetposeestimatecommand import ResetPoseEstimateComman
 
 
 class ResetAutoStateCommand(SequentialCommandGroup):
-    def __init__(self):
+    def __init__(self, angle=0):
         super().__init__()
 
-        self.addCommands(
-            ZeroGyroCommand(driveOrientation=False), ResetPoseEstimateCommand()
-        )
+        self.addCommands(ZeroGyroCommand(angle), ResetPoseEstimateCommand())

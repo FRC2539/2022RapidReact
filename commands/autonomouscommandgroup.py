@@ -10,6 +10,7 @@ import robot, constants
 from commands import autoconfig
 
 from commands.drivetrain.movecommand import MoveCommand
+from commands.drivetrain.resetautostatecommand import ResetAutoStateCommand
 
 
 class AutonomousCommandGroup(SequentialCommandGroup):
@@ -32,7 +33,10 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         eval("self." + toRun + "()")  # Runs the method
 
     def moveAndTurn(self):
-        self.addCommands(MoveCommand(1))
+        self.addCommands(
+            # ResetAutoStateCommand(0),
+            MoveCommand(1),
+        )
 
     def interrupted(self):
         pass

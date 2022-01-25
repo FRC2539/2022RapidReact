@@ -50,3 +50,5 @@ class DriveCommand(CommandBase):
         # rotate - counterclockwise rotation is positive
 
         robot.drivetrain.move(x, logicalaxes.strafe.get(), logicalaxes.rotate.get())
+
+        print(robot.drivetrain.getSwervePose())

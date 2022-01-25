@@ -125,20 +125,24 @@ class SwerveDrive(BaseDrive):
             self.addOrchestraInstrument(module.getTurnMotor())
 
         self.swervePoseEstimator = SwerveDrive4PoseEstimator(
-            -self.navX.getRotation2d(),
-            Pose2d(), # Default the starting location to (0, 0) theta = 0
+            self.getRotationForPoseEstimator(),
+            Pose2d(),  # Default the starting location to (0, 0) theta = 0
             self.swerveKinematics,
+            [0, 0, 0],
+            [0],
+            [0, 0, 0],
+            nominalDt=0.02,
         )
 
         # TODO get rid of rando variables and the send offsets stuff
-        # TODO remove the need to reset the gyro to different positions 
+        # TODO remove the need to reset the gyro to different positions
         # (keep auto and teleop consistent)
         # added the constant, just need to always reset it relative to the "offset"
         # Basically when starting auto, grab the angle, and subtract it from "offset"
         # Then reset the gyro to that angle
 
-        self.resetPoseEstimate()
         self.resetGyro()
+        self.resetPoseEstimate()
         self.PosX = 0
         self.PosY = 0
         self.LastPositions = self.getPositions()
@@ -160,7 +164,7 @@ class SwerveDrive(BaseDrive):
         self.hIk = constants.drivetrain.hIk
         self.hDk = constants.drivetrain.hDk
 
-        # TODO separate the pid values 
+        # TODO separate the pid values
         xController = PIDController(self.hPk, self.hIk, self.hDk)
         yController = PIDController(self.hPk, self.hIk, self.hDk)
 
@@ -191,11 +195,11 @@ class SwerveDrive(BaseDrive):
         # Create a sample trajectory
         self.trajectory = TrajectoryGenerator.generateTrajectory(
             Pose2d(0, 0, Rotation2d(0)),
-            [   
+            [
                 Translation2d(1, 0),
                 Translation2d(1, -1),
             ],
-            Pose2d(2, -1, Rotation2d.fromDegrees(180))
+            Pose2d(2, -1, Rotation2d.fromDegrees(180)),
             self.trajectoryConfig,
         )
 
@@ -272,12 +276,19 @@ class SwerveDrive(BaseDrive):
         states = self.getModuleStates()
 
         self.swervePoseEstimator.update(
-            -self.navX.getRotation2d(),
+            self.getRotationForPoseEstimator(),
             states[0],  # 0
             states[1],  # 1
             states[2],  # 2
             states[3],  # 3
         )
+
+    def getRotationForPoseEstimator(self):
+        """
+        Flips the measurement from the navX 180 degrees.
+        This is necessary for pose estimation.
+        """
+        return Rotation2d(self.navX.getRotation2d().radians() * -1)
 
     def addVisionPoseEstimate(self, pose, latency):
         """
@@ -298,13 +309,13 @@ class SwerveDrive(BaseDrive):
         Resets the pose estimate to a given position, typically the one used when starting a trajectory.
         """
         self.resetEncoders()
-        self.swervePoseEstimator.resetPosition(pose, -self.navX.getRotation2d())
+        self.swervePoseEstimator.resetPosition(pose, self.getRotationForPoseEstimator())
 
     def getSwervePose(self):
         """
         Get the current pose estimate
         """
-        return self.swervePoseEstimator.getPose()
+        return self.swervePoseEstimator.getEstimatedPosition()
 
     def getPoseRotation(self):
         """

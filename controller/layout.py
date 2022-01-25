@@ -65,8 +65,8 @@ def init():
 
     # driveControllerOne.LeftTopRight.whileHeld()
     # driveControllerOne.LeftBottomRight.whileHeld()
-    # driveControllerOne.LeftBottomLeft.whileHeld()
-    driveControllerOne.LeftTopLeft.whenPressed(ResetAutoStateCommand())
+    # driveControllerOne.LeftTopLeft.whileHeld()
+    driveControllerOne.LeftBottomLeft.whenPressed(ResetAutoStateCommand())
 
     # driveControllerOne.RightTopLeft.whileHeld()
     # driveControllerOne.RightBottomLeft.whileHeld()
