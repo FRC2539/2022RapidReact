@@ -9,6 +9,8 @@ import ports
 
 import constants
 
+from wpimath.geometry import Rotation2d
+
 
 class BaseDrive(CougarSystem):
     """
@@ -212,6 +214,18 @@ class BaseDrive(CougarSystem):
 
         self.navX.reset()
         self.navX.setAngleAdjustment(angle)
+
+    def getYaw(self):
+        """Get the current yaw measurement."""
+        return self.navX.getYaw()
+
+    def getYawRotation(self):
+        """Get the current yaw as a Rotation2d"""
+        return Rotation2d.fromDegrees(self.getYaw())
+
+    def resetYaw(self):
+        """Reset the current yaw measurement to 0."""
+        self.navX.zeroYaw()
 
     def getAngle(self):
         """Current gyro reading"""

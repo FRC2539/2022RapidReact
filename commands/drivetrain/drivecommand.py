@@ -18,13 +18,13 @@ class DriveCommand(CommandBase):
 
         self.addRequirements(robot.drivetrain)
 
-        robot.drivetrain.resetGyro()
-        robot.drivetrain.resetPoseEstimate()
+        # robot.drivetrain.resetGyro()
+        # robot.drivetrain.resetPoseEstimate()
 
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
-        robot.drivetrain.resetEncoders()
+        # robot.drivetrain.resetEncoders()
 
         self.lastX = None
         self.slowed = False
@@ -50,5 +50,9 @@ class DriveCommand(CommandBase):
         # rotate - counterclockwise rotation is positive
 
         robot.drivetrain.move(x, logicalaxes.strafe.get(), logicalaxes.rotate.get())
+
+        # print(
+        #     f"Yaw: {robot.drivetrain.getYaw()} | Angle: {robot.drivetrain.getAngle()}"
+        # )
 
         print(robot.drivetrain.getSwervePose())

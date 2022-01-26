@@ -143,6 +143,7 @@ class SwerveDrive(BaseDrive):
 
         self.resetGyro()
         self.resetPoseEstimate()
+
         self.PosX = 0
         self.PosY = 0
         self.LastPositions = self.getPositions()
