@@ -117,7 +117,7 @@ drivetrain.mostRecentPath = []  # Updated in record auto.
 
 drivetrain.autoPeriodicPeriod = 0.005  # Period to run auto code at a higher rate
 
-drivetrain.gyroOffset = 180
+drivetrain.gyroOffset = 0
 
 # Constants for the shooter below.
 

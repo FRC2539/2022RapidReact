@@ -17,5 +17,6 @@ class ResetCommand(InstantCommand):
         """Require all subsystems to reset."""
         self.addRequirements(robot.drivetrain)
         self.addRequirements(robot.intake)
+        # self.addRequirements(robot.shooter)
         # self.addRequirements(robot.climber)
         self.addRequirements(robot.limelight)
