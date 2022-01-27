@@ -16,14 +16,14 @@ class MoveCommand(PointFollowCommand):
         hiddenPoints - the precision of the path (more points -> more precision)
     """
 
-    def __init__(self, x, y=0, angle=0, linearVelocity=None, hiddenPoints=1):
+    def __init__(self, x, y=0, angle=0, linearVelocity=None, hiddenPoints=2):
         points = [Pose2d()]
 
         # Generate points along the straight line
         for i in range(hiddenPoints):
             # Calculate the next position along the line
             # Ex: 2 hidden points, _x = (1/3, then 2/3) * x
-            pathPercentage = ((i + 1) / (hiddenPoints + 1))
+            pathPercentage = (i + 1) / (hiddenPoints + 1)
             _x = x * pathPercentage
             _y = y * pathPercentage
 

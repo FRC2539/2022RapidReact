@@ -45,7 +45,11 @@ class PointFollowCommand(CommandBase):
         self.angleRef = Rotation2d()
 
         # Set the desired linear velocity for the auto
-        self.linearVelocity = linearVelocity if linearVelocity is not None else constants.drivetrain.speedLimit 
+        self.linearVelocity = (
+            linearVelocity
+            if linearVelocity is not None
+            else constants.drivetrain.speedLimit
+        )
 
         # Create a variable to track the current desired pose
         self.currentPose = 0

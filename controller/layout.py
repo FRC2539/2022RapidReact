@@ -25,9 +25,6 @@ from commands.intake.rejectcommand import RejectCommand
 import constants
 import robot
 
-# Imports for testing
-from wpimath.geometry import Pose2d, Translation2d, Rotation2d
-
 
 def init():
     """
@@ -59,11 +56,7 @@ def init():
     driveControllerTwo.LeftThumb.whileHeld(IntakeCommand())
     driveControllerTwo.RightThumb.whileHeld(RejectCommand())
 
-    driveControllerTwo.BottomThumb.whenPressed(
-        ResetAutoStateCommand(
-            initialPose=Pose2d(Translation2d(0, 0), Rotation2d.fromDegrees(315))
-        )
-    )
+    # driveControllerTwo.BottomThumb.whenPressed()
 
     # driveControllerTwo.Trigger.whileHeld()
 

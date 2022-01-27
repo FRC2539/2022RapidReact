@@ -23,4 +23,4 @@ class TurnCommand(PointFollowCommand):
         # Add the final point to the path
         points.append(Pose2d(Translation2d(0, 0), Rotation2d.fromDegrees(degrees)))
 
-        super().__init__(points)
+        super().__init__(points, matchHeading=True)

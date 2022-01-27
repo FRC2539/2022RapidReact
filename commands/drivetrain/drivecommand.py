@@ -51,6 +51,7 @@ class DriveCommand(CommandBase):
 
         robot.drivetrain.move(x, logicalaxes.strafe.get(), logicalaxes.rotate.get())
 
-        print(f"Angle: {robot.drivetrain.getAngle()}")
+        # Prints for debugging
+        # print(f"Angle: {robot.drivetrain.getAngle()}")
 
-        print(robot.drivetrain.getSwervePose())
+        # print(robot.drivetrain.getSwervePose())
