@@ -67,7 +67,11 @@ class CougarSystem(SubsystemBase):
         self.tableName = subsystemName
         self.table = NetworkTables.getTable(self.tableName)
 
+        # Store the keys to constantly update
         self.updateThese = {}
+
+        # Store the keys to update locally from networktables values
+        self.bindThese = {}
 
         # Need to re-write the nt system.
 
@@ -139,6 +143,29 @@ class CougarSystem(SubsystemBase):
         """
         self.table.delete(valueName)
 
+    def bindVariable(self, variableName, networkTableKey, defaultValue):
+        """
+        Creates a property, pushes it to network tables,
+        and updates it when it is changes.
+        """
+
+        # Create a property of the subsystem with the default value
+        setattr(self, variableName, defaultValue)
+
+        # Push the value to networktables
+        self.put(networkTableKey, defaultValue)
+
+        # Store the values necessary to update the variable from networktables
+        self.bindThese[variableName] = networkTableKey
+
+    def updateBoundVariable(self, variableName):
+        """
+        Gets the value of the bound variable from network tables
+        and updates it locally.
+        """
+
+        setattr(self, variableName, self.get(self.bindThese[variableName]))
+
     def constantlyUpdate(self, valueName, call):
         """
         Constantly updates this networktable value so you
@@ -186,8 +213,14 @@ class CougarSystem(SubsystemBase):
         Do not call this yourself (unless it's in the periodic of
         course).
         """
+
+        # Update constantly updating values
         for key, value in self.updateThese.items():
             self.put(key, value())
+
+        # Update local linked variables
+        for variableName in self.bindThese.keys():
+            self.updateBoundVariable(variableName)
 
     def addOrchestraInstrument(self, motor):
         """

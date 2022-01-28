@@ -38,11 +38,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def moveAndTurn(self):
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
-            MoveCommand(1, linearVelocity=0.5),
+            MoveCommand(1, linearVelocity=0.5, matchHeading=False),
             # TurnCommand(90),
         )
 
-    def trajectory(self):
+    def trajectory0(self):
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
             TrajectoryFollowerCommand(robot.drivetrain.trajectory),

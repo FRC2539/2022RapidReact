@@ -170,9 +170,9 @@ class SwerveDrive(BaseDrive):
         yController = PIDController(self.hPk, self.hIk, self.hDk)
 
         thetaController = ProfiledPIDControllerRadians(
-            self.hPk,
-            self.hIk,
-            self.hDk,
+            constants.drivetrain.htPk,
+            constants.drivetrain.htIk,
+            constants.drivetrain.htDk,
             TrapezoidProfileRadians.Constraints(
                 constants.drivetrain.angularSpeedLimit,
                 constants.drivetrain.maxAngularAcceleration,
@@ -200,7 +200,7 @@ class SwerveDrive(BaseDrive):
                 Translation2d(-1, 0),
                 Translation2d(-1, 1),
             ],
-            Pose2d(-2, 1, Rotation2d.fromDegrees(180)),
+            Pose2d(-2, 1, Rotation2d(0)),
             self.trajectoryConfig,
         )
 
@@ -239,6 +239,13 @@ class SwerveDrive(BaseDrive):
         # if that has been indicated in the dashboard
         if self.sendOffsets:
             self.put("correctedOffsets", self.getCorrectedModuleOffsets())
+
+    def debugPrints(self):
+        print("-----------------")
+        print(f"Angle: {self.getAngle()}")
+        print("Swerve Pose:")
+        print(self.getSwervePose())
+        print("-----------------")
 
     def updateSendOffsetsState(self):
         self.sendOffsets = self.get("sendOffsets")

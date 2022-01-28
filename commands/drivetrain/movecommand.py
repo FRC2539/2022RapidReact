@@ -16,7 +16,9 @@ class MoveCommand(PointFollowCommand):
         hiddenPoints - the precision of the path (more points -> more precision)
     """
 
-    def __init__(self, x, y=0, angle=0, linearVelocity=None, hiddenPoints=2):
+    def __init__(
+        self, x, y=0, angle=0, linearVelocity=None, hiddenPoints=2, matchHeading=True
+    ):
         points = [Pose2d()]
 
         # Generate points along the straight line
@@ -33,4 +35,6 @@ class MoveCommand(PointFollowCommand):
         # Add the final point to the path
         points.append(Pose2d(Translation2d(x, y), Rotation2d.fromDegrees(angle)))
 
-        super().__init__(points, linearVelocity=linearVelocity, matchHeading=True)
+        super().__init__(
+            points, linearVelocity=linearVelocity, matchHeading=matchHeading
+        )

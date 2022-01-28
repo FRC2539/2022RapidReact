@@ -66,9 +66,14 @@ drivetrain.stFFk = 0
 drivetrain.stIZk = 0
 
 # PID for holonomic drive controller
-drivetrain.hPk = 2
+drivetrain.hPk = 3  # 2
 drivetrain.hIk = 0
 drivetrain.hDk = 0.03
+
+# PID for theta controller
+drivetrain.htPk = 1
+drivetrain.htIk = 0
+drivetrain.htDk = 0
 
 # Gear ratios on the drivetrain.
 drivetrain.driveMotorGearRatio = 6.86
@@ -103,8 +108,8 @@ drivetrain.maxAcceleration = 1.3  # m/s^2
 drivetrain.angularSpeedLimit = math.pi * 2 / 3  # Radians per second
 drivetrain.maxAngularAcceleration = math.pi * 1 / 3  # Rad/s^2
 
-# Tolerance of 5 cm and 5 degrees
-drivetrain.autoTolerance = Pose2d(Translation2d(0.05, 0.05), Rotation2d.fromDegrees(5))
+# Tolerance of 10 cm and 5 degrees
+drivetrain.autoTolerance = Pose2d(Translation2d(0.1, 0.1), Rotation2d.fromDegrees(5))
 
 drivetrain.encoderConfig = CANCoderConfiguration()
 drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360

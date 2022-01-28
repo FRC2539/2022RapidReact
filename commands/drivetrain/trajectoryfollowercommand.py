@@ -24,7 +24,9 @@ class TrajectoryFollowerCommand(CommandBase):
         # Store useful data about the trajectory
         self.trajectoryDuration = self.trajectory.totalTime()
         self.trajectoryStates = trajectory.states()
-        self.desiredHeading = self.trajectoryStates[len(self.trajectoryStates) - 1].pose.rotation()
+        self.desiredHeading = self.trajectoryStates[
+            len(self.trajectoryStates) - 1
+        ].pose.rotation()
 
         self.driveController = robot.drivetrain.driveController
 
@@ -52,6 +54,8 @@ class TrajectoryFollowerCommand(CommandBase):
 
         # Have the swerve drivetrain follow the required speeds
         robot.drivetrain.setChassisSpeeds(chassisSpeeds)
+
+        # robot.drivetrain.debugPrints()
 
     def isFinished(self):
         # End the command if the duration of the trajectory has elapsed
