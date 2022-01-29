@@ -39,12 +39,12 @@ shooter.motorOneID = 14
 shooter.motorTwoID = 15
 
 climberPneumatics = PortsList()
-climberPneumatics.pcmID = 21
-climberPneumatics.forwardChannel = 1
-climberPneumatics.reverseChannel = 2
+climberPneumatics.pcmID = 13
+climberPneumatics.forwardChannel = 0
+climberPneumatics.reverseChannel = 1
 
 climber = PortsList()
-climber.motorID = 12
+climber.motorID = 11
 
 intake = PortsList()
 

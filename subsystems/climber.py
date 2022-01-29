@@ -18,7 +18,8 @@ class Climber(CougarSystem):
         self.compressor = Compressor(
             ports.climberPneumatics.pcmID, pneumaticsModuleType
         )
-        self.compressor.setClosedLoopControl(True)
+
+        self.compressor.enableDigital()
 
         # Create the controller for the solenoid
         self.climberSolenoid = DoubleSolenoid(
@@ -48,6 +49,9 @@ class Climber(CougarSystem):
         # Climber limits.
         self.upperLimit = constants.climber.upperLimit
         self.lowerLimit = constants.climber.lowerLimit
+
+        # Send the climber position to networktables
+        self.constantlyUpdate("Climber Position", self.getPosition)
 
     def periodic(self):
         """
@@ -85,7 +89,7 @@ class Climber(CougarSystem):
         Returns true if the integrated encoder says we have
         reached our max height limit.
         """
-        return self.climberMotor.getSelectedSensorPosition() >= self.upperLimit
+        return self.getPosition() >= self.upperLimit
 
     def atLowerLimit(self):
         """
@@ -93,7 +97,13 @@ class Climber(CougarSystem):
         reached our lower limit (if the climber is lowered
         all the way; ideally, we shouldn't need this).
         """
-        return self.climberMotor.getSelectedSensorPosition() <= self.lowerLimit
+        return self.getPosition() <= self.lowerLimit
+
+    def getPosition(self):
+        """
+        Gets the current position reading from the encoder.
+        """
+        return self.climberMotor.getSelectedSensorPosition()
 
     def extendClimberArm(self):
         """
@@ -109,6 +119,9 @@ class Climber(CougarSystem):
 
     def toggleClimberArm(self):
         self.climberSolenoid.toggle()
+
+    def isSolenoidForward(self):
+        return self.climberSolenoid.get() == DoubleSolenoid.Value.kForward
 
     def isSolenoidOff(self):
         return self.climberSolenoid.get() == DoubleSolenoid.Value.kOff

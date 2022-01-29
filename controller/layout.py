@@ -22,6 +22,10 @@ from commands.resetcommand import ResetCommand
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.rejectcommand import RejectCommand
 
+from commands.climber.raiseclimbercommand import RaiseClimberCommand
+from commands.climber.lowerclimbercommand import LowerClimberCommand
+from commands.climber.toggleclimbersolenoidcommand import ToggleClimberSolenoidCommand
+
 import constants
 import robot
 
@@ -46,10 +50,10 @@ def init():
 
     logicalaxes.rotate = driveControllerTwo.X
 
-    # driveControllerOne.RightThumb.whileHeld()
-    # driveControllerOne.LeftThumb.whileHeld()
+    driveControllerOne.RightThumb.whileHeld(RaiseClimberCommand())
+    driveControllerOne.LeftThumb.whileHeld(LowerClimberCommand())
 
-    driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
+    driveControllerOne.BottomThumb.whenPressed(ToggleClimberSolenoidCommand())
 
     # driveControllerOne.Trigger.whenPressed()
 

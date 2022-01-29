@@ -155,6 +155,6 @@ limelight.limelightAngle = math.radians(10)  # 10 degrees (angle in radians)
 
 # Constants for the climber
 
-climber.speed = 1  # 100% Speed
-climber.upperLimit = 515000
-climber.lowerLimit = 14000  # Give some wiggle room.
+climber.speed = 0.9  # 100% Speed
+climber.upperLimit = 408000
+climber.lowerLimit = 16000  # Give some wiggle room.

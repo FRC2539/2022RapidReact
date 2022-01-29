@@ -22,7 +22,7 @@ from subsystems.intake import Intake as intake
 
 # from subsystems.shooter import Shooter as shooter
 
-# from subsystems.climber import Climber as climber
+from subsystems.climber import Climber as climber
 
 
 import math

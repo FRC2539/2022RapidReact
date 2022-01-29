@@ -1,9 +1,9 @@
-from commands2 import CommandBase
+from commands2 import InstantCommand
 
 import robot
 
 
-class ToggleClimberSolenoidCommand(CommandBase):
+class ToggleClimberSolenoidCommand(InstantCommand):
     """
     Toggles the state of the climber solenoid (piston).
     """
@@ -17,6 +17,12 @@ class ToggleClimberSolenoidCommand(CommandBase):
         # Activate the solenoid if it is currently off,
         # or toggle the current state of the solenoid
         if robot.climber.isSolenoidOff():
-            robot.climber.extendClimberArm()
+            robot.climber.retractClimberArm()
         else:
-            robot.climber.toggleClimberArm()
+            self.toggleSolenoid()
+
+    def toggleSolenoid(self):
+        if robot.climber.isSolenoidForward():
+            robot.climber.retractClimberArm()
+        else:
+            robot.climber.extendClimberArm()
