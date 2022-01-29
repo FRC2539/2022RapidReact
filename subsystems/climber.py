@@ -99,6 +99,24 @@ class Climber(CougarSystem):
         """
         return self.getPosition() <= self.lowerLimit
 
+    def abovePosition(self, position):
+        """
+        Determines if the climber is above the target position.
+        """
+        return self.getPosition() >= position
+
+    def belowPosition(self, position):
+        """
+        Determines if the climber is below the target position.
+        """
+        return self.getPosition() <= position
+
+    def isValidClimberPosition(self, position):
+        """
+        Checks if the given position is a valid climber position
+        """
+        return self.lowerLimit <= position <= self.upperLimit
+
     def getPosition(self):
         """
         Gets the current position reading from the encoder.
