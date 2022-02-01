@@ -25,6 +25,7 @@ from commands.intake.rejectcommand import RejectCommand
 from commands.climber.raiseclimbercommand import RaiseClimberCommand
 from commands.climber.lowerclimbercommand import LowerClimberCommand
 from commands.climber.toggleclimbersolenoidcommand import ToggleClimberSolenoidCommand
+from commands.climber.climbbarcommand import ClimbBarCommand
 
 import constants
 import robot
@@ -68,7 +69,7 @@ def init():
     # driveControllerTwo.LeftBottomLeft.whileHeld()
 
     # driveControllerOne.LeftTopRight.whileHeld()
-    # driveControllerOne.LeftBottomRight.whileHeld()
+    driveControllerOne.LeftBottomRight.whileHeld(ClimbBarCommand())
     # driveControllerOne.LeftTopLeft.whileHeld()
     driveControllerOne.LeftBottomLeft.whenPressed(ResetAutoStateCommand())
 
