@@ -47,5 +47,7 @@ climber = PortsList()
 climber.motorID = 11
 
 intake = PortsList()
-
 intake.motorID = 21
+
+hood = PortsList()
+hood.motorID = 25  # Not defined right now

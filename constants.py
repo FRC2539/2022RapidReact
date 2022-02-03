@@ -30,6 +30,7 @@ drivetrain = Constants()
 shooter = Constants()
 limelight = Constants()
 climber = Constants()
+hood = Constants()
 
 # Drivtrain Cougar Course Decimal Control
 drivetrain.decimalPlaces = 36
@@ -158,3 +159,15 @@ limelight.limelightAngle = math.radians(10)  # 10 degrees (angle in radians)
 climber.speed = 0.9  # 100% Speed
 climber.upperLimit = 408000
 climber.lowerLimit = 16000  # Give some wiggle room.
+
+# Constants for the hood
+
+# The conversion factor is basically mapping
+# one rotation of the motor to one rotation of the shooter
+hood.positionConversionFactor = 1 / 210  # This should be the gear ratio
+
+hood.kP = 0.001  # PID
+
+# Angle range in degrees
+hood.maxAngle = 45
+hood.minAngle = -45
