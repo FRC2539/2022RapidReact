@@ -108,6 +108,7 @@ drivetrain.speedLimit = 2  # meters per second (50 in/s)
 drivetrain.maxAcceleration = 1.3  # m/s^2
 drivetrain.angularSpeedLimit = math.pi * 2 / 3  # Radians per second
 drivetrain.maxAngularAcceleration = math.pi * 1 / 3  # Rad/s^2
+drivetrain.angularSpeedMinimum = 0.1
 
 # Tolerance of 10 cm and 5 degrees
 drivetrain.autoTolerance = Pose2d(Translation2d(0.1, 0.1), Rotation2d.fromDegrees(5))
