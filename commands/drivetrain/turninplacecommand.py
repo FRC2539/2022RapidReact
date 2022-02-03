@@ -13,36 +13,42 @@ class TurnInPlaceCommand(CommandBase):
     def __init__(
         self,
         turnAngle,
-        time,
+        turnSpeed=drivetrainConstants.angularSpeedLimit,
         accelerationRate=drivetrainConstants.maxAngularAcceleration,
-        minRotationSpeed=0.1,
+        minRotationSpeed=drivetrainConstants.angularSpeedMinimum,
     ):
         super().__init__()
 
+        # sets the angle that the robot will turn and the time it will take to do so
         self.turnAngle = turnAngle
-        self.time = time
-
         self.addRequirements(robot.drivetrain)
 
-        self.radianTolerance = 0.087
+        # sets how close the robot must be to the target angle to stop the command
+        self.radianTolerance = drivetrainConstants.autoTolerance.rotation().radians()
 
-        self.rotationSpeed = turnAngle / time
+        # gets the speed the robot should be rotating at
+        self.maxRotationSpeed = turnSpeed
 
-        self.accelerationRate = accelerationRate
-        self.minRotationSpeed = minRotationSpeed
+        # sets the acceleration rate and minRotationSpeed based on the values input to the function
+        self.accelerationRate = math.abs(accelerationRate)
+        self.minRotationSpeed = math.abs(minRotationSpeed)
 
     def initialize(self):
+        # saves the original pose of the robot
         self.initialPose = robot.drivetrain.getSwervePose()
-        self.currentRotationSpeed = 0.1
+        self.currentRotationSpeed = self.minRotationSpeed
+
+        # tells the command it is starting to turn and not stopping to turn
         self.accelerating = True
         self.decelerating = False
 
     def execute(self):
-        self.calculateTrapezoidSpeed()
+        # sets the current rotation speed based on the trapezoidal speed curve method
         turnChassisSpeed = ChassisSpeeds(0, 0, self.calculateTrapezoidSpeed())
         robot.drivetrain.setChassisSpeeds(turnChassisSpeed)
 
     def isFinished(self):
+        # checks if the current angle of the robot is within the tolerance of the wanted angle
         return (
             -self.radianTolerance
             <= self.getDistanceToTargetAngle()
@@ -50,29 +56,43 @@ class TurnInPlaceCommand(CommandBase):
         )
 
     def end(self, interrupted):
+        # stops the robot if the command is for some reason halted
         robot.drivetrain.stop()
 
     def calculateTrapezoidSpeed(self):
-        """Returns the speed that the robot should be turning at."""
-        if self.currentRotationSpeed >= self.rotationSpeed:
-            self.currentRotationSpeed = self.rotationSpeed
+        """Returns the speed that the robot should be turning at based on the trapezoidal velocity curve."""
+
+        # stops the robot from accelerating if it has reached the target speed
+        if (
+            math.abs(self.currentRotationSpeed) >= self.maxRotationSpeed
+            and self.accelerating
+        ):
+            self.currentRotationSpeed = math.copysign(
+                self.maxRotationSpeed, self.currentRotationSpeed
+            )
             self.accelerating = False
 
-        if self.getDistanceToTargetAngle() < 0.3:
+        # makes the robot start to deccelerate if it is close enough to the target
+        if (
+            self.getDistanceToTargetAngle()
+            < 0.3  # this number is how close to the target it will get before deceleraing
+            and not self.decelerating
+            and not self.accelerating
+        ):
             self.decelerating = True
 
-        if self.accelerating:
+            # accelerates or decelerates the robot
             self.currentRotationSpeed += self.accelerationRate * 0.020
 
         if self.decelerating:
             self.currentRotationSpeed -= self.accelerationRate * 0.020
-
-        if abs(self.currentRotationSpeed) >= self.rotationSpeed:
+        elif math.abs(self.currentRotationSpeed) >= self.rotationSpeed:
             self.currentRotationSpeed = math.copysign(
                 self.rotationSpeed, self.currentRotationSpeed
             )
 
-        if abs(self.currentRotationSpeed) <= self.minRotationSpeed:
+        # ensures that the current speed of the robot is never below the minimum rotation speed
+        if math.abs(self.currentRotationSpeed) <= self.minRotationSpeed:
             self.currentRotationSpeed = math.copysign(
                 self.minRotationSpeed, self.currentRotationSpeed
             )
