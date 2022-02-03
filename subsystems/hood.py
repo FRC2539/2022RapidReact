@@ -40,7 +40,7 @@ class Hood(CougarSystem):
         self.minAngle = constants.hood.minAngle
 
         # The percent to run the hood motor at by default.
-        self.speed = 0.3  # 30% percent.
+        self.speed = constants.hood.percentOutputSpeed
 
         # Constantly updates the hood's status.
         self.constantlyUpdate("Hood Moving", lambda: self.motor.get() != 0)

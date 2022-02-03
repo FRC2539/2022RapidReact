@@ -169,6 +169,8 @@ hood.positionConversionFactor = 1 / 210  # This should be the gear ratio
 
 hood.kP = 0.001  # PID
 
+hood.percentOutputSpeed = 0.3
+
 # Angle range in degrees
 hood.maxAngle = 45
 hood.minAngle = -45
