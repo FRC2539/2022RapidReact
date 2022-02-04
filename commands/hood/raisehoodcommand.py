@@ -15,5 +15,5 @@ class RaiseHoodCommand(CommandBase):
     def execute(self):
         robot.hood.move(robot.hood.speed)
 
-    def end(self, cheese):
+    def end(self, interrupted):
         robot.hood.stop()

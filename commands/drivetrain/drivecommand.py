@@ -18,18 +18,21 @@ class DriveCommand(CommandBase):
 
         self.addRequirements(robot.drivetrain)
 
-        # robot.drivetrain.resetGyro()
-        # robot.drivetrain.resetPoseEstimate()
+        # Use the drive theta controller from the drivetrain subsystem
+        self.pidController = robot.drivetrain.driveThetaController
 
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
-        # robot.drivetrain.resetEncoders()
 
         self.lastX = None
         self.slowed = False
 
+        # Reset the PID Controller for use later
+        self.resetPIDController()
+
     def execute(self):
+        # TODO replace the interesting code below with a rate limiter object
         # Avoid quick changes in direction
         x = logicalaxes.forward.get()
         if self.lastX is None:
@@ -45,10 +48,42 @@ class DriveCommand(CommandBase):
             if abs(x) > abs(self.lastX):
                 self.lastX = x
 
+        # Determine the rotation value (-1 to 1)
+        # Note: the method used depends on if the limelight lock is enabled
+        rotate = (
+            self.calculateDesiredRotation()
+            if robot.drivetrain.isLimelightLockEnabled()
+            else logicalaxes.rotate.get()
+        )
+
         # x - forward and backward axis (these axes are relative to the field)
         # y - side to side axis
         # rotate - counterclockwise rotation is positive
 
-        robot.drivetrain.move(x, logicalaxes.strafe.get(), logicalaxes.rotate.get())
+        robot.drivetrain.move(x, logicalaxes.strafe.get(), rotate)
 
-        # robot.drivetrain.debugPrints()
+    def resetPIDController(self):
+        # Reset the pid controller
+        self.pidController.reset(0)
+        self.pidController.setGoal(0)
+        self.pidController.setTolerance(constants.limelight.drivetrainAngleTolerance)
+
+    def calculateDesiredRotation(self):
+        """
+        See the LimelightAngleLockCommand for further documentation.
+
+        Returns radians/second
+        """
+        desiredVelocity = self.pidController.calculate(
+            self.getLimelightMeasurement(), 0
+        )
+
+        # Normalize the value to a range of -1 to 1
+        return desiredVelocity / constants.drivetrain.angularSpeedLimit
+
+    def getLimelightMeasurement(self):
+        """
+        Uses the same algorithm as the LimelightAngleLockCommand,
+        just in combination with the drive command here.
+        """
+        return robot.limelight.estimateShooterPose().rotation().radians()

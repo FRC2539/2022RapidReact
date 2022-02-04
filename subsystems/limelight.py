@@ -5,6 +5,8 @@ import robot
 import constants
 import math
 
+from wpimath.geometry import Pose2d
+
 from networktables import NetworkTables
 
 
@@ -18,7 +20,7 @@ class Limelight(CougarSystem):
 
         self.driveTable = NetworkTables.getTable("DriveTrain")
 
-        self.setPipeline(1)
+        self.setPipeline(constants.limelight.defaultPipeline)
 
         # The deadband for whether we are aimed or not.
         self.aimedDeadband = 0.25
@@ -37,6 +39,7 @@ class Limelight(CougarSystem):
         )
 
         # Creates the initial nt values.
+        # TODO test variable binding
         self.updateXOffset()
         self.updateYOffset()
         self.updateXOffsetStep()
@@ -91,7 +94,7 @@ class Limelight(CougarSystem):
 
     def getY(self):
         """
-        Return the y-value 
+        Return the y-value
         """
         return self.get("ty") + constants.limelight.yOffset
 
@@ -172,7 +175,7 @@ class Limelight(CougarSystem):
     def calculateDistance(self):
         """
         Calculates the approximate distance to the target.
-        
+
         Notes:
         This algorithm only works with a statically mounted limelight.
         The limelight constants must be correct (limelight height, angle, target height).
@@ -181,6 +184,27 @@ class Limelight(CougarSystem):
         totalAngle = constants.limelight.limelightAngle + math.radians(self.getY())
 
         return constants.limelight.heightOffset / math.tan(totalAngle)
+
+    def estimateLimelightPose(self):
+        """
+        Calculates the limelight pose relative to the target.
+        """
+        return Pose2d(
+            -self.calculateDistance(),  # Treats the target as being "forward"
+            0,  # Given that the target is a circle, there is no real sideways offset
+            math.radians(robot.limelight.getX()),
+        )
+
+    def estimateShooterPose(self):
+        """
+        Calculates the shooter pose relative to the target.
+
+        It uses the limelight pose estimate and transforms it
+        to create the estimate.
+        """
+        return self.estimateLimelightPose().transformBy(
+            constants.limelight.limelightToShooterTransform
+        )
 
     def isAimed(self):
         """

@@ -6,7 +6,7 @@ from ctre import (
     SensorInitializationStrategy,
 )
 
-from wpimath.geometry import Pose2d, Rotation2d, Translation2d
+from wpimath.geometry import Pose2d, Rotation2d, Translation2d, Transform2d
 
 import math
 
@@ -154,6 +154,16 @@ limelight.heightOffset = limelight.targetHeight - limelight.limelightHeight
 
 limelight.limelightAngle = math.radians(10)  # 10 degrees (angle in radians)
 
+limelight.defaultPipeline = 1
+
+limelight.drivetrainAngleTolerance = math.radians(
+    4
+)  # the tolerance for limelight aiming
+
+limelight.limelightToShooterTransform = Transform2d(
+    0, -0.08
+)  # 8 cm to the right (guessed right now)
+
 
 # Constants for the climber
 
@@ -172,5 +182,5 @@ hood.kP = 0.001  # PID
 hood.percentOutputSpeed = 0.3
 
 # Angle range in degrees
-hood.maxAngle = 45
-hood.minAngle = -45
+hood.maxAngle = 35
+hood.minAngle = -35

@@ -1,7 +1,5 @@
 from .cougarsystem import *
 
-import wpilib
-import math
 import ports
 import constants
 

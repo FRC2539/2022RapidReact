@@ -134,19 +134,11 @@ class SwerveDrive(BaseDrive):
             nominalDt=0.02,
         )
 
-        # TODO get rid of rando variables and the send offsets stuff
-        # TODO remove the need to reset the gyro to different positions
-        # (keep auto and teleop consistent)
-        # added the constant, just need to always reset it relative to the "offset"
-        # Basically when starting auto, grab the angle, and subtract it from "offset"
-        # Then reset the gyro to that angle
+        # State variable for the drive command
+        self.limelightLock = False  # Rotation lock towards the limelight target
 
         self.resetGyro()
         self.resetPoseEstimate()
-
-        self.PosX = 0
-        self.PosY = 0
-        self.LastPositions = self.getPositions()
 
         getcontext().prec = constants.drivetrain.decimalPlaces
 
@@ -165,10 +157,10 @@ class SwerveDrive(BaseDrive):
         self.hIk = constants.drivetrain.hIk
         self.hDk = constants.drivetrain.hDk
 
-        # TODO separate the pid values
         xController = PIDController(self.hPk, self.hIk, self.hDk)
         yController = PIDController(self.hPk, self.hIk, self.hDk)
 
+        # Create a theta controller used for autonomous
         thetaController = ProfiledPIDControllerRadians(
             constants.drivetrain.htPk,
             constants.drivetrain.htIk,
@@ -179,6 +171,18 @@ class SwerveDrive(BaseDrive):
             ),
         )
         thetaController.enableContinuousInput(-math.pi, math.pi)
+
+        # Create a theta controller used for driving
+        driveThetaController = ProfiledPIDControllerRadians(
+            constants.drivetrain.htPk,
+            constants.drivetrain.htIk,
+            constants.drivetrain.htDk,
+            TrapezoidProfileRadians.Constraints(
+                constants.drivetrain.angularSpeedLimit,
+                constants.drivetrain.maxAngularAcceleration,
+            ),
+        )
+        driveThetaController.enableContinuousInput(-math.pi, math.pi)
 
         # Create a drive controller for autonomous
         self.driveController = HolonomicDriveController(
@@ -239,6 +243,15 @@ class SwerveDrive(BaseDrive):
         # if that has been indicated in the dashboard
         if self.sendOffsets:
             self.put("correctedOffsets", self.getCorrectedModuleOffsets())
+
+    def enableLimelightLock(self):
+        self.limelightLock = True
+
+    def disableLimelightLock(self):
+        self.limelightLock = False
+
+    def isLimelightLockEnabled(self):
+        return self.limelightLock
 
     def debugPrints(self):
         print("-----------------")
