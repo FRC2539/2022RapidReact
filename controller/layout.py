@@ -1,3 +1,4 @@
+from ast import For
 from .logitechdualshock import LogitechDualShock
 from .thrustmasterjoystick import ThrustmasterJoystick
 from . import logicalaxes
@@ -27,6 +28,9 @@ from commands.climber.lowerclimbercommand import LowerClimberCommand
 from commands.climber.toggleclimbersolenoidcommand import ToggleClimberSolenoidCommand
 from commands.climber.climbbarcommand import ClimbBarCommand
 
+from commands.intakeballscommandgroup import IntakeBallsCommandGroup
+from commands.ballsystem.forwardconveyorcommand import ForwardConveyorCommand
+
 import constants
 import robot
 
@@ -46,17 +50,18 @@ def init():
     driveControllerOne = ThrustmasterJoystick(0)  # The left hand controller
     driveControllerTwo = ThrustmasterJoystick(1)  # The right hand controller
 
+    # Define the x, y, and rotate and rotate axes
     logicalaxes.forward = driveControllerOne.Y
     logicalaxes.strafe = driveControllerOne.X
-
     logicalaxes.rotate = driveControllerTwo.X
 
-    driveControllerOne.RightThumb.whileHeld(RaiseClimberCommand())
-    driveControllerOne.LeftThumb.whileHeld(LowerClimberCommand())
+    driveControllerOne.RightThumb.whileHeld(ForwardConveyorCommand())
+    # driveControllerOne.RightThumb.whileHeld(RaiseClimberCommand())
+    # driveControllerOne.LeftThumb.whileHeld(LowerClimberCommand())
 
-    driveControllerOne.BottomThumb.whenPressed(ToggleClimberSolenoidCommand())
+    # driveControllerOne.BottomThumb.whenPressed(ToggleClimberSolenoidCommand())
 
-    # driveControllerOne.Trigger.whenPressed()
+    driveControllerOne.Trigger.whileHeld(IntakeBallsCommandGroup())
 
     driveControllerTwo.LeftThumb.whileHeld(IntakeCommand())
     driveControllerTwo.RightThumb.whileHeld(RejectCommand())
@@ -69,7 +74,7 @@ def init():
     # driveControllerTwo.LeftBottomLeft.whileHeld()
 
     # driveControllerOne.LeftTopRight.whileHeld()
-    driveControllerOne.LeftBottomRight.whileHeld(ClimbBarCommand())
+    # driveControllerOne.LeftBottomRight.whileHeld(ClimbBarCommand())
     # driveControllerOne.LeftTopLeft.whileHeld()
     driveControllerOne.LeftBottomLeft.whenPressed(ResetAutoStateCommand())
 

@@ -161,7 +161,7 @@ limelight.drivetrainAngleTolerance = math.radians(
 )  # the tolerance for limelight aiming
 
 limelight.limelightToShooterTransform = Transform2d(
-    0, -0.08
+    0, -0.08, 0
 )  # 8 cm to the right (guessed right now)
 
 

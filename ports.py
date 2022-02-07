@@ -47,7 +47,13 @@ climber = PortsList()
 climber.motorID = 11
 
 intake = PortsList()
-intake.motorID = 21
+intake.motorID = 12
 
 hood = PortsList()
 hood.motorID = 25  # Not defined right now
+
+ballsystem = PortsList()
+ballsystem.conveyorMotorID = 13
+ballsystem.chamberMotorID = 14
+ballsystem.conveyorSensor = 0
+ballsystem.chamberSensor = 0

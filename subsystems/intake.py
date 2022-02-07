@@ -16,7 +16,8 @@ class Intake(CougarSystem):
         self.motor.setNeutralMode(NeutralMode.Brake)
         self.motor.setInverted(True)
 
-        self.speed = 1
+        # self.speed = 1
+        self.bindVariable("speed", "Intake Speed", 1.0)
 
     def periodic(self):
         """

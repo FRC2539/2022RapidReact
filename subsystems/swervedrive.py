@@ -173,7 +173,7 @@ class SwerveDrive(BaseDrive):
         thetaController.enableContinuousInput(-math.pi, math.pi)
 
         # Create a theta controller used for driving
-        driveThetaController = ProfiledPIDControllerRadians(
+        self.driveThetaController = ProfiledPIDControllerRadians(
             constants.drivetrain.htPk,
             constants.drivetrain.htIk,
             constants.drivetrain.htDk,
@@ -182,7 +182,7 @@ class SwerveDrive(BaseDrive):
                 constants.drivetrain.maxAngularAcceleration,
             ),
         )
-        driveThetaController.enableContinuousInput(-math.pi, math.pi)
+        self.driveThetaController.enableContinuousInput(-math.pi, math.pi)
 
         # Create a drive controller for autonomous
         self.driveController = HolonomicDriveController(

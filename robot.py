@@ -19,9 +19,10 @@ from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.limelight import Limelight as limelight
 from subsystems.intake import Intake as intake
 
-# from subsystems.shooter import Shooter as shooter
-from subsystems.climber import Climber as climber
+from subsystems.ballsystem import BallSystem as ballsystem
 
+# from subsystems.shooter import Shooter as shooter
+# from subsystems.climber import Climber as climber
 # from subsystems.hood import Hood as hood
 
 
