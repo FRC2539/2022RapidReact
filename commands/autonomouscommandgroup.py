@@ -12,6 +12,7 @@ from commands import autoconfig
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.resetautostatecommand import ResetAutoStateCommand
 from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.turninplacecommand import TurnInPlaceCommand
 
 from commands.drivetrain.trajectoryfollowercommand import TrajectoryFollowerCommand
 
@@ -42,10 +43,16 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # TurnCommand(90),
         )
 
-    def trajectory0(self):
+    def trajectory(self):
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
             TrajectoryFollowerCommand(robot.drivetrain.trajectory),
+        )
+
+    def turnInPlaceTest0(self):
+        self.addCommands(
+            ResetAutoStateCommand(x=0, y=0, angle=0),
+            TurnInPlaceCommand(6.28, accelerationRate=4, turnSpeed=0.25),
         )
 
     def interrupted(self):
