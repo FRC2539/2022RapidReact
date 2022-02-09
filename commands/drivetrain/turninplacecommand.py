@@ -38,9 +38,11 @@ class TurnInPlaceCommand(CommandBase):
         self.accelerationRate = abs(accelerationRate)
         self.minRotationSpeed = abs(minRotationSpeed)
 
+        self.executionNumber = -1
+
     def initialize(self):
         # saves the original pose of the robot
-        self.initialPose = robot.drivetrain.getSwervePose()
+        self.initialAngle = self.getCurrentAngle()
         self.currentRotationSpeed = math.copysign(self.minRotationSpeed, self.turnAngle)
 
         # tells the command it is starting to turn and not stopping to turn
@@ -49,9 +51,13 @@ class TurnInPlaceCommand(CommandBase):
 
     def execute(self):
         # sets the current rotation speed based on the trapezoidal speed curve method
+        self.executionNumber += 1
         turnChassisSpeed = ChassisSpeeds(0, 0, self.calculateTrapezoidSpeed())
         robot.drivetrain.setChassisSpeeds(turnChassisSpeed)
-        print(f"{self.currentRotationSpeed=}, {self.acceleraing=}, {self.decelerating}")
+        if self.executionNumber % 50 == 0:
+            print(
+                f"{self.getDistanceToTargetAngle()=}\n{self.getDistanceFromInitialPose()=}\n{self.accelerating=}, {self.decelerating=}"
+            )
 
     def isFinished(self):
         # checks if the current angle of the robot is within the tolerance of the wanted angle
@@ -113,14 +119,15 @@ class TurnInPlaceCommand(CommandBase):
 
     def getDistanceToTargetAngle(self):
         """Returns the distance between the robot angle and the target angle"""
-        currentPosition = robot.drivetrain.getSwervePose()
-        currentRotationRadians = currentPosition.rotation().radians()
-        initialRotationRadians = self.initialPose.rotation().radians()
+        currentRotationRadians = self.getCurrentAngle()
+        initialRotationRadians = self.initialAngle
         return currentRotationRadians - initialRotationRadians - self.turnAngle
 
     def getDistanceFromInitialPose(self):
         """Returns the distance between the robot angle and the initial angle"""
-        currentPosition = robot.drivetrain.getSwervePose()
-        currentRotationRadians = currentPosition.rotation().radians()
-        initialRotationRadians = self.initialPose.rotation().radians()
+        currentRotationRadians = self.getCurrentAngle()
+        initialRotationRadians = self.initialAngle
         return currentRotationRadians - initialRotationRadians
+
+    def getCurrentAngle(self):
+        return robot.drivetrain.navX.getAngle() / 180 * math.pi

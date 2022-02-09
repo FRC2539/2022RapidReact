@@ -72,7 +72,7 @@ drivetrain.hIk = 0
 drivetrain.hDk = 0.03
 
 # PID for theta controller
-drivetrain.htPk = 1
+drivetrain.htPk = 0.5
 drivetrain.htIk = 0
 drivetrain.htDk = 0
 

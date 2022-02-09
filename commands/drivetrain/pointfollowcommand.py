@@ -35,7 +35,8 @@ class PointFollowCommand(CommandBase):
         self.driveController = robot.drivetrain.driveController
 
         # Set a tolerance of 5 cm, and 5 degrees
-        self.tolerance = Pose2d(Translation2d(0.05, 0.05), Rotation2d.fromDegrees(5))
+        # self.tolerance = Pose2d(Translation2d(0.05, 0.05), Rotation2d.fromDegrees(5))
+        self.tolerance = constants.drivetrain.autoTolerance
 
         # Create a location to store the starting pose of the robot
         self.initialPose = Pose2d()
@@ -64,15 +65,17 @@ class PointFollowCommand(CommandBase):
 
         self.calculateDesiredAbsolutePose()
 
-        print(self.poses)
+        # print(self.poses)
 
     def execute(self):
         # Calculate the chassis speeds (x', y', omega) to reach the desired pose
-        chassisSpeeds = self.driveController.calculate(
-            self.getRobotPose(), self.desiredPose, self.linearVelocity, self.angleRef
-        )
+        # chassisSpeeds = self.driveController.calculate(
+        #     self.getRobotPose(), self.desiredPose, self.linearVelocity, self.angleRef
+        # )
+        chassisSpeeds = ChassisSpeeds(self.linearVelocity)
 
-        print(chassisSpeeds)
+        # print(chassisSpeeds)
+        print(self.getRobotPose())
 
         # Follow the chassis speeds with the drivetrain
         robot.drivetrain.setChassisSpeeds(chassisSpeeds)
