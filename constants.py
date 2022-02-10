@@ -67,12 +67,12 @@ drivetrain.stFFk = 0
 drivetrain.stIZk = 0
 
 # PID for holonomic drive controller
-drivetrain.hPk = 3  # 2
+drivetrain.hPk = 2  # 2
 drivetrain.hIk = 0
 drivetrain.hDk = 0.03
 
 # PID for theta controller
-drivetrain.htPk = 0.5
+drivetrain.htPk = 1
 drivetrain.htIk = 0
 drivetrain.htDk = 0
 

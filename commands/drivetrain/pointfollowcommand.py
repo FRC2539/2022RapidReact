@@ -35,7 +35,6 @@ class PointFollowCommand(CommandBase):
         self.driveController = robot.drivetrain.driveController
 
         # Set a tolerance of 5 cm, and 5 degrees
-        # self.tolerance = Pose2d(Translation2d(0.05, 0.05), Rotation2d.fromDegrees(5))
         self.tolerance = constants.drivetrain.autoTolerance
 
         # Create a location to store the starting pose of the robot
@@ -67,12 +66,18 @@ class PointFollowCommand(CommandBase):
 
         # print(self.poses)
 
+        # Start the wheels facing in the correct direction
+        self.zeroSpeedModuleStates = self.calculateInitialModuleStates()
+
+        robot.drivetrain.setModuleStates(self.zeroSpeedModuleStates)
+
     def execute(self):
+        if not self.moduleStateAnglesMatch(self.zeroSpeedModuleStates):
+            pass
+
         # Calculate the chassis speeds (x', y', omega) to reach the desired pose
-        # chassisSpeeds = self.driveController.calculate(
-        #     self.getRobotPose(), self.desiredPose, self.linearVelocity, self.angleRef
-        # )
-        chassisSpeeds = ChassisSpeeds(self.linearVelocity)
+        chassisSpeeds = self.calculateChassisSpeeds()
+        # chassisSpeeds = ChassisSpeeds(self.linearVelocity)
 
         # print(chassisSpeeds)
         print(self.getRobotPose())
@@ -93,6 +98,40 @@ class PointFollowCommand(CommandBase):
     def end(self, interrupted):
         # Stop the robot
         robot.drivetrain.stop()
+
+    def calculateChassisSpeeds(self):
+        return self.driveController.calculate(
+            self.getRobotPose(), self.desiredPose, self.linearVelocity, self.angleRef
+        )
+
+    def moduleStateAnglesMatch(self, targetModuleStates):
+        currentModuleStates = robot.drivetrain.getModuleStates()
+
+        match = True
+
+        for i in range(0, len(targetModuleStates)):
+            currentAngle = currentModuleStates[i].angle.degrees()
+            targetAngle = targetModuleStates[i].angle.degrees()
+
+            if abs(currentAngle - targetAngle) > 2:  # 5 degree tolerance
+                match = False
+
+        return match
+
+    def calculateInitialModuleStates(self):
+        chassisSpeeds = self.calculateChassisSpeeds()
+
+        moduleStates = robot.drivetrain.convertChassisSpeedsToModuleStates(
+            chassisSpeeds
+        )
+
+        optimizedModuleStates = robot.drivetrain.optimizeModuleStates(moduleStates)
+
+        # Set the module states to their correct angles
+        for moduleState in optimizedModuleStates:
+            moduleState.speed = 0
+
+        return optimizedModuleStates
 
     def getRobotPose(self):
         return robot.drivetrain.getSwervePose()
