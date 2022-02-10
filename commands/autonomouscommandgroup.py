@@ -14,8 +14,9 @@ from commands.drivetrain.resetautostatecommand import ResetAutoStateCommand
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.turninplacecommand import TurnInPlaceCommand
 from commands.drivetrain.pointfollowcommand import PointFollowCommand
-
 from commands.drivetrain.trajectoryfollowercommand import TrajectoryFollowerCommand
+
+from commands.shooter.surrogateshootercommand import SurrogateShooterCommand
 
 from wpimath.geometry import Pose2d
 
