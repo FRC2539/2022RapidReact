@@ -55,10 +55,12 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             TrajectoryFollowerCommand(robot.drivetrain.trajectory),
         )
 
-    def turnInPlaceTest0(self):
+    def turnInPlaceTest(self):
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
-            TurnInPlaceCommand(6.28, accelerationRate=4, turnSpeed=0.25),
+            TurnInPlaceCommand(6.28 * 2, accelerationRate=4, turnSpeed=1),
+            MoveCommand(1, linearVelocity=0.5, matchHeading=False),
+            TurnInPlaceCommand(6.28, accelerationRate=4, turnSpeed=1),
         )
 
     def interrupted(self):

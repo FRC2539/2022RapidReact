@@ -17,7 +17,7 @@ class MoveCommand(PointFollowCommand):
     """
 
     def __init__(
-        self, x, y=0, angle=0, linearVelocity=None, hiddenPoints=2, matchHeading=True
+        self, x, y=0, angle=0, linearVelocity=None, hiddenPoints=4, matchHeading=True
     ):
         points = [Pose2d()]
 
