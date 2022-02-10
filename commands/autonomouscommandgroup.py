@@ -13,8 +13,11 @@ from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.resetautostatecommand import ResetAutoStateCommand
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.turninplacecommand import TurnInPlaceCommand
+from commands.drivetrain.pointfollowcommand import PointFollowCommand
 
 from commands.drivetrain.trajectoryfollowercommand import TrajectoryFollowerCommand
+
+from wpimath.geometry import Pose2d
 
 
 class AutonomousCommandGroup(SequentialCommandGroup):
@@ -36,11 +39,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         eval("self." + toRun + "()")  # Runs the method
 
-    def moveAndTurn(self):
+    def moveTest(self):
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
             MoveCommand(1, linearVelocity=0.5, matchHeading=False),
-            # TurnCommand(90),
+            # PointFollowCommand(  # Follow an S path
+            #     [Pose2d(), Pose2d(1, 0, 0), Pose2d(1, 1, 0), Pose2d(2, 1, 0)],
+            #     linearVelocity=0.5,
+            # ),
         )
 
     def trajectory(self):
