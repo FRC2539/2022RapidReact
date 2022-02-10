@@ -126,6 +126,10 @@ drivetrain.autoPeriodicPeriod = 0.005  # Period to run auto code at a higher rat
 
 drivetrain.gyroOffset = 0
 
+# Constants for the machine learning camera and ball detection system below.
+drivetrain.ballCloseLimit = 0
+drivetrain.ballFarLimit = 0
+
 # Constants for the shooter below.
 
 shooter.kP = 1.5
