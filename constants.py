@@ -67,7 +67,7 @@ drivetrain.stFFk = 0
 drivetrain.stIZk = 0
 
 # PID for holonomic drive controller
-drivetrain.hPk = 2  # 2
+drivetrain.hPk = 1  # 2
 drivetrain.hIk = 0
 drivetrain.hDk = 0.03
 

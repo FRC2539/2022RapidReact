@@ -57,6 +57,9 @@ class PointFollowCommand(CommandBase):
     def initialize(self):
         self.resetCurrentPose()
 
+        print(self.poses)
+        print(self.currentPose)
+
         self.driveController.setTolerance(self.tolerance)
 
         # Store the initial pose of the robot
@@ -80,7 +83,7 @@ class PointFollowCommand(CommandBase):
         # chassisSpeeds = ChassisSpeeds(self.linearVelocity)
 
         # print(chassisSpeeds)
-        print(self.getRobotPose())
+        # print(self.getRobotPose())
 
         # Follow the chassis speeds with the drivetrain
         robot.drivetrain.setChassisSpeeds(chassisSpeeds)
@@ -104,6 +107,11 @@ class PointFollowCommand(CommandBase):
             self.getRobotPose(), self.desiredPose, self.linearVelocity, self.angleRef
         )
 
+        # Convert to robot relative speeds
+        # return robot.drivetrain.getRobotRelativeSpeedsFromFieldSpeeds(
+        #     chassisSpeeds.vx, chassisSpeeds.vy, chassisSpeeds.omega
+        # )
+
     def moduleStateAnglesMatch(self, targetModuleStates):
         currentModuleStates = robot.drivetrain.getModuleStates()
 
@@ -120,6 +128,9 @@ class PointFollowCommand(CommandBase):
 
     def calculateInitialModuleStates(self):
         chassisSpeeds = self.calculateChassisSpeeds()
+
+        print("chassis speeds")
+        print(chassisSpeeds)
 
         moduleStates = robot.drivetrain.convertChassisSpeedsToModuleStates(
             chassisSpeeds
@@ -144,6 +155,7 @@ class PointFollowCommand(CommandBase):
 
     def incrementPose(self):
         self.currentPose += 1
+        print(self.currentPose)
 
     def calculateDesiredAbsolutePose(self):
         # Get the desired pose,
@@ -154,6 +166,8 @@ class PointFollowCommand(CommandBase):
         self.angleRef = (
             self.desiredPose.rotation() if self.matchHeading else Rotation2d(0)
         )
+
+        print(self.desiredPose)
 
     def isLastPose(self):
         return self.currentPose == len(self.poses) - 1

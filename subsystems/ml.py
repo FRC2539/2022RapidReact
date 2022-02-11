@@ -24,32 +24,38 @@ class ML(CougarSystem):
         """
         self.feed()
 
+    def isTargetAcquired(self):
+        """
+        Returns whether or not a target is actively detected by the ml system.
+        """
+        return self.get("targetAcquired")
+
     def getX(self):
         """
         Returns the current latency of the limelight (in ms)
         """
-        return self.get("x")
+        return self.get("targetX")
 
     def getY(self):
         """
         Returns the current latency of the limelight (in ms)
         """
-        return self.get("y")
+        return self.get("targetY")
 
     def getArea(self):
         """
         Returns the current latency of the limelight (in ms)
         """
-        return self.get("area")
+        return self.get("targetArea")
 
     def getResX(self):
         """
         Returns the current latency of the limelight (in ms)
         """
-        return self.get("resolutionx")
+        return self.get("resolutionX")
 
     def getResY(self):
         """
         Returns the current latency of the limelight (in ms)
         """
-        return self.get("resolutiony")
+        return self.get("resolutionY")

@@ -68,7 +68,7 @@ def init():
     driveControllerTwo.LeftThumb.whileHeld(IntakeCommand())
     driveControllerTwo.RightThumb.whileHeld(RejectCommand())
 
-    driveControllerTwo.BottomThumb.whenPressed(AutoCollectBallsCommand())
+    driveControllerTwo.BottomThumb.whileHeld(AutoCollectBallsCommand())
 
     # driveControllerTwo.Trigger.whileHeld()
 

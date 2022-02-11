@@ -43,8 +43,8 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def moveTest(self):
         self.addCommands(
             ResetAutoStateCommand(),
-            MoveCommand(1, linearVelocity=0.4, matchHeading=False),
-            MoveCommand(-1, linearVelocity=0.4, matchHeading=False),
+            MoveCommand(1, linearVelocity=0.005, matchHeading=False),
+            MoveCommand(-1, linearVelocity=0.005, matchHeading=False),
             # PointFollowCommand(  # Follow an S path
             #     [Pose2d(), Pose2d(1, 0, 0), Pose2d(1, 1, 0), Pose2d(2, 1, 0)],
             #     linearVelocity=0.5,

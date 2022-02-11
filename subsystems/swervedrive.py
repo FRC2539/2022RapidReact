@@ -310,6 +310,7 @@ class SwerveDrive(BaseDrive):
         This is necessary for pose estimation.
         """
         return Rotation2d(self.navX.getRotation2d().radians() * -1)
+        # return self.navX.getRotation2d()
 
     def addVisionPoseEstimate(self, pose, latency):
         """
@@ -401,20 +402,32 @@ class SwerveDrive(BaseDrive):
 
         targetChassisSpeeds = self.convertControllerToChassisSpeeds(x, y, rotate)
 
+        # print("speeds")
+        # print(targetChassisSpeeds)
+        # print("angle")
+        # print(self.navX.getRotation2d())
+        # print()
+
         self.setChassisSpeeds(targetChassisSpeeds)
 
     def convertControllerToChassisSpeeds(self, x, y, rotate):
         # Convert the percent outputs from the joysticks
         # to meters per second and radians per second
-        vx, vy, vrotate = (
+        vx, vy, omega = (
             x * self.speedLimit,
             y * self.speedLimit,
             rotate * self.angularSpeedLimit,
         )
 
         # Convert and return the target velocities to a chassis speeds object
+        return self.getRobotRelativeSpeedsFromFieldSpeeds(vx, vy, omega)
+
+    def getRobotRelativeSpeedsFromFieldSpeeds(self, vx, vy, omega):
+        """
+        Converts and returns the target velocities to a chassis speeds object
+        """
         return ChassisSpeeds.fromFieldRelativeSpeeds(
-            vx, vy, vrotate, self.navX.getRotation2d()
+            vx, vy, omega, self.navX.getRotation2d()
         )
 
     def setChassisSpeeds(self, chassisSpeeds):

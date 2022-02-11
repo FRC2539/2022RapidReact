@@ -9,9 +9,9 @@ import math
 
 
 class AutoCollectBallsCommand(CommandBase):
-    def __init__(self, screenResolution):
+    def __init__(self):
         super().__init__()
-        self.addRequirements(robot.drivetrain)
+        # self.addRequirements(robot.drivetrain)
 
         # Store the current screen resolution.
         # self.resolutionX = screenResolution[0]
@@ -27,7 +27,7 @@ class AutoCollectBallsCommand(CommandBase):
         # robot.drivetrain.setChassisSpeeds(
         #     ChassisSpeeds(0, 0, self.pidController.calculate(self.estimateBallPose()))
         # )
-        print("target x:" + str(robot.ML.getX()))
+        print("target x:" + str(robot.ml.getX()))
 
     # def isFinished(self):
     #     return (
