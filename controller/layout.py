@@ -31,6 +31,8 @@ from commands.climber.climbbarcommand import ClimbBarCommand
 from commands.intakeballscommandgroup import IntakeBallsCommandGroup
 from commands.ballsystem.forwardconveyorcommand import ForwardConveyorCommand
 
+from commands.drivetrain.autocollectballscommand import AutoCollectBallsCommand
+
 import constants
 import robot
 
@@ -66,7 +68,7 @@ def init():
     driveControllerTwo.LeftThumb.whileHeld(IntakeCommand())
     driveControllerTwo.RightThumb.whileHeld(RejectCommand())
 
-    # driveControllerTwo.BottomThumb.whenPressed()
+    driveControllerTwo.BottomThumb.whenPressed(AutoCollectBallsCommand())
 
     # driveControllerTwo.Trigger.whileHeld()
 
