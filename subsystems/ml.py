@@ -32,30 +32,30 @@ class ML(CougarSystem):
 
     def getX(self):
         """
-        Returns the current latency of the limelight (in ms)
+        Returns the x position of the largest/closest ball
         """
         return self.get("targetX")
 
     def getY(self):
         """
-        Returns the current latency of the limelight (in ms)
+        Returns the y position of the largest/closest ball
         """
         return self.get("targetY")
 
     def getArea(self):
         """
-        Returns the current latency of the limelight (in ms)
+        Returns the area of the largest/closest ball
         """
         return self.get("targetArea")
 
     def getResX(self):
         """
-        Returns the current latency of the limelight (in ms)
+        Returns the x resolution of the ml device
         """
         return self.get("resolutionX")
 
     def getResY(self):
         """
-        Returns the current latency of the limelight (in ms)
+        Returns the y resolution of the ml device
         """
         return self.get("resolutionY")
