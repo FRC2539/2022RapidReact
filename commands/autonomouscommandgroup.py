@@ -44,6 +44,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def moveTest(self):
         self.addCommands(
             ResetAutoStateCommand(),
+            # CustomMoveCommand(x=1, y=1, relative=True),
+            # TurnCommand(3.14 / 2),
+            # CustomMoveCommand(x=-1, y=-1, relative=True),
             CustomMoveCommand(x=1),
             TurnCommand(3.14 / 2),
             TurnCommand(-3.14 / 2),

@@ -2,7 +2,7 @@ from commands2 import CommandBase
 
 import robot
 
-from wpimath.geometry import Transform2d
+from wpimath.geometry import Transform2d, Pose2d, Rotation2d
 from wpimath.kinematics import ChassisSpeeds
 
 
@@ -16,7 +16,7 @@ class CustomMoveCommand(CommandBase):
         x=0,
         y=0,
         relative=True,
-        flipDirection=False,
+        flipDirection=True,
         maxSpeed=0.5,
         minSpeed=0.05,
         distanceTolerance=0.1,
@@ -30,8 +30,8 @@ class CustomMoveCommand(CommandBase):
         self.directionCorrection = -1 if flipDirection else 1
 
         # Store the arguments
-        self.x = x * -1  # multiply by -1 for correcting the direction
-        self.y = y * -1
+        self.x = x * self.directionCorrection
+        self.y = y * self.directionCorrection
         self.relative = relative
         self.maxSpeed = maxSpeed
         self.minSpeed = minSpeed
@@ -82,6 +82,8 @@ class CustomMoveCommand(CommandBase):
         # Calculate the speeds needed in each axis as percents
         self.speedPercents = self.calculateAxisSpeedsAsPercents()
 
+        print(self.speedPercents)
+
         # Calculate the distance to the final position and store it
         self.distance = self.calculateDistanceToFinalPose()
 
@@ -99,9 +101,6 @@ class CustomMoveCommand(CommandBase):
             speed = self.minSpeed
         else:
             speed = self.maxSpeed
-
-        # Flip the speed direction if that was configured
-        speed *= self.directionCorrection
 
         # Return field relative speeds in the correct direction
         return robot.drivetrain.getRobotRelativeSpeedsFromFieldSpeeds(
@@ -150,6 +149,7 @@ class CustomMoveCommand(CommandBase):
         return match
 
     def calculateDistanceToFinalPose(self):
+        print(self.getRobotPose().translation(), self.finalPosition.translation())
         return (
             self.getRobotPose().translation().distance(self.finalPosition.translation())
         )
@@ -157,6 +157,9 @@ class CustomMoveCommand(CommandBase):
     def calculateAxisSpeedsAsPercents(self):
         # Calculate the change in x, y, and (angle) to get to the final pose
         twist = self.initialPosition.log(self.finalPosition)
+
+        print(self.finalPosition)
+        print(twist)
 
         maxVelocity = max(abs(twist.dx), abs(twist.dy))
 
@@ -168,9 +171,19 @@ class CustomMoveCommand(CommandBase):
         return ChassisSpeeds(twist.dx / maxVelocity, twist.dy / maxVelocity, 0)
 
     def calculateFinalRobotPose(self):
-        transform = Transform2d(self.x, self.y, 0)
+        reversedRotation = Rotation2d(self.initialPosition.rotation().radians() * -1)
 
-        return self.initialPosition.transformBy(transform)
+        # Calculate either the absolute or relative target position
+        if self.relative:
+            transform = Transform2d(self.x, self.y, 0)
+
+            # Make the robot pose "field relative"
+            basePose = Pose2d(self.initialPosition.translation(), Rotation2d(0))
+            targetPose = basePose.transformBy(transform)
+
+            return Pose2d(targetPose.translation(), reversedRotation)
+        else:
+            return Pose2d(self.x, self.y, self.initialPosition.rotation())
 
     def getRobotPose(self):
         return robot.drivetrain.getSwervePose()

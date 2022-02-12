@@ -430,6 +430,14 @@ class SwerveDrive(BaseDrive):
             vx, vy, omega, self.navX.getRotation2d()
         )
 
+    def getRobotRelativeSpeedsFromFieldSpeedsReversed(self, vx, vy, omega):
+        """
+        Converts and returns the target velocities to a chassis speeds object
+        """
+        return ChassisSpeeds.fromFieldRelativeSpeeds(
+            vx, vy, omega, Rotation2d(self.navX.getRotation2d().radians() * -1)
+        )
+
     def setChassisSpeeds(self, chassisSpeeds):
         """
         Converts a chassis speeds object to module states,
