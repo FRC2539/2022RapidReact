@@ -10,6 +10,7 @@ import robot, constants
 from commands import autoconfig
 
 from commands.drivetrain.movecommand import MoveCommand
+from commands.drivetrain.custommovecommand import CustomMoveCommand
 from commands.drivetrain.resetautostatecommand import ResetAutoStateCommand
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.turninplacecommand import TurnInPlaceCommand
@@ -43,12 +44,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def moveTest(self):
         self.addCommands(
             ResetAutoStateCommand(),
-            MoveCommand(1, linearVelocity=0.005, matchHeading=False),
-            MoveCommand(-1, linearVelocity=0.005, matchHeading=False),
-            # PointFollowCommand(  # Follow an S path
-            #     [Pose2d(), Pose2d(1, 0, 0), Pose2d(1, 1, 0), Pose2d(2, 1, 0)],
-            #     linearVelocity=0.5,
-            # ),
+            CustomMoveCommand(x=1),
+            TurnCommand(3.14 / 2),
+            TurnCommand(-3.14 / 2),
+            CustomMoveCommand(x=-1),
+            TurnCommand(6.28),
         )
 
     def trajectory(self):
@@ -61,7 +61,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
             TurnInPlaceCommand(6.28 * 2, accelerationRate=4, turnSpeed=1),
-            MoveCommand(1, linearVelocity=0.5, matchHeading=False),
+            # MoveCommand(1, linearVelocity=0.5, matchHeading=False),
             TurnInPlaceCommand(6.28, accelerationRate=4, turnSpeed=1),
         )
 
