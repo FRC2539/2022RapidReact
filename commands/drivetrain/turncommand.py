@@ -31,10 +31,9 @@ class TurnCommand(CommandBase):
             # (-) accounts for the fact that the robot is counterclockwise positive
             self.turnAngle = -turnAngle
         else:
-            rotation = Rotation2d(turnAngle)
-            self.turnAngle = (
-                robot.drivetrain.getSwervePose().rotation().rotateBy(rotation).radians()
-            )
+            robotRotation = robot.drivetrain.getSwervePose().rotation().radians()
+
+            self.turnAngle = -1 * (turnAngle - robotRotation)
 
         self.addRequirements(robot.drivetrain)
 

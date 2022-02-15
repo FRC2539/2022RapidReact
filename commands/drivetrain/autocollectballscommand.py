@@ -14,54 +14,54 @@ class AutoCollectBallsCommand(CommandBase):
     def __init__(self):
         super().__init__()
         self.addRequirements(robot.drivetrain)
-        
+
         self.reactionSpeed = 1
-        self.maxRotationSpeed = drivetrainConstants.angularSpeedLimit
-        self.minRotationSpeed = drivetrainConstants.angularSpeedMinimum
-        
-        self.radianTolerance = 0.1
-        
-        
+        self.maxRotationSpeed = drivetrainConstants.angularSpeedLimit / 4
+        self.minRotationSpeed = 0  # drivetrainConstants.angularSpeedMinimum
+
+        self.radianTolerance = 0.01
+
     def initialize(self):
         pass
 
     def execute(self):
         robot.drivetrain.setChassisSpeeds(
-            ChassisSpeeds(calcForwardVelocity(), 0, calcRotationSpeed())
+            ChassisSpeeds(self.calcForwardVelocity(), 0, self.calcRotationSpeed())
         )
-        print("target x:" + str(robot.ml.getX()))
-    
+        print(
+            f"{robot.ml.getX()=}, {self.getXNormalized()=}, {self.calcRotationSpeed()}"
+        )
 
     def end(self, interrupted):
         robot.drivetrain.stop()
-    
+
     def calcForwardVelocity(self):
         return 0
-    
+
     def calcRotationSpeed(self):
-        if robot.ml.isTargetAcquired():
+        if not robot.ml.isTargetAcquired():
             return 0
-        
-        velocity = getXNormalized() * self.reactionSpeed
-        
+
+        velocity = self.getXNormalized() * self.reactionSpeed
+
         absVel = abs(velocity)
-        
-        absVel = max(absVel,self.minRotationSpeed)
-        absVel = min(absVel,self.maxRotationSpeed)
-        
-        if abs(getXNormalized()) <= self.radianTolerance:
+
+        absVel = max(absVel, self.minRotationSpeed)
+        absVel = min(absVel, self.maxRotationSpeed)
+
+        if abs(self.getXNormalized()) <= self.radianTolerance:
             absVel = 0
-        
+
         velocity = math.copysign(absVel, velocity)
-        
+
         return velocity
-        
+
     def getXNormalized(self):
         """Returns a value between -1 (left) and 1 (right) for where the ball is on the x axis"""
         xPosition = robot.ml.getX()
         xResolution = robot.ml.getResX()
-        
-        #normalizes and then moves 
-        xNormalized = xPosition/xResolution * 2 - 1
-        
+
+        # normalizes and then moves
+        xNormalized = xPosition / xResolution * 2 - 1
+
         return xNormalized
