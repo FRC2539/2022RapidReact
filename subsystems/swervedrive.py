@@ -309,8 +309,8 @@ class SwerveDrive(BaseDrive):
         Flips the measurement from the navX 180 degrees.
         This is necessary for pose estimation.
         """
-        return Rotation2d(self.navX.getRotation2d().radians() * -1)
-        # return self.navX.getRotation2d()
+        # return Rotation2d(self.navX.getRotation2d().radians() * -1)
+        return self.navX.getRotation2d()
 
     def addVisionPoseEstimate(self, pose, latency):
         """

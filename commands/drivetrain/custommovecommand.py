@@ -19,7 +19,7 @@ class CustomMoveCommand(CommandBase):
         flipDirection=True,
         maxSpeed=0.5,
         minSpeed=0.05,
-        distanceTolerance=0.1,
+        distanceTolerance=0.15,
         slowdownDistance=0.5,
     ):
         super().__init__()
@@ -38,7 +38,7 @@ class CustomMoveCommand(CommandBase):
         self.distanceTolerance = distanceTolerance
         self.slowdownDistance = slowdownDistance
 
-        self.wheelAngleTolerance = 2  # degrees
+        self.wheelAngleTolerance = 1.75  # degrees
 
     def initialize(self):
         # Initialize the robot state

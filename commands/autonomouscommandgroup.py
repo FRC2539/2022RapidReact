@@ -41,17 +41,17 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         eval("self." + toRun + "()")  # Runs the method
 
-    def moveTest(self):
+    def moveTest0(self):
         self.addCommands(
-            ResetAutoStateCommand(),
-            # CustomMoveCommand(x=1, y=1, relative=True),
-            # TurnCommand(3.14 / 2),
-            # CustomMoveCommand(x=-1, y=-1, relative=True),
-            CustomMoveCommand(x=1),
+            ResetAutoStateCommand(x=0, y=0, angle=0),
+            CustomMoveCommand(x=1, y=1, relative=True),
             TurnCommand(3.14 / 2),
-            TurnCommand(-3.14 / 2),
-            CustomMoveCommand(x=-1),
-            TurnCommand(6.28),
+            CustomMoveCommand(x=-1, y=-1, relative=True),
+            # CustomMoveCommand(x=1),
+            # TurnCommand(3.14 / 2),
+            # TurnCommand(-3.14 / 2),
+            # CustomMoveCommand(x=-1),
+            # TurnCommand(6.28),
         )
 
     def trajectory(self):
@@ -68,9 +68,8 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             TurnInPlaceCommand(6.28, accelerationRate=4, turnSpeed=1),
         )
 
-    """Collect the leftmost red ball, shoot 2, then collect 2 more balls and shoot those."""
-
     def fourBall(self):
+        """Collect the leftmost red ball, shoot 2, then collect 2 more balls and shoot those."""
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
             CustomMoveCommand(x=0, y=1.89),
@@ -81,18 +80,16 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             CustomMoveCommand(x=-2.69, y=0.29),
         )
 
-    """Collects the leftmost red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)."""
-
     def twoBallLeftND(self):
+        """Collects the leftmost red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)."""
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
             CustomMoveCommand(x=0, y=1.89),
             # Intake ball command
         )
 
-    """Collects the middle red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)."""
-
     def twoBallMidND(self):
+        """Collects the middle red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)."""
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
             CustomMoveCommand(x=1.23, y=0.6),
