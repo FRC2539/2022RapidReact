@@ -10,7 +10,7 @@ from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 
 
 class TurnInPlaceCommand(CommandBase):
-    """This Command does not work yet. HAZARDOUS. Will spin off too infinity if you mess up.
+    """This Command does not work yet. HAZARDOUS. Will spin off to infinity if you mess up.
     Great for repeatedly bashing the intake against walls."""
 
     def __init__(

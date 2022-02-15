@@ -68,5 +68,36 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             TurnInPlaceCommand(6.28, accelerationRate=4, turnSpeed=1),
         )
 
+    """Collect the leftmost red ball, shoot 2, then collect 2 more balls and shoot those."""
+
+    def fourBall(self):
+        self.addCommands(
+            ResetAutoStateCommand(x=0, y=0, angle=0),
+            CustomMoveCommand(x=0, y=1.89),
+            # Intake ball command
+            CustomMoveCommand(x=0, y=-1.89),
+            TurnCommand(turnAngle=-1.46),
+            CustomMoveCommand(x=6.67, y=0.71),
+            CustomMoveCommand(x=-2.69, y=0.29),
+        )
+
+    """Collects the leftmost red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)."""
+
+    def twoBallLeftND(self):
+        self.addCommands(
+            ResetAutoStateCommand(x=0, y=0, angle=0),
+            CustomMoveCommand(x=0, y=1.89),
+            # Intake ball command
+        )
+
+    """Collects the middle red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)."""
+
+    def twoBallMidND(self):
+        self.addCommands(
+            ResetAutoStateCommand(x=0, y=0, angle=0),
+            CustomMoveCommand(x=1.23, y=0.6),
+            # ShootCommand
+        )
+
     def interrupted(self):
         pass
