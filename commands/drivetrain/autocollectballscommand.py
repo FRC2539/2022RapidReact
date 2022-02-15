@@ -15,11 +15,11 @@ class AutoCollectBallsCommand(CommandBase):
         super().__init__()
         self.addRequirements(robot.drivetrain)
 
-        self.reactionSpeed = 1
+        self.reactionSpeed = 0.5
         self.maxRotationSpeed = drivetrainConstants.angularSpeedLimit / 4
         self.minRotationSpeed = 0  # drivetrainConstants.angularSpeedMinimum
 
-        self.radianTolerance = 0.01
+        self.radianTolerance = 0.2
 
     def initialize(self):
         pass
