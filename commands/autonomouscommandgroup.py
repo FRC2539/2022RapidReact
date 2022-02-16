@@ -72,30 +72,54 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def fourBall(self):
         """Collect the leftmost red ball, shoot 2, then collect 2 more balls and shoot those."""
         self.addCommands(
+            #Collect the leftmost ball.
             ResetAutoStateCommand(x=0, y=0, angle=0),
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
             CustomMoveCommand(x=0, y=1.89),
-            # Intake ball command
+            
+            #Collect the remaining two balls.
             CustomMoveCommand(x=0, y=-1.89),
             TurnCommand(turnAngle=-1.46),
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
             CustomMoveCommand(x=6.67, y=0.71),
+            
+            #Return to shoot.
             CustomMoveCommand(x=-2.69, y=0.29),
+            SurrogateShooterCommand(),
         )
 
     def twoBallLeftND(self):
-        """Collects the leftmost red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)."""
+        """Collects the leftmost red ball and shoots both. ND standss for Non-Disruptive (no blue ball interference)."""
         self.addCommands(
-            ResetAutoStateCommand(x=0, y=0, angle=0),
+            ResetAutoStateCommand(x=0, y=0, angle=1.57), #90 degrees
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
             CustomMoveCommand(x=0, y=1.89),
-            # Intake ball command
+            SurrogateShooterCommand(),
         )
 
     def twoBallMidND(self):
         """Collects the middle red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)."""
         self.addCommands(
-            ResetAutoStateCommand(x=0, y=0, angle=0),
+            ResetAutoStateCommand(x=0, y=0, angle=0.99), # 57 degrees
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
             CustomMoveCommand(x=1.23, y=0.6),
-            # ShootCommand
+            TurnCommand(0.54), #31 degrees
+            SurrogateShooterCommand(),
         )
-
+    
+    def twoBallLeftYD(self):
+        pass
+    
+    def twoBallRightYD(self):
+        pass
+    
+    def interrupted(self):
+        pass
+    
+    def twoBallRightND(self):
+        """Collects the rightmost red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)"""
+        self.addCommands(
+            ResetAutoStateCommand(x=0, y=0, angle=0.99), # 57 degrees
+        )
     def interrupted(self):
         pass
