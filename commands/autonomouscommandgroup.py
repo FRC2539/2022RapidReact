@@ -44,15 +44,16 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def moveTest0(self):
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
-            CustomMoveCommand(x=1, y=1, relative=False),
+            # CustomMoveCommand(x=1, y=1, relative=False),
             # TurnCommand(3.14 / 2, relative=False),
             # TurnCommand(0, relative=False),
-            CustomMoveCommand(x=0, y=0, relative=False),
-            # CustomMoveCommand(x=1),
-            # TurnCommand(3.14 / 2),
-            # TurnCommand(-3.14 / 2),
-            # CustomMoveCommand(x=-1),
-            # TurnCommand(6.28),
+            # TurnCommand(-3.14 / 2, relative=False),
+            # CustomMoveCommand(x=0, y=0, relative=False),
+            CustomMoveCommand(x=1, relative=False),
+            TurnCommand(3.14 / 2, relative=False),
+            TurnCommand(-3.14 / 2, relative=False),
+            CustomMoveCommand(x=-1, relative=False),
+            TurnCommand(6.28, relative=False),
         )
 
     def trajectory(self):
