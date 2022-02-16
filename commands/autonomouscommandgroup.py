@@ -44,15 +44,16 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def moveTest0(self):
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
-            CustomMoveCommand(x=1, y=1, relative=False),
-            # TurnCommand(3.14 / 2, relative=False),
+            CustomMoveCommand(x=0.5, y=0.5, relative=False),
+            TurnCommand(3.14 / 2, relative=False),
             # TurnCommand(0, relative=False),
-            CustomMoveCommand(x=0, y=0, relative=False),
-            # CustomMoveCommand(x=1),
-            # TurnCommand(3.14 / 2),
-            # TurnCommand(-3.14 / 2),
-            # CustomMoveCommand(x=-1),
-            # TurnCommand(6.28),
+            # TurnCommand(-3.14 / 2, relative=False),
+            CustomMoveCommand(x=-0.5, y=-0.5, relative=False),
+            # CustomMoveCommand(x=1, relative=False),
+            # TurnCommand(3.14 / 2, relative=False),
+            # TurnCommand(-3.14 / 2, relative=False),
+            # CustomMoveCommand(x=0, relative=False),
+            # TurnCommand(6.28, relative=False),
         )
 
     def trajectory(self):
@@ -72,30 +73,80 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def fourBall(self):
         """Collect the leftmost red ball, shoot 2, then collect 2 more balls and shoot those."""
         self.addCommands(
-            ResetAutoStateCommand(x=0, y=0, angle=0),
+            #Collect the leftmost ball.
+            ResetAutoStateCommand(x=0, y=0, angle=-1.57), # -90 degrees.
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
             CustomMoveCommand(x=0, y=1.89),
-            # Intake ball command
+            
+            #Collect the remaining two balls.
             CustomMoveCommand(x=0, y=-1.89),
             TurnCommand(turnAngle=-1.46),
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
             CustomMoveCommand(x=6.67, y=0.71),
+            
+            #Return to shoot.
             CustomMoveCommand(x=-2.69, y=0.29),
+            TurnCommand(0.35), #20 degrees
+            SurrogateShooterCommand(),
         )
 
     def twoBallLeftND(self):
-        """Collects the leftmost red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)."""
+        """Collects the leftmost red ball and shoots both. ND standss for Non-Disruptive (no blue ball interference)."""
         self.addCommands(
-            ResetAutoStateCommand(x=0, y=0, angle=0),
+            ResetAutoStateCommand(x=0, y=0, angle=-1.57), #-90 degrees
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
             CustomMoveCommand(x=0, y=1.89),
-            # Intake ball command
+            SurrogateShooterCommand(),
         )
 
     def twoBallMidND(self):
         """Collects the middle red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)."""
         self.addCommands(
-            ResetAutoStateCommand(x=0, y=0, angle=0),
+            ResetAutoStateCommand(x=0, y=0, angle=-2.15), # -123 degrees
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
             CustomMoveCommand(x=1.23, y=0.6),
-            # ShootCommand
+            TurnCommand(0.54), #31 degrees
+            SurrogateShooterCommand(),
         )
 
+    def twoBallRightND(self):
+        """Collects the rightmost red ball and shoots both. ND stands for Non-Disruptive (no blue ball interference)"""
+        self.addCommands(
+            ResetAutoStateCommand(x=0, y=0, angle=2.30), # 132 degrees
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
+            CustomMoveCommand(x=0.75, y=-0.83),
+            TurnCommand(0.17), #10 degrees
+            SurrogateShooterCommand(),
+        )
+    
+    def twoBallLeftYD(self):
+        """Collects the rightmost blue ball and yeets it away from the centerline before scoring 1 red ball. YD stands for Yes-Disruptive (blue ball interference)."""
+        self.addCommands(
+            #Collect and yeet the blue ball.
+            ResetAutoStateCommand(x=0, y=0, angle=-1.27), # -73 degrees
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
+            CustomMoveCommand(x=-0.35, y=1.16),
+            TurnCommand(-2.04), # -117 degrees
+            InstantCommand(lambda: robot.intake.RejectCommand(), [robot.intake]), #Could potentially be switched with shoot for maximum yeet.
+           
+            #Shoot the red ball.
+            TurnCommand(1.95), # 112 degrees
+            SurrogateShooterCommand(),
+        )
+    
+    def twoBallRightYD(self):
+        """Collects the leftmost blue ball and yeets it away from the centerline before scoring 1 red ball. YD stands for Yes-Disruptive (blue ball interference)."""
+        self.addCommands(
+            #Collect and yeet the blue ball.
+            ResetAutoStateCommand(x=0, y=0, angle=-2.06), # -118 degrees
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
+            CustomMoveCommand(x=1.16, y=0.35),
+            TurnCommand(-0.79), # -45 degrees
+            InstantCommand(lambda: robot.intake.RejectCommand(), [robot.intake]), #Could potentially be switched with shoot for maximum yeet.
+            
+            TurnCommand(0.61), #35 degrees
+            SurrogateShooterCommand(),
+        )
+        
     def interrupted(self):
         pass

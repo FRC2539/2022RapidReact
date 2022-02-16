@@ -38,7 +38,7 @@ class CustomMoveCommand(CommandBase):
         self.distanceTolerance = distanceTolerance
         self.slowdownDistance = slowdownDistance
 
-        self.wheelAngleTolerance = 1.75  # degrees
+        self.wheelAngleTolerance = 1.85  # degrees
 
     def initialize(self):
         # Initialize the robot state
@@ -183,7 +183,8 @@ class CustomMoveCommand(CommandBase):
 
             return Pose2d(targetPose.translation(), reversedRotation)
         else:
-            return Pose2d(self.x, self.y, self.initialPosition.rotation())
+            # return Pose2d(self.x, self.y, self.initialPosition.rotation())
+            return Pose2d(self.x, self.y, reversedRotation)
 
     def getRobotPose(self):
         return robot.drivetrain.getSwervePose()

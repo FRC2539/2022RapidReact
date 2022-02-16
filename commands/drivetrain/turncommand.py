@@ -26,14 +26,11 @@ class TurnCommand(CommandBase):
     ):
         super().__init__()
 
-        if relative:
-            # sets the angle that the robot will turn and the time it will take to do so
-            # (-) accounts for the fact that the robot is counterclockwise positive
-            self.turnAngle = -turnAngle
-        else:
-            robotRotation = robot.drivetrain.getSwervePose().rotation().radians()
+        self.relative = relative
 
-            self.turnAngle = -1 * (turnAngle - robotRotation)
+        # sets the angle that the robot will turn and the time it will take to do so
+        # (-) accounts for the fact that the robot is counterclockwise positive
+        self.turnAngle = -turnAngle
 
         self.addRequirements(robot.drivetrain)
 
@@ -50,6 +47,9 @@ class TurnCommand(CommandBase):
         self.executionNumber = -1
 
     def initialize(self):
+        if not self.relative:
+            self.calculateAbsoluteTurnAngle()
+
         # saves the original pose of the robot
         self.initialAngle = self.getCurrentAngle()
         self.currentRotationSpeed = math.copysign(self.minRotationSpeed, self.turnAngle)
@@ -79,6 +79,11 @@ class TurnCommand(CommandBase):
     def end(self, interrupted):
         # stops the robot if the command is for some reason halted
         robot.drivetrain.stop()
+
+    def calculateAbsoluteTurnAngle(self):
+        robotRotation = robot.drivetrain.getSwervePose().rotation().radians()
+
+        self.turnAngle = -1 * (-self.turnAngle - robotRotation)
 
     def calculateTrapezoidSpeed(self):
         """Returns the speed that the robot should be turning at based on the trapezoidal velocity curve.
