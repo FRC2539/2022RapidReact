@@ -31,6 +31,7 @@ shooter = Constants()
 limelight = Constants()
 climber = Constants()
 hood = Constants()
+ml = Constants()
 
 # Drivtrain Cougar Course Decimal Control
 drivetrain.decimalPlaces = 36
@@ -188,3 +189,11 @@ hood.percentOutputSpeed = 0.3
 # Angle range in degrees
 hood.maxAngle = 35
 hood.minAngle = -35
+
+# sets ml constants
+
+# this is for the camera the was on the robot when we calculated these
+ml.horizontalFieldOfView = 1.137  # measured in radians
+ml.verticalFieldOfView = 0.846  # radians
+
+ml.ballArea = 5000  # at 4 feet
