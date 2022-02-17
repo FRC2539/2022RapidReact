@@ -42,4 +42,4 @@ class LimelightAngleLockCommand(CommandBase):
         robot.drivetrain.stop()
 
     def getMeasurement(self):
-        return robot.limelight.estimateShooterPose().rotation().radians()
+        return -1 * robot.limelight.estimateShooterPose().rotation().radians()

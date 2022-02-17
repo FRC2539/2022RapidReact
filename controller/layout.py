@@ -33,6 +33,9 @@ from commands.ballsystem.forwardconveyorcommand import ForwardConveyorCommand
 
 from commands.drivetrain.autocollectballscommand import AutoCollectBallsCommand
 
+from commands.limelight.limelightanglelockcommand import LimelightAngleLockCommand
+from commands.drivetrain.enablelimelightlockcommand import EnableLimelightLockCommand
+
 import constants
 import robot
 
@@ -68,7 +71,9 @@ def init():
     driveControllerTwo.LeftThumb.whileHeld(IntakeCommand())
     driveControllerTwo.RightThumb.whileHeld(RejectCommand())
 
-    driveControllerTwo.BottomThumb.whileHeld(AutoCollectBallsCommand())
+    # driveControllerTwo.BottomThumb.whileHeld(AutoCollectBallsCommand())
+    # driveControllerTwo.BottomThumb.whileHeld(LimelightAngleLockCommand())
+    driveControllerTwo.BottomThumb.whileHeld(EnableLimelightLockCommand())
 
     # driveControllerTwo.Trigger.whileHeld()
 

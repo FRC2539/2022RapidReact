@@ -162,7 +162,7 @@ limelight.limelightAngle = math.radians(10)  # 10 degrees (angle in radians)
 limelight.defaultPipeline = 1
 
 limelight.drivetrainAngleTolerance = math.radians(
-    4
+    1.5
 )  # the tolerance for limelight aiming
 
 limelight.limelightToShooterTransform = Transform2d(
