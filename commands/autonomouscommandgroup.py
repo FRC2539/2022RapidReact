@@ -70,6 +70,17 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             TurnInPlaceCommand(6.28, accelerationRate=4, turnSpeed=1),
         )
 
+    def fiveBall(self):
+        """Immediately shoots a red ball, collects 2 balls and shoots them, then collects a red ball + one from the human player station."""
+        self.addCommands(
+            ResetAutoStateCommand(x=0, y=0, angle=-1.57), # -90 degrees
+            SurrogateShooterCommand(),
+            InstantCommand(lambda: robot.intake.IntakeCommand(), [robot.intake]),
+            CustomMoveCommand(x=0, y=),
+            TurnCommand(-1.76), # -101 degrees
+            CustomMoveCommand(),
+        )
+    
     def fourBall(self):
         """Collect the leftmost red ball, shoot 2, then collect 2 more balls and shoot those."""
         self.addCommands(
