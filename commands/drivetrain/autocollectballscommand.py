@@ -12,24 +12,36 @@ import math
 
 
 class AutoCollectBallsCommand(CommandBase):
+    """Turns towards ball and then moves at it. The intake is running during the entire command."""
+
     def __init__(self):
         super().__init__()
         self.addRequirements(robot.drivetrain)
 
+        # sets the proportional value in my made up PID controller
         self.reactionSpeed = 0.03
+
+        # sets the min and max speed the robot will spin at
         self.maxRotationSpeed = constants.drivetrain.angularSpeedLimit / 4
         self.minRotationSpeed = constants.drivetrain.angularSpeedMinimum
 
-        self.maxLinearSpeed = constants.drivetrain.speedLimit / 6
+        # sets the speed the robot will move forwards
+        self.maxLinearSpeed = constants.drivetrain.speedLimit / 4
 
+        # the angle the robot will turn to be within
         self.turningRadianTolerance = 0.2
+        # the angle the robot will move when it is within
         self.movingRadianTolerance = 0.4
 
+        # creates a timer for later letting the robot run slightly after losing sight of the ball
         self.timer = Timer()
+
+        self.timerStarted = False
 
     def initialize(self):
         robot.intake.intakeBalls()
         self.timer.reset()
+        self.timer.start()
 
     def execute(self):
 
@@ -46,31 +58,50 @@ class AutoCollectBallsCommand(CommandBase):
         robot.intake.stop()
 
     def calcForwardVelocity(self):
+        """calculates the velocity the robot should be moving forwards at. m/s"""
+        # resets the timer everytime a target is aquired for later
         if robot.ml.isTargetAcquired():
+            self.timerStarted = True
             self.timer.reset()
             self.timer.start()
 
-        if not robot.ml.isTargetAcquired() and not self.timer.hasElapsed(0.2):
+        # lets the robot continue to move forward for 0.2 seconds after losing sight of the ball
+        if (
+            not robot.ml.isTargetAcquired()
+            and not self.timer.hasElapsed(0.2)
+            and self.timerStarted
+        ):
             return self.maxLinearSpeed
+
+        # otherwise, if 0.2 seconds has passed, the robot is stopped
+        if not robot.ml.isTargetAcquired():
+            return 0
 
         velocity = 0
 
+        # keeps the velocity zero if the robot is not pointing close enough to the ball
         if abs(self.getXAngle()) <= self.movingRadianTolerance:
             velocity = self.maxLinearSpeed
 
         return velocity
 
     def calcRotationSpeed(self):
+        """calculates the rotation speed that the robot should be turning in radians. Counterclockwise positive. (I think)"""
+        # does not spin towards a ball that doesn't exist
         if not robot.ml.isTargetAcquired():
             return 0
 
+        # sets the rotational velocity of the robot to be proportional to its offset
         velocity = self.getXNormalized() * self.reactionSpeed
 
+        # replaces a bunch of copysigns
         absVel = abs(velocity)
 
+        # limits the speed
         absVel = max(absVel, self.minRotationSpeed)
         absVel = min(absVel, self.maxRotationSpeed)
 
+        # checks if we are in the tolerance and stops
         if abs(self.getXAngle()) <= self.turningRadianTolerance:
             absVel = 0
 
