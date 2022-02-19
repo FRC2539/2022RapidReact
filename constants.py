@@ -117,7 +117,8 @@ drivetrain.autoTolerance = Pose2d(Translation2d(0.1, 0.1), Rotation2d.fromDegree
 drivetrain.encoderConfig = CANCoderConfiguration()
 drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360
 drivetrain.encoderConfig.initializationStrategy = (
-    SensorInitializationStrategy.BootToAbsolutePosition
+    # SensorInitializationStrategy.BootToAbsolutePosition
+    SensorInitializationStrategy.BootToZero
 )
 drivetrain.encoderConfig.sensorDirection = False
 
@@ -184,11 +185,11 @@ hood.positionConversionFactor = 1 / 210  # This should be the gear ratio
 
 hood.kP = 0.001  # PID
 
-hood.percentOutputSpeed = 0.3
+hood.percentOutputSpeed = 0.1
 
 # Angle range in degrees
-hood.maxAngle = 35
-hood.minAngle = -35
+hood.maxAngle = 17
+hood.minAngle = -17
 
 # sets ml constants
 

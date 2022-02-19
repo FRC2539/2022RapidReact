@@ -1,4 +1,3 @@
-
 """
 This is the place where we store port numbers for all subsystems. It is based on
 the RobotMap concept from WPILib. Each subsystem should have its own ports list.
@@ -14,8 +13,6 @@ class PortsList:
 
 drivetrain = PortsList()
 
-# The PDP is/should be ID 16.
-
 """CAN IDs for motors"""
 drivetrain.frontLeftDriveID = 0
 drivetrain.frontRightDriveID = 2
@@ -27,36 +24,40 @@ drivetrain.frontRightTurnID = 6
 drivetrain.backLeftTurnID = 5
 drivetrain.backRightTurnID = 7
 
-drivetrain.frontLeftCANCoder = 17
-drivetrain.frontRightCANCoder = 19
-drivetrain.backLeftCANCoder = 18
-drivetrain.backRightCANCoder = 20
+drivetrain.frontLeftCANCoder = 24
+drivetrain.frontRightCANCoder = 26
+drivetrain.backLeftCANCoder = 25
+drivetrain.backRightCANCoder = 27
 
 limelight = PortsList()
 limelight.port = 8
 
 shooter = PortsList()
-shooter.motorOneID = 14
-shooter.motorTwoID = 15
+shooter.motorOneID = 8
+shooter.motorTwoID = 9
 
 climberPneumatics = PortsList()
-climberPneumatics.pcmID = 13
-climberPneumatics.forwardChannel = 0
-climberPneumatics.reverseChannel = 1
+climberPneumatics.pcmID = 22
+climberPneumatics.forwardChannel = 6
+climberPneumatics.reverseChannel = 7
 
 climber = PortsList()
-climber.motorID = 11
+climber.motorID = 18
 
 intake = PortsList()
-intake.motorID = 12
+intake.motorID = 10
+intake.forwardChannel = 0
+intake.reverseChannel = 1
 
 hood = PortsList()
-hood.motorID = 25  # Not defined right now
+hood.motorID = 13
 
 ballsystem = PortsList()
-ballsystem.conveyorMotorID = 13
-ballsystem.chamberMotorID = 14
+ballsystem.conveyorMotorID = 11
+ballsystem.chamberMotorID = 12
 ballsystem.conveyorSensor = 0
 ballsystem.chamberSensor = 0
 
 ml = PortsList()
+
+compressor = PortsList()

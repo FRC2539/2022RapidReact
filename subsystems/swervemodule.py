@@ -81,6 +81,7 @@ class SwerveModule:
 
         # Sets the magnet offset of the CANCoder. This can be determined through the Pheonix Tuner.
         if self.offset is not None:
+            # print(self.moduleName + ": " + str(self.getWheelAngle()))
             self.cancoder.configMagnetOffset(self.offset)
 
         # Store the offset basis for zeroing the CANCoder.
@@ -217,6 +218,7 @@ class SwerveModule:
         # angle = (angle + 180) % 360  # Takes the opposite so right isn't left.
 
         currentAngle = self.getWheelAngle()
+        # currentAngle = self.getAbsoluteWheelAngle()
         self.addcounter = 0  # Counts how many times we exceed 360.
         self.minuscounter = 0  # Counts how many times we go below 0.
         self.loop = True

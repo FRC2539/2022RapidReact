@@ -3,7 +3,7 @@ from .cougarsystem import *
 import ports
 import constants
 
-from rev import CANSparkMax, MotorType, ControlType, IdleMode
+from rev import CANSparkMax
 
 
 class Hood(CougarSystem):
@@ -13,8 +13,8 @@ class Hood(CougarSystem):
         super().__init__("Hood")
 
         # Define the motor object.
-        self.motor = CANSparkMax(ports.hood.motorID, MotorType.kBrushless)
-        self.motor.setIdleMode(IdleMode.kBrake)
+        self.motor = CANSparkMax(ports.hood.motorID, CANSparkMax.MotorType.kBrushless)
+        self.motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
         self.motor.burnFlash()
 
         # Get the motor's PID controller.
@@ -68,7 +68,7 @@ class Hood(CougarSystem):
         if not self.angleIsWithinBounds(position):
             return
 
-        self.controller.setReference(position, ControlType.kPosition)
+        self.controller.setReference(position, CANSparkMax.ControlType.kPosition)
 
     def setPercent(self, speed):
         """
@@ -97,6 +97,9 @@ class Hood(CougarSystem):
             self.motor.set(speed)
         else:
             self.stop()
+
+    def rawMove(self, speed):
+        self.motor.set(speed)
 
     def isInAngleBounds(self, speed=0):
         """
@@ -135,4 +138,4 @@ class Hood(CougarSystem):
         Stops the hood motor.
         """
         self.motor.stopMotor()
-        self.sendMessage("Hood Stopped!")
+        # self.sendMessage("Hood Stopped!")

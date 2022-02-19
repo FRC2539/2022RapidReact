@@ -10,4 +10,7 @@ class IntakeBallsCommandGroup(ParallelCommandGroup):
     def __init__(self):
         super().__init__()
 
-        self.addCommands(IntakeCommand(), ForwardConveyorCommand())
+        self.addCommands(
+            IntakeCommand(),
+            ForwardConveyorCommand(),
+        )
