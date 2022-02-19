@@ -14,6 +14,7 @@ from commands.drivetrain.custommovecommand import CustomMoveCommand
 from commands.drivetrain.resetautostatecommand import ResetAutoStateCommand
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.turninplacecommand import TurnInPlaceCommand
+from commands.drivetrain.turntocommand import TurnToCommand
 from commands.drivetrain.pointfollowcommand import PointFollowCommand
 from commands.drivetrain.trajectoryfollowercommand import TrajectoryFollowerCommand
 
@@ -71,20 +72,28 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             TurnInPlaceCommand(6.28, accelerationRate=4, turnSpeed=1),
         )
 
-    #def fiveBall(self):
-        #"""Immediately shoots a red ball, collects 2 balls and shoots them, then collects a red ball + one from the human player station."""
-        #self.addCommands(
-            #ResetAutoStateCommand(x=0, y=0, angle=-1.57), # -90 degrees
-            #SurrogateShooterCommand(),
-            #ParallelCommandGroup(
-                #IntakeCommand(),
-                #CustomMoveCommand(x=0, y=1.89),
-            #)
-            #TurnCommand(-1.97), # -113 degrees
-            #CustomMoveCommand(x=2.52, y=-1.07),
-            #TurnCommand(
-        #)
-    
+    def turnToTest(self):
+        self.addCommands(
+            ResetAutoStateCommand(),
+            TurnToCommand(math.pi / 2),
+            TurnToCommand(-math.pi),
+            TurnToCommand(math.pi / 2),
+        )
+
+    # def fiveBall(self):
+    # """Immediately shoots a red ball, collects 2 balls and shoots them, then collects a red ball + one from the human player station."""
+    # self.addCommands(
+    # ResetAutoStateCommand(x=0, y=0, angle=-1.57), # -90 degrees
+    # SurrogateShooterCommand(),
+    # ParallelCommandGroup(
+    # IntakeCommand(),
+    # CustomMoveCommand(x=0, y=1.89),
+    # )
+    # TurnCommand(-1.97), # -113 degrees
+    # CustomMoveCommand(x=2.52, y=-1.07),
+    # TurnCommand(
+    # )
+
     def fourBall(self):
         """Collect the leftmost red ball, shoot 2, then collect 2 more balls and shoot those."""
         self.addCommands(
