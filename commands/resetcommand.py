@@ -18,6 +18,7 @@ class ResetCommand(InstantCommand):
         self.addRequirements(robot.drivetrain)
         self.addRequirements(robot.intake)
         self.addRequirements(robot.ml)
+        self.addRequirements(robot.lights)
         # self.addRequirements(robot.shooter)
         # self.addRequirements(robot.climber)
         self.addRequirements(robot.limelight)

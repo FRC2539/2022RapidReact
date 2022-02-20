@@ -21,6 +21,7 @@ from subsystems.intake import Intake as intake
 
 from subsystems.ballsystem import BallSystem as ballsystem
 from subsystems.ml import ML as ml
+from subsystems.lights import Lights as lights
 
 # from subsystems.shooter import Shooter as shooter
 # from subsystems.climber import Climber as climber
@@ -52,6 +53,8 @@ class KryptonBot(TimedCommandRobot):
         StartUpCommandGroup().schedule()
 
         import robot
+
+        robot.lights.solidBlue()
 
         self.addPeriodic(
             robot.drivetrain.callAutoPeriodicFunctions,

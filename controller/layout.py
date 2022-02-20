@@ -36,6 +36,10 @@ from commands.drivetrain.autocollectballscommand import AutoCollectBallsCommand
 from commands.limelight.limelightanglelockcommand import LimelightAngleLockCommand
 from commands.drivetrain.enablelimelightlockcommand import EnableLimelightLockCommand
 
+from commands.lights.lightsbluecommand import LightsBlueCommand
+from commands.lights.lightsorangecommand import LightsOrangeCommand
+from commands.lights.lightsseizurecommand import LightsSeizureCommand
+
 import constants
 import robot
 
@@ -81,8 +85,10 @@ def init():
     # driveControllerTwo.LeftBottomLeft.whileHeld()
 
     # driveControllerOne.LeftTopRight.whileHeld()
+    driveControllerOne.LeftTopRight.whenPressed(LightsSeizureCommand())
     # driveControllerOne.LeftBottomRight.whileHeld(ClimbBarCommand())
     # driveControllerOne.LeftTopLeft.whileHeld()
+    driveControllerOne.LeftTopLeft.whenPressed(LightsOrangeCommand())
     driveControllerOne.LeftBottomLeft.whenPressed(ResetAutoStateCommand())
 
     # driveControllerOne.RightTopLeft.whileHeld()
