@@ -117,8 +117,8 @@ drivetrain.autoTolerance = Pose2d(Translation2d(0.1, 0.1), Rotation2d.fromDegree
 drivetrain.encoderConfig = CANCoderConfiguration()
 drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360
 drivetrain.encoderConfig.initializationStrategy = (
-    # SensorInitializationStrategy.BootToAbsolutePosition
-    SensorInitializationStrategy.BootToZero
+    SensorInitializationStrategy.BootToAbsolutePosition
+    # SensorInitializationStrategy.BootToZero
 )
 drivetrain.encoderConfig.sensorDirection = False
 

@@ -77,7 +77,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
-                0,
+                299.434,
                 # 321.416,  # -90,  # -255.498047,
                 180,  # Offset basis - used for zeroing CANCoder
             ),
@@ -87,7 +87,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontRightTurnID,
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
-                0,
+                191.78,
                 # 182.373,  # 15,  # -272.548840625,
                 360,  # Offset basis - used for zeroing CANCoder
                 invertedDrive=True,  # Invert for some reason?
@@ -98,7 +98,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backLeftTurnID,
                 ports.drivetrain.backLeftCANCoder,
                 self.speedLimit,
-                0,
+                20.033,
                 # 349.277,  # 10,  # -40.8692515625,
                 -180,  # Offset basis - used for zeroing CANCoder
             ),
@@ -108,7 +108,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
-                0,
+                84.915,
                 # 4.131,  # 90,  # -128.759766125,
                 -360,  # Offset basis - used for zeroing CANCoder
                 invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
@@ -454,6 +454,7 @@ class SwerveDrive(BaseDrive):
 
         # Set the swerve modules to the module states
         self.setModuleStates(optimizedModuleStates)
+        # self.setModuleStates(moduleStates)
 
     def setChassisSpeedsRaw(self, chassisSpeeds):
         """

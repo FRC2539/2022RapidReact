@@ -18,10 +18,10 @@ class BallSystem(CougarSystem):
         super().__init__("BallSystem")
 
         self.conveyorMotor = WPI_TalonSRX(ports.ballsystem.conveyorMotorID)
-        # self.chamberMotor = WPI_TalonSRX(ports.ballsystem.chamberMotorID)
+        self.chamberMotor = WPI_TalonSRX(ports.ballsystem.chamberMotorID)
 
         self.configureMotor(self.conveyorMotor)
-        # self.configureMotor(self.chamberMotor)
+        self.configureMotor(self.chamberMotor)
 
         # INFO: Percentages are from 0 - 1, 1 being 100%
         self.bindVariable("conveyorSpeed", "Conveyor Speed", 1.0)
@@ -48,6 +48,14 @@ class BallSystem(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
+
+    def forwardAll(self):
+        self.moveConveyor(self.conveyorSpeed)
+        self.moveChamber(self.chamberSpeed)
+
+    def backwardAll(self):
+        self.moveConveyor(-self.conveyorSpeed)
+        self.moveChamber(-self.chamberSpeed)
 
     def forwardConveyor(self):
         """
