@@ -77,7 +77,8 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
-                -255.498047,
+                0,
+                # 321.416,  # -90,  # -255.498047,
                 180,  # Offset basis - used for zeroing CANCoder
             ),
             SwerveModule(  # Front right module.
@@ -86,7 +87,8 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontRightTurnID,
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
-                -272.548840625,
+                0,
+                # 182.373,  # 15,  # -272.548840625,
                 360,  # Offset basis - used for zeroing CANCoder
                 invertedDrive=True,  # Invert for some reason?
             ),
@@ -96,8 +98,9 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backLeftTurnID,
                 ports.drivetrain.backLeftCANCoder,
                 self.speedLimit,
-                -40.8692515625,
-                180,  # Offset basis - used for zeroing CANCoder
+                0,
+                # 349.277,  # 10,  # -40.8692515625,
+                -180,  # Offset basis - used for zeroing CANCoder
             ),
             SwerveModule(  # Back right module.
                 "back right",
@@ -105,8 +108,9 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
-                -128.759766125,
-                360,  # Offset basis - used for zeroing CANCoder
+                0,
+                # 4.131,  # 90,  # -128.759766125,
+                -360,  # Offset basis - used for zeroing CANCoder
                 invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
@@ -662,7 +666,7 @@ class SwerveDrive(BaseDrive):
         """
 
         # Calculate the new offset for each swerve module
-        # Algorithm: Current offset + (Base angle - absolute wheel angle)
+        # Algorithm: Current offset + (Base angle - absolut
         correctedAngles = [
             module.offset + (module.offsetBasis - module.getAbsoluteWheelAngle())
             for module in self.modules

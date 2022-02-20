@@ -21,4 +21,3 @@ class ResetCommand(InstantCommand):
         self.addRequirements(robot.lights)
         # self.addRequirements(robot.shooter)
         # self.addRequirements(robot.climber)
-        self.addRequirements(robot.limelight)

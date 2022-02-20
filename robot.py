@@ -21,11 +21,16 @@ from subsystems.intake import Intake as intake
 
 from subsystems.ballsystem import BallSystem as ballsystem
 from subsystems.ml import ML as ml
+<<<<<<< HEAD
 from subsystems.lights import Lights as lights
+=======
+from subsystems.pneumatics import Pneumatics as pneumatics
 
-# from subsystems.shooter import Shooter as shooter
+from subsystems.shooter import Shooter as shooter
+>>>>>>> 088ec1856432a47d3860d57d9b933ae4b15c0d5a
+
 # from subsystems.climber import Climber as climber
-# from subsystems.hood import Hood as hood
+from subsystems.hood import Hood as hood
 
 
 import math

@@ -1,4 +1,3 @@
-from ast import For
 from .logitechdualshock import LogitechDualShock
 from .thrustmasterjoystick import ThrustmasterJoystick
 from . import logicalaxes
@@ -36,9 +35,16 @@ from commands.drivetrain.autocollectballscommand import AutoCollectBallsCommand
 from commands.limelight.limelightanglelockcommand import LimelightAngleLockCommand
 from commands.drivetrain.enablelimelightlockcommand import EnableLimelightLockCommand
 
+
 from commands.lights.lightsbluecommand import LightsBlueCommand
 from commands.lights.lightsorangecommand import LightsOrangeCommand
 from commands.lights.lightsseizurecommand import LightsSeizureCommand
+
+from commands.hood.raisehoodcommand import RaiseHoodCommand
+from commands.hood.lowerhoodcommand import LowerHoodCommand
+
+from commands.shooter.setshooterrpmscommand import SetShooterRPMsCommand
+
 
 import constants
 import robot
@@ -111,12 +117,12 @@ def init():
 
     componentController.Back.whenPressed(ResetCommand())
 
-    # componentController.LeftTrigger.whileHeld()
-    # componentController.LeftBumper.whileHeld()
-    # componentController.RightTrigger.whileHeld()
+    componentController.LeftTrigger.whileHeld(LowerHoodCommand())
+    componentController.LeftBumper.whileHeld(RaiseHoodCommand())
+    componentController.RightTrigger.whileHeld(SetShooterRPMsCommand(2000, 2000))
     # componentController.RightBumper.whileHeld()
 
-    # componentController.A.whenPressed()
+    # componentController.A.whileHeld()
     # componentController.X.whileHeld()
     # componentController.B.whileHeld()
     # componentController.Y.whileHeld()

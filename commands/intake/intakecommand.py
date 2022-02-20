@@ -10,6 +10,7 @@ class IntakeCommand(CommandBase):
         self.addRequirements(robot.intake)
 
     def initialize(self):
+        robot.pneumatics.extendIntake()
         robot.intake.intakeBalls()
 
     def end(self, interrupted):

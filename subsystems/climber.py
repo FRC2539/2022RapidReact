@@ -12,14 +12,7 @@ class Climber(CougarSystem):
     def __init__(self):
         super().__init__("Climber")
 
-        pneumaticsModuleType = PneumaticsModuleType.CTREPCM
-
-        # Create the controller for the compressor
-        self.compressor = Compressor(
-            ports.climberPneumatics.pcmID, pneumaticsModuleType
-        )
-
-        self.compressor.enableDigital()
+        pneumaticsModuleType = PneumaticsModuleType.REVPH
 
         # Create the controller for the solenoid
         self.climberSolenoid = DoubleSolenoid(
