@@ -56,7 +56,6 @@ ballsystem = PortsList()
 ballsystem.conveyorMotorID = 11
 ballsystem.chamberMotorID = 12
 ballsystem.conveyorSensor = 0
-ballsystem.chamberSensor = 0
 
 ml = PortsList()
 
