@@ -37,13 +37,16 @@ class BallSystem(CougarSystem):
         # Initialize the color sensor in the chamber
         self.chamberSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
 
-        self.colorSensor.configureColorSensor(
+        self.chamberSensor.configureColorSensor(
             ColorSensorV3.ColorResolution.k18bit,
             ColorSensorV3.ColorMeasurementRate.k50ms,
         )
 
         # Set a threshold for the conveyor sensor
         self.conveyorSensorThreshold = 50
+
+        # Set a threshold for the chamber sensor
+        self.chamberSensorThreshold = 2000  # 0 to 2047 (higher is closer)
 
         # Constantly updates the ballsystem's status.
         self.constantlyUpdate(
@@ -129,3 +132,15 @@ class BallSystem(CougarSystem):
         Returns if the sensor in the conveyor sees a ball
         """
         return self.conveyorSensor.getValue() < self.conveyorSensorThreshold
+
+    def isChamberBallPresent(self):
+        """
+        Returns if the sensor in the chamber sees a ball
+        """
+        return self.chamberSensor.getProximity() > self.chamberSensorThreshold
+
+    def getChamberBallColor(self):
+        """
+        Returns the color read by the chamber ball sensor
+        """
+        return self.chamberSensor.getColor()
