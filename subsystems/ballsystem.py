@@ -1,6 +1,6 @@
 from .cougarsystem import *
 
-from wpilib import AnalogInput
+from wpilib import AnalogInput, DriverStation
 
 import wpilib
 
@@ -144,3 +144,11 @@ class BallSystem(CougarSystem):
         Returns the color read by the chamber ball sensor
         """
         return self.chamberSensor.getColor()
+
+    def getAllianceColor(self):
+        """
+        Returns the current alliance color
+
+        (Return value is a DriverStation.Alliance (kRed, kBlue, kInvalid))
+        """
+        return DriverStation.getAlliance()
