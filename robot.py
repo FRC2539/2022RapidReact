@@ -26,7 +26,7 @@ from subsystems.pneumatics import Pneumatics as pneumatics
 
 from subsystems.shooter import Shooter as shooter
 
-# from subsystems.climber import Climber as climber
+from subsystems.climber import Climber as climber
 from subsystems.hood import Hood as hood
 
 

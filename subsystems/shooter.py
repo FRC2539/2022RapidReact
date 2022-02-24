@@ -31,25 +31,25 @@ class Shooter(CougarSystem):
         self.shooterMotorTwo.setNeutralMode(NeutralMode.Coast)
 
         # Set the PID configuration.
-        self.shooterMotorOne.config_kF(0, constants.shooter.kF, 0)  # Ben, no FF! -Ben
-        self.shooterMotorOne.config_kP(0, constants.shooter.kP, 0)
-        self.shooterMotorOne.config_kI(0, constants.shooter.kI, 0)
-        self.shooterMotorOne.config_kD(0, constants.shooter.kD, 0)
-        self.shooterMotorOne.config_IntegralZone(0, constants.shooter.IZone, 0)
+        self.shooterMotorOne.config_kF(0, 0.05, 0)  # Ben, no FF! -Ben
+        self.shooterMotorOne.config_kP(0, 0.2, 0)
+        self.shooterMotorOne.config_kI(0, 0, 0)
+        self.shooterMotorOne.config_kD(0, 0.05, 0)
+        self.shooterMotorOne.config_IntegralZone(0, 0, 0)
 
         # Set the PID configuration.
-        self.shooterMotorTwo.config_kF(0, constants.shooter.kF, 0)  # Ben, no FF! -Ben
-        self.shooterMotorTwo.config_kP(0, constants.shooter.kP, 0)
-        self.shooterMotorTwo.config_kI(0, constants.shooter.kI, 0)
-        self.shooterMotorTwo.config_kD(0, constants.shooter.kD, 0)
-        self.shooterMotorTwo.config_IntegralZone(0, constants.shooter.IZone, 0)
+        self.shooterMotorTwo.config_kF(0, 0.05, 0)  # Ben, no FF! -Ben
+        self.shooterMotorTwo.config_kP(0, 0.2, 0)
+        self.shooterMotorTwo.config_kI(0, 0, 0)
+        self.shooterMotorTwo.config_kD(0, 0.05, 0)
+        self.shooterMotorTwo.config_IntegralZone(0, 0, 0)
 
         # Set the second motor to move in the opposite direction of the first.
         self.shooterMotorTwo.setInverted(True)
 
         # Set the range of velocities.
         self.maxVel = 3000
-        self.minVel = 400
+        self.minVel = 100
 
         # Constantly updates the hood's status.
         self.constantlyUpdate(

@@ -4,7 +4,7 @@ from wpilib import AnalogInput, DriverStation
 
 import wpilib
 
-from rev.color import ColorSensorV3
+# from rev.color import ColorSensorV3
 
 import ports
 
@@ -32,15 +32,15 @@ class BallSystem(CougarSystem):
         self.bindVariable("chamberSpeed", "Chamber Speed", 1.0)
 
         # Initialize the sensor that detects the presence of balls in the conveyor area
-        self.conveyorSensor = AnalogInput(ports.ballsystem.sensorPort)
+        self.conveyorSensor = AnalogInput(ports.ballsystem.conveyorSensor)
 
         # Initialize the color sensor in the chamber
-        self.chamberSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
+        # self.chamberSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
 
-        self.chamberSensor.configureColorSensor(
-            ColorSensorV3.ColorResolution.k18bit,
-            ColorSensorV3.ColorMeasurementRate.k50ms,
-        )
+        # self.chamberSensor.configureColorSensor(
+        #     ColorSensorV3.ColorResolution.k18bit,
+        #     ColorSensorV3.ColorMeasurementRate.k50ms,
+        # )
 
         # Set a threshold for the conveyor sensor
         self.conveyorSensorThreshold = 50
@@ -133,17 +133,17 @@ class BallSystem(CougarSystem):
         """
         return self.conveyorSensor.getValue() < self.conveyorSensorThreshold
 
-    def isChamberBallPresent(self):
-        """
-        Returns if the sensor in the chamber sees a ball
-        """
-        return self.chamberSensor.getProximity() > self.chamberSensorThreshold
+    # def isChamberBallPresent(self):
+    #     """
+    #     Returns if the sensor in the chamber sees a ball
+    #     """
+    #     return self.chamberSensor.getProximity() > self.chamberSensorThreshold
 
-    def getChamberBallColor(self):
-        """
-        Returns the color read by the chamber ball sensor
-        """
-        return self.chamberSensor.getColor()
+    # def getChamberBallColor(self):
+    #     """
+    #     Returns the color read by the chamber ball sensor
+    #     """
+    #     return self.chamberSensor.getColor()
 
     def getAllianceColor(self):
         """

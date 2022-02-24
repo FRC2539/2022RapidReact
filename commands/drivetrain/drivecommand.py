@@ -86,4 +86,4 @@ class DriveCommand(CommandBase):
         Uses the same algorithm as the LimelightAngleLockCommand,
         just in combination with the drive command here.
         """
-        return -1 * robot.limelight.estimateShooterPose().rotation().radians()
+        return robot.limelight.estimateShooterPose().rotation().radians()

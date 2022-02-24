@@ -4,6 +4,8 @@ from . import logicalaxes
 
 from commands2 import InstantCommand
 
+from commands2 import ParallelCommandGroup
+
 
 from commands.drivetrain.drivecommand import DriveCommand
 
@@ -28,7 +30,7 @@ from commands.climber.toggleclimbersolenoidcommand import ToggleClimberSolenoidC
 from commands.climber.climbbarcommand import ClimbBarCommand
 
 from commands.intakeballscommandgroup import IntakeBallsCommandGroup
-from commands.ballsystem.forwardconveyorcommand import ForwardConveyorCommand
+from commands.ballsystem.forwardballsystemcommand import ForwardBallSystemCommand
 
 from commands.drivetrain.autocollectballscommand import AutoCollectBallsCommand
 
@@ -70,22 +72,30 @@ def init():
     logicalaxes.strafe = driveControllerOne.X
     logicalaxes.rotate = driveControllerTwo.X
 
-    driveControllerOne.RightThumb.whileHeld(ForwardConveyorCommand())
-    # driveControllerOne.RightThumb.whileHeld(RaiseClimberCommand())
-    # driveControllerOne.LeftThumb.whileHeld(LowerClimberCommand())
+    # Replace with the automated commands
+    driveControllerOne.RightThumb.whileHeld(RaiseClimberCommand())
+    driveControllerOne.LeftThumb.whileHeld(LowerClimberCommand())
+    driveControllerOne.BottomThumb.whenPressed(ToggleClimberSolenoidCommand())
 
-    # driveControllerOne.BottomThumb.whenPressed(ToggleClimberSolenoidCommand())
+    driveControllerOne.LeftBottomLeft.whileHeld(RaiseClimberCommand())
+    driveControllerOne.LeftBottomMiddle.whileHeld(LowerClimberCommand())
+    driveControllerOne.LeftBottomRight.whileHeld(ToggleClimberSolenoidCommand())
 
-    driveControllerOne.Trigger.whileHeld(IntakeBallsCommandGroup())
+    driveControllerOne.Trigger.whileHeld(SetShooterRPMsCommand(3000, 2200))
 
-    driveControllerTwo.LeftThumb.whileHeld(IntakeCommand())
-    driveControllerTwo.RightThumb.whileHeld(RejectCommand())
+    # Reverse lower shot
+    # driveControllerOne.Trigger.whileHeld()
 
-    # driveControllerTwo.BottomThumb.whileHeld(AutoCollectBallsCommand())
-    # driveControllerTwo.BottomThumb.whileHeld(LimelightAngleLockCommand())
+    driveControllerTwo.LeftThumb.whileHeld(IntakeBallsCommandGroup())
+    driveControllerTwo.RightThumb.whileHeld(AutoCollectBallsCommand())
     driveControllerTwo.BottomThumb.whileHeld(EnableLimelightLockCommand())
 
-    # driveControllerTwo.Trigger.whileHeld()
+    driveControllerTwo.Trigger.whileHeld(
+        ParallelCommandGroup(
+            SetShooterRPMsCommand(3000, 2200),
+            ForwardBallSystemCommand(),
+        )
+    )
 
     # driveControllerTwo.LeftTopLeft.whileHeld()
     # driveControllerTwo.LeftBottomLeft.whileHeld()
@@ -97,19 +107,6 @@ def init():
     driveControllerOne.LeftTopLeft.whenPressed(LightsOrangeCommand())
     driveControllerOne.LeftBottomLeft.whenPressed(ResetAutoStateCommand())
 
-    # driveControllerOne.RightTopLeft.whileHeld()
-    # driveControllerOne.RightBottomLeft.whileHeld()
-    # driveControllerOne.RightBottomRight.whileHeld()
-
-    # driveControllerOne.RightBottomLeft.whileHeld()
-    # driveControllerOne.RightBottomMiddle.whenPressed()
-    # driveControllerOne.RightBottomRight.whileHeld()
-    # driveControllerOne.RightTopRight.whenPressed(AutomatedColorControlCommand())
-
-    # driveControllerTwo.LeftBottomMiddle.whileHeld()
-    # driveControllerTwo.LeftTopMiddle.whileHeld()
-    # driveControllerTwo.LeftTopMiddle.whileHeld()
-
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)
 
@@ -119,7 +116,7 @@ def init():
 
     componentController.LeftTrigger.whileHeld(LowerHoodCommand())
     componentController.LeftBumper.whileHeld(RaiseHoodCommand())
-    componentController.RightTrigger.whileHeld(SetShooterRPMsCommand(2000, 2000))
+    # componentController.RightTrigger.whileHeld(SetShooterRPMsCommand(1000, 1000))
     # componentController.RightBumper.whileHeld()
 
     # componentController.A.whileHeld()

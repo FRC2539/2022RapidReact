@@ -134,11 +134,17 @@ drivetrain.ballFarLimit = 0
 
 # Constants for the shooter below.
 
-shooter.kP = 1.5
-shooter.kI = 0
-shooter.kD = 0.1
-shooter.kF = 0.05
-shooter.IZone = 0
+# shooter.kP = 1.5
+# shooter.kI = 0
+# shooter.kD = 0.1
+# shooter.kF = 0.05
+# shooter.IZone = 0
+
+# shooter.kP = 1
+# shooter.kI = 0
+# shooter.kD = 0.05
+# shooter.kF = 0.0005
+# shooter.IZone = 0
 
 # Constants for the limelight below.
 

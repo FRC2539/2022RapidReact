@@ -18,8 +18,6 @@ class Limelight(CougarSystem):
 
         self.nt = NetworkTables.getTable("limelight")
 
-        self.driveTable = NetworkTables.getTable("DriveTrain")
-
         self.setPipeline(constants.limelight.defaultPipeline)
 
         # The deadband for whether we are aimed or not.

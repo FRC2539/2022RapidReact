@@ -14,6 +14,7 @@ class SetShooterRPMsCommand(CommandBase):
 
     def initialize(self):
         robot.shooter.setRPM(self.rpm1, self.rpm2)
+        # robot.shooter.setPercent(0.4, 0.4)
 
     def end(self, interrupted):
         robot.shooter.stopShooter()
