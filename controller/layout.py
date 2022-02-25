@@ -46,6 +46,8 @@ from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 
 from commands.shooter.setshooterrpmscommand import SetShooterRPMsCommand
+from commands.shooter.lowgoalshootcommand import LowGoalShootCommand
+from commands.shooter.highgoalshootcommand import HighGoalShootCommand
 
 
 import constants
@@ -81,7 +83,8 @@ def init():
     driveControllerOne.LeftBottomMiddle.whileHeld(LowerClimberCommand())
     driveControllerOne.LeftBottomRight.whileHeld(ToggleClimberSolenoidCommand())
 
-    driveControllerOne.Trigger.whileHeld(SetShooterRPMsCommand(3000, 2200))
+    # driveControllerOne.Trigger.whileHeld(SetShooterRPMsCommand(1350, 1000))
+    driveControllerOne.Trigger.whileHeld(HighGoalShootCommand())
 
     # Reverse lower shot
     # driveControllerOne.Trigger.whileHeld()
@@ -90,12 +93,14 @@ def init():
     driveControllerTwo.RightThumb.whileHeld(AutoCollectBallsCommand())
     driveControllerTwo.BottomThumb.whileHeld(EnableLimelightLockCommand())
 
-    driveControllerTwo.Trigger.whileHeld(
-        ParallelCommandGroup(
-            SetShooterRPMsCommand(3000, 2200),
-            ForwardBallSystemCommand(),
-        )
-    )
+    # driveControllerTwo.Trigger.whileHeld(
+    #     ParallelCommandGroup(
+    #         SetShooterRPMsCommand(1350, 1000),
+    #         ForwardBallSystemCommand(),
+    #     )
+    # )
+
+    driveControllerTwo.Trigger.whileHeld(LowGoalShootCommand(1450, 1000))
 
     # driveControllerTwo.LeftTopLeft.whileHeld()
     # driveControllerTwo.LeftBottomLeft.whileHeld()
@@ -104,8 +109,8 @@ def init():
     driveControllerOne.LeftTopRight.whenPressed(LightsSeizureCommand())
     # driveControllerOne.LeftBottomRight.whileHeld(ClimbBarCommand())
     # driveControllerOne.LeftTopLeft.whileHeld()
-    driveControllerOne.LeftTopLeft.whenPressed(LightsOrangeCommand())
-    driveControllerOne.LeftBottomLeft.whenPressed(ResetAutoStateCommand())
+    # driveControllerOne.LeftTopLeft.whenPressed(LightsOrangeCommand())
+    driveControllerOne.LeftTopLeft.whenPressed(ResetAutoStateCommand())
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)
@@ -116,12 +121,12 @@ def init():
 
     componentController.LeftTrigger.whileHeld(LowerHoodCommand())
     componentController.LeftBumper.whileHeld(RaiseHoodCommand())
-    # componentController.RightTrigger.whileHeld(SetShooterRPMsCommand(1000, 1000))
+    componentController.RightTrigger.whileHeld(HighGoalShootCommand())
     # componentController.RightBumper.whileHeld()
 
     # componentController.A.whileHeld()
-    # componentController.X.whileHeld()
-    # componentController.B.whileHeld()
+    componentController.X.whileHeld(RejectCommand())
+    componentController.B.whileHeld(RejectCommand())
     # componentController.Y.whileHeld()
 
     # componentController.DPadUp.whenPressed()

@@ -25,6 +25,7 @@ class Hood(CougarSystem):
         self.encoder.setPositionConversionFactor(  # See the constant for an explanation
             constants.hood.positionConversionFactor
         )
+        # self.encoder.setPosition(0)
 
         # Adjust the hood's PID control values.
         self.controller.setP(constants.hood.kP, 0)

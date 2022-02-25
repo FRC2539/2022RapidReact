@@ -14,11 +14,11 @@ class Pneumatics(CougarSystem):
         pneumaticsModuleType = PneumaticsModuleType.REVPH
 
         # Create the controller for the compressor
-        self.compressor = Compressor(
-            ports.climberPneumatics.pcmID, pneumaticsModuleType
-        )
+        # self.compressor = Compressor(
+        #     ports.climberPneumatics.pcmID, pneumaticsModuleType
+        # )
 
-        self.compressor.enableDigital()
+        # self.compressor.enableDigital()
 
         self.intakeSolenoid = DoubleSolenoid(
             ports.climberPneumatics.pcmID,

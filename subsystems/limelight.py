@@ -60,6 +60,8 @@ class Limelight(CougarSystem):
 
         self.aimedDeadband = self.get("aimedDeadband", self.aimedDeadband)
 
+        # self.put("Distance", self.calculateDistance())
+
     def setPipeline(self, pipeline: int):
         """
         Changes the pipeline of the limelight.

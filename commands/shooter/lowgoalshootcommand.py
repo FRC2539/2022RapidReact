@@ -9,13 +9,15 @@ class LowGoalShootCommand(CommandBase):
     def __init__(self, rpm1, rpm2):
         super().__init__()
 
-        self.rpm1 = rpm1
-        self.rpm2 = rpm2
+        # self.rpm1 = rpm1
+        # self.rpm2 = rpm2
         self.addRequirements(robot.shooter)
         # self.shootTime = 0.5
-        self.shooterRPMTolerance = 150
+        self.shooterRPMTolerance = 100
 
     def initialize(self):
+        self.rpm1 = robot.shooter.lowGoalRPM1
+        self.rpm2 = robot.shooter.lowGoalRPM2
         robot.shooter.setRPM(self.rpm1, self.rpm2)
         robot.ballsystem.forwardConveyor()
 
@@ -43,6 +45,8 @@ class LowGoalShootCommand(CommandBase):
 
         if shooterAtSpeed1 and shooterAtSpeed2:
             robot.ballsystem.forwardChamber()
+        else:
+            robot.ballsystem.stopChamber()
 
     # def monitorConveyor(self):
     #     """Monitors the state of the conveyor and moves balls to the chamber."""

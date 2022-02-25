@@ -32,14 +32,14 @@ class Shooter(CougarSystem):
 
         # Set the PID configuration.
         self.shooterMotorOne.config_kF(0, 0.05, 0)  # Ben, no FF! -Ben
-        self.shooterMotorOne.config_kP(0, 0.2, 0)
+        self.shooterMotorOne.config_kP(0, 0.1, 0)
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 0.05, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
 
         # Set the PID configuration.
         self.shooterMotorTwo.config_kF(0, 0.05, 0)  # Ben, no FF! -Ben
-        self.shooterMotorTwo.config_kP(0, 0.2, 0)
+        self.shooterMotorTwo.config_kP(0, 0.1, 0)
         self.shooterMotorTwo.config_kI(0, 0, 0)
         self.shooterMotorTwo.config_kD(0, 0.05, 0)
         self.shooterMotorTwo.config_IntegralZone(0, 0, 0)
@@ -50,6 +50,9 @@ class Shooter(CougarSystem):
         # Set the range of velocities.
         self.maxVel = 3000
         self.minVel = 100
+
+        self.bindVariable("lowGoalRPM1", "Low Goal RPM 1", 1150)
+        self.bindVariable("lowGoalRPM2", "Low Goal RPM 2", 900)
 
         # Constantly updates the hood's status.
         self.constantlyUpdate(
@@ -88,6 +91,12 @@ class Shooter(CougarSystem):
         self.shooterMotorTwo.stopMotor()
 
     def rpmToSensor(self, rpm):
+        return self.rpmToSensorRaw(rpm * constants.shooter.gearRatio)
+
+    def sensorToRPM(self, units):
+        return self.sensorToRPMRaw(units) / constants.shooter.gearRatio
+
+    def rpmToSensorRaw(self, rpm):
         """
         Convert a standard output RPM into
         a tick units for the robot. Please note,
@@ -96,7 +105,7 @@ class Shooter(CougarSystem):
         """
         return (rpm * 2048) / 600
 
-    def sensorToRPM(self, units):
+    def sensorToRPMRaw(self, units):
         """
         Convert a value in tick units into
         a human-comprehendible RPM. Please note,

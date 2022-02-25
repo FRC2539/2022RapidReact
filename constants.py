@@ -146,6 +146,8 @@ drivetrain.ballFarLimit = 0
 # shooter.kF = 0.0005
 # shooter.IZone = 0
 
+shooter.gearRatio = 1.5
+
 # Constants for the limelight below.
 
 # 11 ms, the approximate time taken for a limelight to take a photo
@@ -194,8 +196,8 @@ hood.kP = 0.001  # PID
 hood.percentOutputSpeed = 0.1
 
 # Angle range in degrees
-hood.maxAngle = 17
-hood.minAngle = -17
+hood.maxAngle = 28
+hood.minAngle = -37.8
 
 # sets ml constants
 
