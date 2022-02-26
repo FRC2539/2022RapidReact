@@ -1,6 +1,6 @@
 from .cougarsystem import *
 
-from wpilib import AnalogInput, DriverStation, Color
+from wpilib import AnalogInput, DriverStation
 
 import wpilib
 
@@ -39,14 +39,14 @@ class BallSystem(CougarSystem):
 
         self.chamberSensor.configureColorSensor(
             ColorSensorV3.ColorResolution.k18bit,
-            ColorSensorV3.ColorMeasurementRate.k50ms,
+            ColorSensorV3.ColorMeasurementRate.k25ms,
         )
 
         # Set a threshold for the conveyor sensor
         self.conveyorSensorThreshold = 50
 
         # Set a threshold for the chamber sensor
-        self.chamberSensorThreshold = 110  # 0 to 2047 (higher is closer)
+        self.chamberSensorThreshold = 100  # 0 to 2047 (higher is closer)
         # last used - 150
         # Partial ball - 180
         # Full ball - 360 - 380
@@ -157,12 +157,16 @@ class BallSystem(CougarSystem):
         Returns the color read by the chamber ball sensor
         """
         color = self.getChamberBallColorRaw()
-        if color.blue > color.red:
-            # return Color.kBlue
-            return "blue"
+
+        # Returns the ball color
+        #   Invalid if no ball
+        #   Ball color otherwise
+        if not self.isChamberBallPresent():
+            return DriverStation.Alliance.kInvalid
+        elif color.blue > color.red:
+            return DriverStation.Alliance.kBlue
         else:
-            # return Color.kRed
-            return "red"
+            return DriverStation.Alliance.kRed
 
     def getAllianceColor(self):
         """
