@@ -59,6 +59,9 @@ class BallSystem(CougarSystem):
         self.constantlyUpdate(
             "Chamber Running", lambda: self.chamberMotor.getMotorOutputPercent() != 0
         )
+        self.constantlyUpdate(
+            "Conveyor distance", lambda: self.conveyorSensor.getValue()
+        )
 
         # self.constantlyUpdate("Ball Present", lambda: self.isChamberBallPresent())
         # self.constantlyUpdate("Ball Color", lambda: self.getChamberBallColor())

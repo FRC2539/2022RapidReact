@@ -16,6 +16,7 @@ from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.turninplacecommand import TurnInPlaceCommand
 from commands.drivetrain.turntocommand import TurnToCommand
 from commands.drivetrain.pointfollowcommand import PointFollowCommand
+from commands.drivetrain.moveforwardcommand import MoveForwardCommand
 from commands.drivetrain.trajectoryfollowercommand import TrajectoryFollowerCommand
 
 from commands.shooter.surrogateshootercommand import SurrogateShooterCommand
@@ -42,35 +43,35 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 break
 
         eval("self." + toRun + "()")  # Runs the method
-        
+
     def threeBall0(self):
         self.addCommands(
-                ResetAutoStateCommand(angle=-math.pi/2),
-                #AimAndShootCommand(),
-                TurnCommand(-math.pi/2,relative=False),
-                #StartIntakeCommand(),
-                MoveForwardCommand(1.7),
-                MoveForwardCommand(-0.79),
-                TurnCommand(-1.83),
-                MoveForwardCommand(2.54),
-                #StopIntakeCommand(),
-                TurnCommand(0.79),
-                #AimAndShootCommand(),
-            )
-    
+            ResetAutoStateCommand(angle=-math.pi / 2),
+            # AimAndShootCommand(),
+            TurnCommand(-math.pi / 2, relative=False),
+            # StartIntakeCommand(),
+            MoveForwardCommand(1.7),
+            MoveForwardCommand(-0.79),
+            TurnCommand(-1.83),
+            MoveForwardCommand(2.54),
+            # StopIntakeCommand(),
+            TurnCommand(0.79),
+            # AimAndShootCommand(),
+        )
+
     def matthewsMoveCommand(self):
         self.addCommands(
-            ResetAutoStateCommand(angle=math.pi/2),
+            ResetAutoStateCommand(angle=math.pi / 2),
             TurnCommand(0, relative=False),
             MoveForwardCommand(2),
-            TurnCommand(math.pi/4),
+            TurnCommand(math.pi / 4),
             MoveForwardCommand(-math.sqrt(2)),
-            TurnCommand(-math.pi/2),
+            TurnCommand(-math.pi / 2),
             MoveForwardCommand(math.sqrt(2)),
             TurnCommand(0, relative=False),
             MoveForwardCommand(-2),
-            TurnCommand(-math.pi/3 * 2, relative=False)
-            )
+            TurnCommand(-math.pi / 3 * 2, relative=False),
+        )
 
     def moveTest(self):
         self.addCommands(

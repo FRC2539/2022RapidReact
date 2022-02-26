@@ -11,5 +11,7 @@ class AutoCollectBallsCommandGroup(ParallelCommandGroup):
         super().__init__()
 
         self.addCommands(
-            IntakeCommand(), ForwardBallSystemCommand(), AutoCollectBallsCommand()
+            IntakeCommand(),
+            ForwardBallSystemCommand(useLights=False),
+            AutoCollectBallsCommand(),
         )

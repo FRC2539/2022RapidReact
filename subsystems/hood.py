@@ -28,12 +28,12 @@ class Hood(CougarSystem):
         self.encoder.setPosition(0)
 
         # Adjust the hood's PID control values.
-        self.controller.setP(0.1)
-        self.controller.setI(0)
-        self.controller.setD(0)
-        self.controller.setFF(0)
-        self.controller.setIZone(0)
-        self.controller.setOutputRange(-1, 1)
+        # self.controller.setP(0.1)
+        # self.controller.setI(0)
+        # self.controller.setD(0)
+        # self.controller.setFF(0)
+        # self.controller.setIZone(0)
+        # self.controller.setOutputRange(-1, 1)
 
         # The hood's max and min angle.
         self.maxAngle = constants.hood.maxAngle
@@ -45,6 +45,9 @@ class Hood(CougarSystem):
         # Constantly updates the hood's status.
         self.constantlyUpdate("Hood Moving", lambda: self.motor.get() != 0)
         self.constantlyUpdate("Hood Position", self.getPosition)
+
+        self.lowGoalAngle = 10
+        self.highGoalAngle = 11
 
     def periodic(self):
         """

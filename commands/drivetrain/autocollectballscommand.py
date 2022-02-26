@@ -9,6 +9,7 @@ from wpilib import Timer
 from wpimath.kinematics import ChassisSpeeds
 import constants
 import math
+import wpilib
 
 
 class AutoCollectBallsCommand(CommandBase):
@@ -28,6 +29,8 @@ class AutoCollectBallsCommand(CommandBase):
         # sets the speed the robot will move forwards
         self.maxLinearSpeed = constants.drivetrain.speedLimit / 4
 
+        self.pickupSpeed = self.maxLinearSpeed / 2
+
         # the angle the robot will turn to be within
         self.turningRadianTolerance = 0.2
         # the angle the robot will move when it is within
@@ -36,13 +39,20 @@ class AutoCollectBallsCommand(CommandBase):
         # creates a timer for later letting the robot run slightly after losing sight of the ball
         self.timer = Timer()
 
+        self.lightsTimer = Timer()
+
         self.timerStarted = False
+
+        self.lightsOn = False
 
     def initialize(self):
         self.timer.reset()
         self.timer.start()
+        self.lightsTimer.reset()
+        self.lightsTimer.start()
 
     def execute(self):
+        self.blinkBallColor()
 
         robot.drivetrain.setChassisSpeeds(
             ChassisSpeeds(-self.calcForwardVelocity(), 0, self.calcRotationSpeed())
@@ -55,6 +65,9 @@ class AutoCollectBallsCommand(CommandBase):
     def end(self, interrupted):
         robot.drivetrain.stop()
 
+        finalColor = self.allianceToColor(robot.ml.getTargetColor())
+        robot.lights.set(finalColor)
+
     def calcForwardVelocity(self):
         """calculates the velocity the robot should be moving forwards at. m/s"""
         # resets the timer everytime a target is aquired for later
@@ -66,10 +79,10 @@ class AutoCollectBallsCommand(CommandBase):
         # lets the robot continue to move forward for 0.2 seconds after losing sight of the ball
         if (
             not robot.ml.isTargetAcquired()
-            and not self.timer.hasElapsed(0.1)
+            and not self.timer.hasElapsed(0.2)
             and self.timerStarted
         ):
-            return self.maxLinearSpeed
+            return self.pickupSpeed
 
         # otherwise, if 0.2 seconds has passed, the robot is stopped
         if not robot.ml.isTargetAcquired():
@@ -131,3 +144,26 @@ class AutoCollectBallsCommand(CommandBase):
         """calculates the angle of the ball to the robot x"""
         horizontalAngle = -self.getXNormalized() / constants.ml.horizontalFieldOfView
         return horizontalAngle  # counter clockwise positive
+
+    def blinkBallColor(self):
+        blinkColor = self.allianceToColor(robot.ml.getTargetColor())
+
+        if self.lightsTimer.hasElapsed(0.25):
+            self.lightsOn = not self.lightsOn
+            self.lightsTimer.reset()
+
+        if self.lightsOn:
+            robot.lights.set(blinkColor)
+        else:
+            robot.lights.off()
+
+    def allianceToColor(self, alliance):
+
+        if alliance == wpilib.DriverStation.Alliance.kRed:
+            blinkColor = robot.lights.colors["red"]
+        elif alliance == wpilib.DriverStation.Alliance.kBlue:
+            blinkColor = robot.lights.colors["blue"]
+        else:
+            blinkColor = robot.lights.colors["yellow"]
+
+        return blinkColor

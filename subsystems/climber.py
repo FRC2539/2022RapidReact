@@ -2,7 +2,7 @@ from .cougarsystem import CougarSystem
 import ports
 import math
 import constants
-from wpilib import Compressor, DoubleSolenoid, PneumaticsModuleType
+from wpilib import DoubleSolenoid, PneumaticsModuleType
 from ctre import WPI_TalonFX, NeutralMode, FeedbackDevice
 
 
@@ -45,6 +45,7 @@ class Climber(CougarSystem):
 
         # Send the climber position to networktables
         self.constantlyUpdate("Climber Position", self.getPosition)
+        self.constantlyUpdate("Climber Running", lambda: self.climberMotor.get() != 0)
 
     def periodic(self):
         """

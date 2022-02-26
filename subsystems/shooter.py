@@ -56,11 +56,11 @@ class Shooter(CougarSystem):
         self.lowGoalRPM2 = 900
 
         # High goal rpms
-        self.highGoalRPM1 = 900
-        self.highGoalRPM2 = 2300
+        # self.highGoalRPM1 = 900
+        # self.highGoalRPM2 = 2300
 
-        # self.bindVariable("highGoalRPM1", "High Goal RPM 1", 1800)
-        # self.bindVariable("highGoalRPM2", "High Goal RPM 2", 1500)
+        self.bindVariable("highGoalRPM1", "High Goal RPM 1", 900)
+        self.bindVariable("highGoalRPM2", "High Goal RPM 2", 2300)
 
         # Constantly updates the hood's status.
         self.constantlyUpdate(

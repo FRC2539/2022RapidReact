@@ -4,6 +4,8 @@ import math
 
 import constants
 
+from wpilib import DriverStation
+
 from wpimath.geometry import Pose2d
 
 from networktables import NetworkTables
@@ -29,6 +31,25 @@ class ML(CougarSystem):
         Returns whether or not a target is actively detected by the ml system.
         """
         return self.get("targetAcquired")
+
+    def setFilterColor(self, color):
+        """
+        Sets the color to filter for.
+        """
+        self.put("filterColor", color)
+
+    def getTargetColor(self):
+        """
+        Returns the color of the currently selected target (DriverStation.Alliance)
+        """
+        rawTargetColor = self.get("targetColor")
+
+        if rawTargetColor == "red":
+            return DriverStation.Alliance.kRed
+        elif rawTargetColor == "blue":
+            return DriverStation.Alliance.kBlue
+        else:
+            return DriverStation.Alliance.kInvalid
 
     def getX(self):
         """

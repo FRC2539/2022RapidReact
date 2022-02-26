@@ -1,37 +1,43 @@
-from commands2 import CommandBase
+from commands.shooter.baseshootcommand import BaseShootCommand
 
 import robot
 
 
-class HighGoalShootCommand(CommandBase):
+class HighGoalShootCommand(BaseShootCommand):
     def __init__(self):
         super().__init__()
 
-        self.addRequirements(robot.shooter)
-        self.shooterRPMTolerance = 150
+        self.rpm1Multiplier = 8
+        self.rpm2Multiplier = 8
+        self.rpm1Base = robot.shooter.highGoalRPM1
+        self.rpm2Base = robot.shooter.highGoalRPM2
 
-        self.rpm1 = 0
-        self.rpm2 = 0
+        self.hoodMultiplier = 0.1
+        self.hoodBase = robot.hood.highGoalAngle
 
     def initialize(self):
-        robot.shooter.setRPM(self.rpm1, self.rpm2)
-        robot.ballsystem.forwardConveyor()
+        pass
+        # self.setRPMs(0, 0)
+        # self.setHoodPosition(0)
 
     def execute(self):
+        distance = robot.limelight.calculateDistance()
+
+        # Calculate new rpm and hood values based on the current distance
+        self.updateRPMs(distance)
+        self.updateHoodAngle(distance)
+
+        # Run core class methods
         self.shootIfShooterAtSpeed()
+        self.updateHoodPosition()
 
-    def end(self, interrupted):
-        robot.shooter.stopShooter()
-        robot.ballsystem.stopConveyor()
-        robot.ballsystem.stopChamber()
+    def updateRPMs(self, distance):
+        rpm1 = self.rpm1Multiplier * distance + self.rpm1Base
+        rpm2 = self.rpm2Multiplier * distance + self.rpm2Base
 
-    def shootIfShooterAtSpeed(self):
-        shooterAtSpeed1 = (
-            abs(robot.shooter.getRPM1() - self.rpm1) <= self.shooterRPMTolerance
-        )
-        shooterAtSpeed2 = (
-            abs(robot.shooter.getRPM2() - self.rpm2) <= self.shooterRPMTolerance
-        )
+        self.setRPMs(rpm1, rpm2)
 
-        if shooterAtSpeed1 and shooterAtSpeed2:
-            robot.ballsystem.forwardChamber()
+    def updateHoodAngle(self, distance):
+        hoodAngle = self.hoodMultiplier * distance + self.hoodBase
+
+        self.setHoodPosition(hoodAngle)

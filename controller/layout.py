@@ -87,7 +87,7 @@ def init():
 
     driveControllerOne.LeftBottomLeft.whileHeld(RaiseClimberCommand())
     driveControllerOne.LeftBottomMiddle.whileHeld(LowerClimberCommand())
-    driveControllerOne.LeftBottomRight.whileHeld(ToggleClimberSolenoidCommand())
+    driveControllerOne.LeftBottomRight.whenPressed(ToggleClimberSolenoidCommand())
 
     # driveControllerOne.Trigger.whileHeld(SetShooterRPMsCommand(1350, 1000))
     # driveControllerOne.Trigger.whileHeld(HighGoalShootCommand())
