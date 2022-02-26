@@ -32,7 +32,7 @@ class LightsSeizureCommand(CommandBase):
             robot.lights.solidBlue()
             self.colorvalue = 1
 
-        time.sleep(0.02)
+        # time.sleep(0.02)
 
     def end(self, interrupted):
         robot.lights.off()
