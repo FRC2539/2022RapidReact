@@ -13,8 +13,8 @@ class LowerHoodCommand(CommandBase):
         self.addRequirements(robot.hood)
 
     def execute(self):
-        # if robot.hood.isAboveMinAngle():
-        robot.hood.rawMove(-robot.hood.speed)
+        if robot.hood.isAboveMinAngle():
+            robot.hood.rawMove(-robot.hood.speed)
 
     def end(self, interrupted):
         robot.hood.stop()

@@ -15,7 +15,11 @@ class ForwardBallSystemCommand(CommandBase):
 
     def execute(self):
         robot.ballsystem.forwardConveyor()
-        robot.ballsystem.forwardChamber()
+
+        if not robot.ballsystem.isChamberBallPresent():
+            robot.ballsystem.forwardChamber()
+        else:
+            robot.ballsystem.stopChamber()
 
     def end(self, interrupted):
         robot.ballsystem.stopConveyor()

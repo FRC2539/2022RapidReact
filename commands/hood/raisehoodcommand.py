@@ -13,8 +13,8 @@ class RaiseHoodCommand(CommandBase):
         self.addRequirements(robot.hood)
 
     def execute(self):
-        # if robot.hood.isUnderMaxAngle():
-        robot.hood.rawMove(robot.hood.speed)
+        if robot.hood.isUnderMaxAngle():
+            robot.hood.rawMove(robot.hood.speed)
 
     def end(self, interrupted):
         robot.hood.stop()

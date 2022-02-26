@@ -25,14 +25,15 @@ class Hood(CougarSystem):
         self.encoder.setPositionConversionFactor(  # See the constant for an explanation
             constants.hood.positionConversionFactor
         )
-        # self.encoder.setPosition(0)
+        self.encoder.setPosition(0)
 
         # Adjust the hood's PID control values.
-        self.controller.setP(constants.hood.kP, 0)
-        self.controller.setI(0, 0)
-        self.controller.setD(0, 0)
-        self.controller.setFF(0, 0)
-        self.controller.setIZone(0, 0)
+        self.controller.setP(0.1)
+        self.controller.setI(0)
+        self.controller.setD(0)
+        self.controller.setFF(0)
+        self.controller.setIZone(0)
+        self.controller.setOutputRange(-1, 1)
 
         # The hood's max and min angle.
         self.maxAngle = constants.hood.maxAngle
@@ -66,10 +67,10 @@ class Hood(CougarSystem):
 
         Based on the current setup the position should be an angle from -45 to 45.
         """
-        if not self.angleIsWithinBounds(position):
-            return
+        # if not self.angleIsWithinBounds(position):
+        #     return
 
-        self.controller.setReference(position, CANSparkMax.ControlType.kPosition)
+        self.controller.setReference(position / 360, CANSparkMax.ControlType.kPosition)
 
     def setPercent(self, speed):
         """

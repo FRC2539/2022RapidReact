@@ -32,7 +32,10 @@ from commands.climber.climbbarcommand import ClimbBarCommand
 from commands.intakeballscommandgroup import IntakeBallsCommandGroup
 from commands.ballsystem.forwardballsystemcommand import ForwardBallSystemCommand
 
-from commands.drivetrain.autocollectballscommand import AutoCollectBallsCommand
+# from commands.drivetrain.autocollectballscommand import AutoCollectBallsCommand
+from commands.drivetrain.autocollectballscommandgroup import (
+    AutoCollectBallsCommandGroup,
+)
 
 from commands.limelight.limelightanglelockcommand import LimelightAngleLockCommand
 from commands.drivetrain.enablelimelightlockcommand import EnableLimelightLockCommand
@@ -44,10 +47,13 @@ from commands.lights.lightsseizurecommand import LightsSeizureCommand
 
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
+from commands.hood.manualsethoodpositioncommand import ManualSetHoodPositionCommand
 
 from commands.shooter.setshooterrpmscommand import SetShooterRPMsCommand
 from commands.shooter.lowgoalshootcommand import LowGoalShootCommand
-from commands.shooter.highgoalshootcommand import HighGoalShootCommand
+
+# from commands.shooter.highgoalshootcommand import HighGoalShootCommand
+from commands.shooter.highgoalfendercommand import HighGoalFenderCommand
 
 
 import constants
@@ -84,13 +90,14 @@ def init():
     driveControllerOne.LeftBottomRight.whileHeld(ToggleClimberSolenoidCommand())
 
     # driveControllerOne.Trigger.whileHeld(SetShooterRPMsCommand(1350, 1000))
-    driveControllerOne.Trigger.whileHeld(HighGoalShootCommand())
+    # driveControllerOne.Trigger.whileHeld(HighGoalShootCommand())
+    driveControllerOne.Trigger.whileHeld(HighGoalFenderCommand())
 
     # Reverse lower shot
     # driveControllerOne.Trigger.whileHeld()
 
     driveControllerTwo.LeftThumb.whileHeld(IntakeBallsCommandGroup())
-    driveControllerTwo.RightThumb.whileHeld(AutoCollectBallsCommand())
+    driveControllerTwo.RightThumb.whileHeld(AutoCollectBallsCommandGroup())
     driveControllerTwo.BottomThumb.whileHeld(EnableLimelightLockCommand())
 
     # driveControllerTwo.Trigger.whileHeld(
@@ -100,7 +107,7 @@ def init():
     #     )
     # )
 
-    driveControllerTwo.Trigger.whileHeld(LowGoalShootCommand(1450, 1000))
+    driveControllerTwo.Trigger.whileHeld(LowGoalShootCommand())
 
     # driveControllerTwo.LeftTopLeft.whileHeld()
     # driveControllerTwo.LeftBottomLeft.whileHeld()
@@ -121,7 +128,7 @@ def init():
 
     componentController.LeftTrigger.whileHeld(LowerHoodCommand())
     componentController.LeftBumper.whileHeld(RaiseHoodCommand())
-    componentController.RightTrigger.whileHeld(HighGoalShootCommand())
+    # componentController.RightTrigger.whileHeld(HighGoalShootCommand())
     # componentController.RightBumper.whileHeld()
 
     # componentController.A.whileHeld()

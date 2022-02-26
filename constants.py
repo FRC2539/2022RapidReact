@@ -196,8 +196,8 @@ hood.kP = 0.001  # PID
 hood.percentOutputSpeed = 0.1
 
 # Angle range in degrees
-hood.maxAngle = 28
-hood.minAngle = -37.8
+hood.maxAngle = 22  # 28
+hood.minAngle = -32  # -37.8
 
 # sets ml constants
 

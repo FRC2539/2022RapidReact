@@ -1,9 +1,12 @@
 from commands2 import ParallelCommandGroup
 
-import robot
-
 from commands.intake.intakecommand import IntakeCommand
-from commands.ballsystem.forwardconveyorcommand import ForwardConveyorCommand
+
+# from commands.ballsystem.forwardconveyorcommand import ForwardConveyorCommand
+# from commands.ballsystem.runchamberuntilballpresentcommand import (
+#     RunChamberUntilBallPresentCommand,
+# )
+from commands.ballsystem.forwardballsystemcommand import ForwardBallSystemCommand
 
 
 class IntakeBallsCommandGroup(ParallelCommandGroup):
@@ -12,5 +15,5 @@ class IntakeBallsCommandGroup(ParallelCommandGroup):
 
         self.addCommands(
             IntakeCommand(),
-            ForwardConveyorCommand(),
+            ForwardBallSystemCommand(),
         )

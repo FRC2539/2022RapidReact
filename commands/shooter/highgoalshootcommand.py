@@ -10,6 +10,9 @@ class HighGoalShootCommand(CommandBase):
         self.addRequirements(robot.shooter)
         self.shooterRPMTolerance = 150
 
+        self.rpm1 = 0
+        self.rpm2 = 0
+
     def initialize(self):
         robot.shooter.setRPM(self.rpm1, self.rpm2)
         robot.ballsystem.forwardConveyor()

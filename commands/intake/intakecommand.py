@@ -15,3 +15,4 @@ class IntakeCommand(CommandBase):
 
     def end(self, interrupted):
         robot.intake.stop()
+        robot.pneumatics.retractIntake()

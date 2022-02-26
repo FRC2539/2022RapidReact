@@ -11,14 +11,14 @@ class Pneumatics(CougarSystem):
     def __init__(self):
         super().__init__("Pneumatics")
 
-        pneumaticsModuleType = PneumaticsModuleType.REVPH
+        pneumaticsModuleType = PneumaticsModuleType.CTREPCM
 
         # Create the controller for the compressor
-        # self.compressor = Compressor(
-        #     ports.climberPneumatics.pcmID, pneumaticsModuleType
-        # )
+        self.compressor = Compressor(
+            ports.climberPneumatics.pcmID, pneumaticsModuleType
+        )
 
-        # self.compressor.enableDigital()
+        self.compressor.enableDigital()
 
         self.intakeSolenoid = DoubleSolenoid(
             ports.climberPneumatics.pcmID,

@@ -3,7 +3,7 @@ from commands2 import CommandBase
 import robot
 
 
-class LowGoalShootCommand(CommandBase):
+class HighGoalFenderCommand(CommandBase):
     def __init__(self):
         super().__init__()
 
@@ -12,9 +12,9 @@ class LowGoalShootCommand(CommandBase):
         self.hoodTolerance = 0.5
 
     def initialize(self):
-        self.rpm1 = robot.shooter.lowGoalRPM1
-        self.rpm2 = robot.shooter.lowGoalRPM2
-        self.hoodAngle = 10
+        self.rpm1 = robot.shooter.highGoalRPM1
+        self.rpm2 = robot.shooter.highGoalRPM2
+        self.hoodAngle = 11
 
         robot.shooter.setRPM(self.rpm1, self.rpm2)
         robot.ballsystem.forwardConveyor()

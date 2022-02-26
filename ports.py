@@ -38,8 +38,8 @@ shooter.motorTwoID = 9
 
 climberPneumatics = PortsList()
 climberPneumatics.pcmID = 22
-climberPneumatics.forwardChannel = 6
-climberPneumatics.reverseChannel = 7
+climberPneumatics.forwardChannel = 2
+climberPneumatics.reverseChannel = 3
 
 climber = PortsList()
 climber.motorID = 18

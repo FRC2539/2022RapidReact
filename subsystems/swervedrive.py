@@ -178,8 +178,8 @@ class SwerveDrive(BaseDrive):
 
         # Create a theta controller used for driving
         self.driveThetaController = ProfiledPIDControllerRadians(
-            # 3.5,
-            2,
+            3.5,
+            # 2,
             0,
             0.035,
             TrapezoidProfileRadians.Constraints(

@@ -39,7 +39,6 @@ class AutoCollectBallsCommand(CommandBase):
         self.timerStarted = False
 
     def initialize(self):
-        robot.intake.intakeBalls()
         self.timer.reset()
         self.timer.start()
 
@@ -49,13 +48,12 @@ class AutoCollectBallsCommand(CommandBase):
             ChassisSpeeds(-self.calcForwardVelocity(), 0, self.calcRotationSpeed())
         )
 
-        print(
-            f"{robot.ml.getX()=}, {self.getXNormalized()=}, {self.calcRotationSpeed()}"
-        )
+        # print(
+        #     f"{robot.ml.getX()=}, {self.getXNormalized()=}, {self.calcRotationSpeed()}"
+        # )
 
     def end(self, interrupted):
         robot.drivetrain.stop()
-        robot.intake.stop()
 
     def calcForwardVelocity(self):
         """calculates the velocity the robot should be moving forwards at. m/s"""
@@ -68,7 +66,7 @@ class AutoCollectBallsCommand(CommandBase):
         # lets the robot continue to move forward for 0.2 seconds after losing sight of the ball
         if (
             not robot.ml.isTargetAcquired()
-            and not self.timer.hasElapsed(0.2)
+            and not self.timer.hasElapsed(0.1)
             and self.timerStarted
         ):
             return self.maxLinearSpeed
