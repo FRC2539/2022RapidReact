@@ -42,8 +42,37 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 break
 
         eval("self." + toRun + "()")  # Runs the method
+        
+    def threeBall0(self):
+        self.addCommands(
+                ResetAutoStateCommand(angle=-math.pi/2),
+                #AimAndShootCommand(),
+                TurnCommand(-math.pi/2,relative=False),
+                #StartIntakeCommand(),
+                MoveForwardCommand(1.7),
+                MoveForwardCommand(-0.79),
+                TurnCommand(-1.83),
+                MoveForwardCommand(2.54),
+                #StopIntakeCommand(),
+                TurnCommand(0.79),
+                #AimAndShootCommand(),
+            )
+    
+    def matthewsMoveCommand(self):
+        self.addCommands(
+            ResetAutoStateCommand(angle=math.pi/2),
+            TurnCommand(0, relative=False),
+            MoveForwardCommand(2),
+            TurnCommand(math.pi/4),
+            MoveForwardCommand(-math.sqrt(2)),
+            TurnCommand(-math.pi/2),
+            MoveForwardCommand(math.sqrt(2)),
+            TurnCommand(0, relative=False),
+            MoveForwardCommand(-2),
+            TurnCommand(-math.pi/3 * 2, relative=False)
+            )
 
-    def moveTest0(self):
+    def moveTest(self):
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
             CustomMoveCommand(x=0.5, y=0.5, relative=False),

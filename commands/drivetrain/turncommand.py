@@ -1,4 +1,3 @@
-from threading import currentThread
 from commands2 import CommandBase
 from constants import drivetrain as drivetrainConstants
 import math
@@ -30,8 +29,9 @@ class TurnCommand(CommandBase):
 
         # sets the angle that the robot will turn and the time it will take to do so
         # (-) accounts for the fact that the robot is counterclockwise positive
+        
         self.turnAngle = -turnAngle
-
+        
         self.addRequirements(robot.drivetrain)
 
         # sets how close the robot must be to the target angle to stop the command
