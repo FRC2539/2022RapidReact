@@ -44,7 +44,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         eval("self." + toRun + "()")  # Runs the method
 
-    def threeBall0(self):
+    def oldthreeBall(self):
         self.addCommands(
             ResetAutoStateCommand(angle=-math.pi / 2),
             # AimAndShootCommand(),
@@ -53,6 +53,25 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             MoveForwardCommand(1.7),
             MoveForwardCommand(-0.79),
             TurnCommand(-1.83),
+            MoveForwardCommand(2.54),
+            # StopIntakeCommand(),
+            TurnCommand(0.79),
+            # AimAndShootCommand(),
+        )
+
+    def threeBall0(self):
+        """
+        Currently following the correct path, but sometimes doesn't stop on the long
+        forward path.
+        """
+        self.addCommands(
+            ResetAutoStateCommand(angle=-math.radians(78)),
+            # AimAndShootCommand(),
+            TurnCommand(-math.radians(78), relative=False),
+            # StartIntakeCommand(),
+            MoveForwardCommand(1.09),
+            MoveForwardCommand(-0.79),
+            TurnCommand(-1.48),
             MoveForwardCommand(2.54),
             # StopIntakeCommand(),
             TurnCommand(0.79),

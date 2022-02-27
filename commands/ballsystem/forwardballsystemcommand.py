@@ -30,10 +30,10 @@ class ForwardBallSystemCommand(CommandBase):
     def end(self, interrupted):
         robot.ballsystem.stopConveyor()
         robot.ballsystem.stopChamber()
+        robot.shooter.stopShooter()
 
         if self.useLights:
-            finalColor = self.allianceToColor(robot.ballsystem.getChamberBallColor())
-            robot.lights.set(finalColor)
+            robot.lights.showTeamColor()
 
     def ballPresentStopping(self):
         chamberBall = robot.ballsystem.isChamberBallPresent()
@@ -42,8 +42,17 @@ class ForwardBallSystemCommand(CommandBase):
         # Manage the chamber using the chamber sensor
         if not chamberBall:
             robot.ballsystem.forwardChamber()
+            robot.shooter.stopShooter()
+        elif (
+            robot.ballsystem.getChamberBallColor()
+            != robot.ballsystem.getAllianceColor()
+            and chamberBall
+        ):
+            robot.shooter.setRPM(robot.shooter.rejectRPM1, robot.shooter.rejectRPM2)
+            robot.ballsystem.forwardChamber()
         else:
             robot.ballsystem.stopChamber()
+            robot.shooter.stopShooter()
 
         # Manage the conveyor using the conveyor and chamber sensor
         if conveyorBall and not chamberBall:

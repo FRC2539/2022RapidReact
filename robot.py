@@ -56,8 +56,6 @@ class KryptonBot(TimedCommandRobot):
 
         import robot
 
-        robot.lights.solidBlue()
-
         self.addPeriodic(
             robot.drivetrain.callAutoPeriodicFunctions,
             constants.drivetrain.autoPeriodicPeriod,
@@ -73,6 +71,10 @@ class KryptonBot(TimedCommandRobot):
 
     def teleopInit(self):
         self.auto.cancel()
+
+        import robot
+
+        robot.lights.showTeamColor()
 
     def disabledInit(self):
         self.auto.cancel()

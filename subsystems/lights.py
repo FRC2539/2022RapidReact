@@ -2,7 +2,7 @@ from .cougarsystem import *
 from custom import driverhud
 from custom.config import Config
 
-from wpilib import Spark
+from wpilib import DriverStation, Spark
 from networktables import NetworkTables
 
 import robot
@@ -96,6 +96,12 @@ class Lights(CougarSystem):
 
     def blinkWhite(self):
         self.set(self.colors["blinkWhite"])
+
+    def showTeamColor(self):
+        if robot.ballsystem.getAllianceColor() == DriverStation.Alliance.kBlue:
+            self.solidBlue()
+        else:
+            self.solidRed()
 
     # def isZero(self):
     #     if robot.arm.isAtZero() and robot.elevator.isAtZero():

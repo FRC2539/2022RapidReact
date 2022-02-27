@@ -65,8 +65,7 @@ class AutoCollectBallsCommand(CommandBase):
     def end(self, interrupted):
         robot.drivetrain.stop()
 
-        finalColor = self.allianceToColor(robot.ml.getTargetColor())
-        robot.lights.set(finalColor)
+        robot.lights.showTeamColor()
 
     def calcForwardVelocity(self):
         """calculates the velocity the robot should be moving forwards at. m/s"""

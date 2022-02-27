@@ -8,7 +8,7 @@ class BaseShootCommand(CommandBase):
         super().__init__()
 
         self.addRequirements([robot.shooter, robot.hood])
-        self.shooterRPMTolerance = 75
+        self.shooterRPMTolerance = 60
         self.hoodTolerance = 0.3
 
         # These values should be set within the initialize
@@ -16,6 +16,9 @@ class BaseShootCommand(CommandBase):
         self.rpm1 = 0
         self.rpm2 = 0
         self.hoodAngle = 0
+
+        # Reject balls of the wrong color
+        self.rejectMode = False
 
     # This is a demo execute command
     # def execute(self):
@@ -52,13 +55,32 @@ class BaseShootCommand(CommandBase):
             robot.hood.stop()
 
     def shootIfShooterAtSpeed(self):
+        targetRPM1 = self.rpm1 if not self.rejectMode else robot.shooter.rejectRPM1
+        targetRPM2 = self.rpm2 if not self.rejectMode else robot.shooter.rejectRPM2
+
         # Check if both of the shooter wheels are up to speed
         shooterAtSpeed1 = (
-            abs(robot.shooter.getRPM1() - self.rpm1) <= self.shooterRPMTolerance
+            abs(robot.shooter.getRPM1() - targetRPM1) <= self.shooterRPMTolerance
         )
         shooterAtSpeed2 = (
-            abs(robot.shooter.getRPM2() - self.rpm2) <= self.shooterRPMTolerance
+            abs(robot.shooter.getRPM2() - targetRPM2) <= self.shooterRPMTolerance
         )
+
+        # Set to reject mode if the ball is the wrong color
+        if (
+            robot.ballsystem.isChamberBallPresent()
+            and robot.ballsystem.getChamberBallColor()
+            != robot.ballsystem.getAllianceColor()
+        ):
+            self.rejectMode = True
+        else:
+            self.rejectMode = False
+
+        # Switch to reject rpms if we must reject the ball
+        if self.rejectMode:
+            robot.shooter.setRPM(robot.shooter.rejectRPM1, robot.shooter.rejectRPM2)
+        else:
+            robot.shooter.setRPM(self.rpm1, self.rpm2)
 
         # Move the ball through the chamber if the shooter is up to speed
         if shooterAtSpeed1 and shooterAtSpeed2:

@@ -51,6 +51,10 @@ class Shooter(CougarSystem):
         self.maxVel = 3000
         self.minVel = 100
 
+        # Reject ball velocity
+        self.rejectRPM1 = 600
+        self.rejectRPM2 = 900
+
         # Low goal rpms
         self.lowGoalRPM1 = 1150
         self.lowGoalRPM2 = 900

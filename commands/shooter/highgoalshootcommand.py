@@ -2,6 +2,8 @@ from commands.shooter.baseshootcommand import BaseShootCommand
 
 import robot
 
+from wpimath.filter import MedianFilter
+
 
 class HighGoalShootCommand(BaseShootCommand):
     def __init__(self):
@@ -15,13 +17,17 @@ class HighGoalShootCommand(BaseShootCommand):
         self.hoodMultiplier = 0.1
         self.hoodBase = robot.hood.highGoalAngle
 
+        # Create a filter to improve consistency in distance readings
+        self.distanceFilter = MedianFilter(3)
+
     def initialize(self):
-        pass
+        self.distanceFilter.reset()
+
         # self.setRPMs(0, 0)
         # self.setHoodPosition(0)
 
     def execute(self):
-        distance = robot.limelight.calculateDistance()
+        distance = self.distanceFilter.calculate(robot.limelight.calculateDistance())
 
         # Calculate new rpm and hood values based on the current distance
         self.updateRPMs(distance)
