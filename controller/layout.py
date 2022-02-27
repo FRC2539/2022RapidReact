@@ -52,7 +52,7 @@ from commands.hood.manualsethoodpositioncommand import ManualSetHoodPositionComm
 from commands.shooter.setshooterrpmscommand import SetShooterRPMsCommand
 from commands.shooter.lowgoalshootcommand import LowGoalShootCommand
 
-# from commands.shooter.highgoalshootcommand import HighGoalShootCommand
+from commands.shooter.highgoalshootcommand import HighGoalShootCommand
 from commands.shooter.highgoalfendercommand import HighGoalFenderCommand
 
 
@@ -128,7 +128,7 @@ def init():
 
     componentController.LeftTrigger.whileHeld(LowerHoodCommand())
     componentController.LeftBumper.whileHeld(RaiseHoodCommand())
-    # componentController.RightTrigger.whileHeld(HighGoalShootCommand())
+    componentController.RightTrigger.whileHeld(HighGoalShootCommand())
     # componentController.RightBumper.whileHeld()
 
     # componentController.A.whileHeld()

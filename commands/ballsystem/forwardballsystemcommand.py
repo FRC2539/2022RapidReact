@@ -65,7 +65,9 @@ class ForwardBallSystemCommand(CommandBase):
     def blinkBallColor(self):
         blinkColor = self.allianceToColor(robot.ballsystem.getChamberBallColor())
 
-        if self.timer.hasElapsed(0.25):
+        conveyorBall = robot.ballsystem.isConveyorBallPresent()
+
+        if self.timer.hasElapsed(0.25 if not conveyorBall else 0.1):
             self.lightsOn = not self.lightsOn
             self.timer.reset()
 

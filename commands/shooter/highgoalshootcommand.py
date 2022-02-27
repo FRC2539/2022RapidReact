@@ -9,12 +9,12 @@ class HighGoalShootCommand(BaseShootCommand):
     def __init__(self):
         super().__init__()
 
-        self.rpm1Multiplier = 8
-        self.rpm2Multiplier = 8
+        self.rpm1Multiplier = 90
+        self.rpm2Multiplier = 90
         self.rpm1Base = robot.shooter.highGoalRPM1
         self.rpm2Base = robot.shooter.highGoalRPM2
 
-        self.hoodMultiplier = 0.1
+        self.hoodMultiplier = 2
         self.hoodBase = robot.hood.highGoalAngle
 
         # Create a filter to improve consistency in distance readings

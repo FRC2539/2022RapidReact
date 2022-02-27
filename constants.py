@@ -105,8 +105,8 @@ drivetrain.robotRadius = 16.84251
 
 drivetrain.autoSpeedLimit = 2
 
-drivetrain.speedLimit = 2  # meters per second (50 in/s)
-drivetrain.maxAcceleration = 1.3  # m/s^2
+drivetrain.speedLimit = 1.5  # 2  # meters per second (50 in/s)
+drivetrain.maxAcceleration = 1  # 1.3  # m/s^2
 drivetrain.angularSpeedLimit = math.pi * 2 / 3  # Radians per second
 drivetrain.maxAngularAcceleration = math.pi * 1 / 3  # Rad/s^2
 drivetrain.angularSpeedMinimum = 0.1
@@ -166,7 +166,7 @@ limelight.targetHeight = 2.62  # in meters (bottom of tape is 2.58, top is 2.64)
 limelight.limelightHeight = 0.635  # meters (height of limelight camera from the ground)
 limelight.heightOffset = limelight.targetHeight - limelight.limelightHeight
 
-limelight.limelightAngle = math.radians(10)  # 10 degrees (angle in radians)
+limelight.limelightAngle = math.radians(37)  # 10 degrees (angle in radians)
 
 limelight.defaultPipeline = 1
 
