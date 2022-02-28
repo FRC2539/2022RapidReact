@@ -37,7 +37,7 @@ shooter.motorOneID = 8
 shooter.motorTwoID = 9
 
 pneumatics = PortsList()
-pneumatics.pcmID = 22
+pneumatics.pcmID = 17
 
 climber = PortsList()
 climber.motorID = 18
@@ -61,5 +61,3 @@ ml = PortsList()
 
 lights = PortsList()
 lights.lightControllerID = 9  # PWM
-
-compressor = PortsList()
