@@ -1,3 +1,4 @@
+from bz2 import compress
 from .cougarsystem import CougarSystem
 import ports
 import math
@@ -11,27 +12,27 @@ class Pneumatics(CougarSystem):
     def __init__(self):
         super().__init__("Pneumatics")
 
-        self.pneumaticHub = PneumaticHub(
-            ports.pneumatics.pcmID
-        )
-
         # Create the controller for the compressor
-        self.compressor = self.pneumaticHub.makeCompressor()
+        self.compressor = Compressor(
+            ports.pneumatics.pcmID,
+            PneumaticsModuleType.REVPH
+        )
         
-        self.compressor.enableDigital()
-
         # Create the controller for the intake solenoid.
-        self.intakeSolenoid = self.pneumaticHub.makeDoubleSolenoid(
+        self.intakeSolenoid = DoubleSolenoid(
+            ports.pneumatics.pcmID,
+            PneumaticsModuleType.REVPH,
             ports.intake.forwardChannel,
             ports.intake.reverseChannel
         )
         
-        # Create the controller for the climber arm solenoid.
-        self.climberSolenoid = self.pneumaticHub.makeDoubleSolenoid(
+        # Create the controller for the climber solenoid
+        self.climberSolenoid = DoubleSolenoid(
+            ports.pneumatics.pcmID,
+            PneumaticsModuleType.REVPH,
             ports.climber.forwardChannel,
             ports.climber.reverseChannel
         )
-        
 
     def periodic(self):
         """
@@ -39,6 +40,13 @@ class Pneumatics(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
+        
+        if self.compressor.getPressureSwitchValue() and not self.compressor.enabled():
+            self.compressor.start()
+        elif self.compressor.getPressureSwitchValue():
+            self.compressor.start()
+        else:
+            self.compressor.stop()
 
     def extendIntake(self):
         self.intakeSolenoid.set(DoubleSolenoid.Value.kForward)
