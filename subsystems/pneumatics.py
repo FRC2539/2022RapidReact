@@ -2,7 +2,7 @@ from .cougarsystem import CougarSystem
 import ports
 import math
 
-from wpilib import Compressor, PneumaticsModuleType, DoubleSolenoid
+from wpilib import PneumaticHub, Compressor, PneumaticsModuleType, DoubleSolenoid
 
 
 class Pneumatics(CougarSystem):
@@ -11,28 +11,27 @@ class Pneumatics(CougarSystem):
     def __init__(self):
         super().__init__("Pneumatics")
 
-        # Create the controller for the compressor
-        self.compressor = Compressor(
-            ports.pneumatics.pcmID, PneumaticsModuleType.REVPH
+        self.pneumaticHub = PneumaticHub(
+            ports.pneumatics.pcmID
         )
+
+        # Create the controller for the compressor
+        self.compressor = self.pneumaticHub.makeCompressor()
         
-        self.compressor.disable()
+        self.compressor.enableDigital()
 
         # Create the controller for the intake solenoid.
-        self.intakeSolenoid = DoubleSolenoid(
-            ports.pneumatics.pcmID,
-            PneumaticsModuleType.REVPH,
+        self.intakeSolenoid = self.pneumaticHub.makeDoubleSolenoid(
             ports.intake.forwardChannel,
             ports.intake.reverseChannel
         )
         
-        # Create the controller for the climber solenoid
-        self.climberSolenoid = DoubleSolenoid(
-            ports.pneumatics.pcmID,
-            PneumaticsModuleType.REVPH,
+        # Create the controller for the climber arm solenoid.
+        self.climberSolenoid = self.pneumaticHub.makeDoubleSolenoid(
             ports.climber.forwardChannel,
             ports.climber.reverseChannel
         )
+        
 
     def periodic(self):
         """
@@ -40,12 +39,6 @@ class Pneumatics(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
-        
-        # Watch our air ourselves.
-        if self.compressor.getPressureSwitchValue():
-            self.compressor.start()
-        else:
-            self.compressor.stop()
 
     def extendIntake(self):
         self.intakeSolenoid.set(DoubleSolenoid.Value.kForward)
