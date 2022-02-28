@@ -12,16 +12,6 @@ class Climber(CougarSystem):
     def __init__(self):
         super().__init__("Climber")
 
-        pneumaticsModuleType = PneumaticsModuleType.CTREPCM
-
-        # Create the controller for the solenoid
-        self.climberSolenoid = DoubleSolenoid(
-            ports.climberPneumatics.pcmID,
-            pneumaticsModuleType,
-            ports.climberPneumatics.forwardChannel,
-            ports.climberPneumatics.reverseChannel,
-        )
-
         # Create the controller for the climber motor
         self.climberMotor = WPI_TalonFX(ports.climber.motorID)
 
@@ -116,24 +106,3 @@ class Climber(CougarSystem):
         Gets the current position reading from the encoder.
         """
         return self.climberMotor.getSelectedSensorPosition()
-
-    def extendClimberArm(self):
-        """
-        Extends the climber arm solenoid, raising it to its vertical position.
-        """
-        self.climberSolenoid.set(DoubleSolenoid.Value.kForward)
-
-    def retractClimberArm(self):
-        """
-        Retracts the climber arm solenoid, lowering it to its angled position.
-        """
-        self.climberSolenoid.set(DoubleSolenoid.Value.kReverse)
-
-    def toggleClimberArm(self):
-        self.climberSolenoid.toggle()
-
-    def isSolenoidForward(self):
-        return self.climberSolenoid.get() == DoubleSolenoid.Value.kForward
-
-    def isSolenoidOff(self):
-        return self.climberSolenoid.get() == DoubleSolenoid.Value.kOff

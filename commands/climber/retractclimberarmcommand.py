@@ -14,4 +14,4 @@ class RetractClimberArmCommand(InstantCommand):
         self.addRequirements(robot.climber)
 
     def initialize(self):
-        robot.climber.retractClimberArm()
+        robot.pneumatics.retractClimberArm()

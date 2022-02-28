@@ -36,13 +36,13 @@ shooter = PortsList()
 shooter.motorOneID = 8
 shooter.motorTwoID = 9
 
-climberPneumatics = PortsList()
-climberPneumatics.pcmID = 22
-climberPneumatics.forwardChannel = 2
-climberPneumatics.reverseChannel = 3
+pneumatics = PortsList()
+pneumatics.pcmID = 22
 
 climber = PortsList()
 climber.motorID = 18
+climber.forwardChannel = 2
+climber.reverseChannel = 3
 
 intake = PortsList()
 intake.motorID = 10
@@ -61,4 +61,5 @@ ml = PortsList()
 
 lights = PortsList()
 lights.lightControllerID = 9  # PWM
+
 compressor = PortsList()
