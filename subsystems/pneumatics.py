@@ -41,7 +41,12 @@ class Pneumatics(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
-        print("Compressor: " + str(self.compressor.enabled()))
+        
+        # Watch our air ourselves.
+        if self.compressor.getPressureSwitchValue():
+            self.compressor.start()
+        else:
+            self.compressor.stop()
 
     def extendIntake(self):
         self.intakeSolenoid.set(DoubleSolenoid.Value.kForward)
