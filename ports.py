@@ -41,8 +41,8 @@ pneumatics.pcmID = 22
 
 climber = PortsList()
 climber.motorID = 18
-climber.forwardChannel = 2
-climber.reverseChannel = 3
+climber.forwardChannel = 6
+climber.reverseChannel = 7
 
 intake = PortsList()
 intake.motorID = 10

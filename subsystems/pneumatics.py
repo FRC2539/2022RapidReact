@@ -22,16 +22,18 @@ class Pneumatics(CougarSystem):
 
         # Create the controller for the intake solenoid.
         self.intakeSolenoid = DoubleSolenoid(
+            ports.pneumatics.pcmID,
             pneumaticsModuleType,
             ports.intake.forwardChannel,
-            ports.intake.reverseChannel,
+            ports.intake.reverseChannel
         )
         
         # Create the controller for the climber solenoid
         self.climberSolenoid = DoubleSolenoid(
+            ports.pneumatics.pcmID,
             pneumaticsModuleType,
             ports.climber.forwardChannel,
-            ports.climber.reverseChannel,
+            ports.climber.reverseChannel
         )
 
     def periodic(self):
