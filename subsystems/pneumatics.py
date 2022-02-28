@@ -15,8 +15,7 @@ class Pneumatics(CougarSystem):
         self.compressor = Compressor(
             ports.pneumatics.pcmID, PneumaticsModuleType.REVPH
         )
-
-        self.compressor.enableDigital()
+        
         self.compressor.disable()
 
         # Create the controller for the intake solenoid.
