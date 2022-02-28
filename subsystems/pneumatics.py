@@ -18,6 +18,8 @@ class Pneumatics(CougarSystem):
             PneumaticsModuleType.REVPH
         )
         
+        self.compressor.enableDigital()
+        
         # Create the controller for the intake solenoid.
         self.intakeSolenoid = DoubleSolenoid(
             ports.pneumatics.pcmID,
@@ -40,13 +42,6 @@ class Pneumatics(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
-        
-        if self.compressor.getPressureSwitchValue() and not self.compressor.enabled():
-            self.compressor.start()
-        elif self.compressor.getPressureSwitchValue():
-            self.compressor.start()
-        else:
-            self.compressor.stop()
 
     def extendIntake(self):
         self.intakeSolenoid.set(DoubleSolenoid.Value.kForward)
