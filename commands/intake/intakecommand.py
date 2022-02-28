@@ -8,7 +8,6 @@ class IntakeCommand(CommandBase):
         super().__init__()
 
         self.addRequirements(robot.intake)
-        self.addRequirements(robot.pneumatics)
 
     def initialize(self):
         robot.pneumatics.extendIntake()

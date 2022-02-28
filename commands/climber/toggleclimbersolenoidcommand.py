@@ -11,8 +11,6 @@ class ToggleClimberSolenoidCommand(InstantCommand):
     def __init__(self):
         super().__init__()
 
-        self.addRequirements(robot.pneumatics)
-
     def initialize(self):
         # Activate the solenoid if it is currently off,
         # or toggle the current state of the solenoid
