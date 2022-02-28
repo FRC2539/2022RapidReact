@@ -2,7 +2,6 @@ from .cougarsystem import CougarSystem
 import ports
 import math
 import constants
-from wpilib import DoubleSolenoid, PneumaticsModuleType
 from ctre import WPI_TalonFX, NeutralMode, FeedbackDevice
 
 

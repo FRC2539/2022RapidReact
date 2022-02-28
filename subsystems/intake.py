@@ -4,7 +4,6 @@ import ports
 
 from ctre import WPI_TalonSRX, NeutralMode, ControlMode
 
-
 class Intake(CougarSystem):
     """Controls the intake."""
 

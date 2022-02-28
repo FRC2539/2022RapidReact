@@ -8,6 +8,7 @@ class RejectCommand(CommandBase):
         super().__init__()
 
         self.addRequirements(robot.intake)
+        self.addRequirements(robot.pneumatics)
 
     def initialize(self):
         robot.intake.outtakeBalls()
