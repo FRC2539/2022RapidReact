@@ -1,6 +1,11 @@
 from wpilib import DriverStation
 
-from commands2 import SequentialCommandGroup, ParallelCommandGroup
+from commands2 import (
+    ParallelRaceGroup,
+    SequentialCommandGroup,
+    ParallelCommandGroup,
+    WaitCommand,
+)
 
 from networktables import NetworkTables
 
@@ -20,9 +25,13 @@ from commands.drivetrain.moveforwardcommand import MoveForwardCommand
 from commands.drivetrain.trajectoryfollowercommand import TrajectoryFollowerCommand
 
 from commands.shooter.surrogateshootercommand import SurrogateShooterCommand
+from commands.shooter.highgoalshootcommand import HighGoalShootCommand
+from commands.shooter.highgoalfendercommand import HighGoalFenderCommand
 
 from commands.intake.intakecommand import IntakeCommand
 from commands.intake.rejectcommand import RejectCommand
+
+from commands.ballsystem.forwardballsystemcommand import ForwardBallSystemCommand
 
 
 class AutonomousCommandGroup(SequentialCommandGroup):
@@ -67,15 +76,22 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             ResetAutoStateCommand(angle=-math.radians(78)),
             # AimAndShootCommand(),
+            ParallelRaceGroup(HighGoalFenderCommand(), WaitCommand(3)),
             TurnCommand(-math.radians(78), relative=False),
             # StartIntakeCommand(),
-            MoveForwardCommand(1.09),
-            MoveForwardCommand(-0.79),
-            TurnCommand(-1.48),
-            MoveForwardCommand(2.54),
+            ParallelRaceGroup(
+                SequentialCommandGroup(
+                    MoveForwardCommand(1.09),
+                    MoveForwardCommand(-0.79),
+                    TurnCommand(-1.48),
+                    MoveForwardCommand(2.54),
+                ),
+                ForwardBallSystemCommand(),
+            ),
             # StopIntakeCommand(),
             TurnCommand(0.79),
             # AimAndShootCommand(),
+            HighGoalShootCommand(),
         )
 
     def matthewsMoveCommand(self):

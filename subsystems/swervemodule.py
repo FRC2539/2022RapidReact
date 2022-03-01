@@ -8,6 +8,7 @@ from ctre import (
     RemoteSensorSource,
     SensorTerm,
     SensorInitializationStrategy,
+    CANCoderStatusFrame,
 )
 
 import math
@@ -75,6 +76,8 @@ class SwerveModule:
         # Declare and setup the remote encoder.
         self.cancoder = CANCoder(canCoderID)
         self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
+
+        # self.cancoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 1)
 
         # Stores the offset for this module
         self.offset = offset
