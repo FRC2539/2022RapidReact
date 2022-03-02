@@ -19,6 +19,8 @@ from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
 from commands.drivetrain.resetautostatecommand import ResetAutoStateCommand
 
+from commands.drivetrain.moveforwardcommand import MoveForwardCommand
+
 from commands.resetcommand import ResetCommand
 
 from commands.intake.intakecommand import IntakeCommand
@@ -109,7 +111,7 @@ def init():
 
     driveControllerTwo.Trigger.whileHeld(LowGoalShootCommand())
 
-    # driveControllerTwo.LeftTopLeft.whileHeld()
+    driveControllerTwo.LeftTopMiddle.whenPressed(MoveForwardCommand(3))
     # driveControllerTwo.LeftBottomLeft.whileHeld()
 
     # driveControllerOne.LeftTopRight.whileHeld()

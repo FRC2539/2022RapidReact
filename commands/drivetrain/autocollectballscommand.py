@@ -15,9 +15,11 @@ import wpilib
 class AutoCollectBallsCommand(CommandBase):
     """Turns towards ball and then moves at it. The intake is running during the entire command."""
 
-    def __init__(self):
+    def __init__(self, endOnBallPickup=False):
         super().__init__()
         self.addRequirements(robot.drivetrain)
+
+        self.endOnBallPickup = endOnBallPickup
 
         # sets the proportional value in my made up PID controller
         self.reactionSpeed = 0.03
@@ -51,6 +53,8 @@ class AutoCollectBallsCommand(CommandBase):
         self.lightsTimer.reset()
         self.lightsTimer.start()
 
+        self.ballInChamber = robot.ballsystem.isChamberBallPresent()
+
     def execute(self):
         self.blinkBallColor()
 
@@ -61,6 +65,19 @@ class AutoCollectBallsCommand(CommandBase):
         # print(
         #     f"{robot.ml.getX()=}, {self.getXNormalized()=}, {self.calcRotationSpeed()}"
         # )
+
+    def isFinished(self):
+        if not self.endOnBallPickup:
+            return False
+
+        conveyorBall = robot.ballsystem.isConveyorBallPresent()
+        chamberBall = robot.ballsystem.isChamberBallPresent()
+
+        return (
+            (conveyorBall and chamberBall)
+            or (self.ballInChamber and conveyorBall)
+            or (not self.ballInChamber and chamberBall)
+        )
 
     def end(self, interrupted):
         robot.drivetrain.stop()
@@ -78,7 +95,7 @@ class AutoCollectBallsCommand(CommandBase):
         # lets the robot continue to move forward for 0.2 seconds after losing sight of the ball
         if (
             not robot.ml.isTargetAcquired()
-            and not self.timer.hasElapsed(0.2)
+            and not self.timer.hasElapsed(0.05)
             and self.timerStarted
         ):
             return self.pickupSpeed

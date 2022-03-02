@@ -12,26 +12,25 @@ class Pneumatics(CougarSystem):
     def __init__(self):
         super().__init__("Pneumatics")
 
+        # self.hub = PneumaticHub()
+
         # Create the controller for the compressor
-        self.compressor = Compressor(
-            ports.pneumatics.pcmID,
-            PneumaticsModuleType.REVPH
-        )
-        
+        self.compressor = Compressor(ports.pneumatics.pcmID, PneumaticsModuleType.REVPH)
+
         # Create the controller for the intake solenoid.
         self.intakeSolenoid = DoubleSolenoid(
             ports.pneumatics.pcmID,
             PneumaticsModuleType.REVPH,
             ports.intake.forwardChannel,
-            ports.intake.reverseChannel
+            ports.intake.reverseChannel,
         )
-        
+
         # Create the controller for the climber solenoid
         self.climberSolenoid = DoubleSolenoid(
             ports.pneumatics.pcmID,
             PneumaticsModuleType.REVPH,
             ports.climber.forwardChannel,
-            ports.climber.reverseChannel
+            ports.climber.reverseChannel,
         )
 
     def periodic(self):
@@ -40,7 +39,7 @@ class Pneumatics(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
-        
+
         if self.compressor.getPressureSwitchValue() and not self.compressor.enabled():
             self.compressor.start()
         elif self.compressor.getPressureSwitchValue():

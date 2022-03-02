@@ -1,3 +1,4 @@
+from commands2 import InstantCommand
 from wpilib import DriverStation
 
 from commands2 import (
@@ -10,6 +11,8 @@ from commands2 import (
 from networktables import NetworkTables
 
 import math
+from commands.intakeballscommandgroup import IntakeBallsCommandGroup
+from commands.shooter.lowgoalshootcommand import LowGoalShootCommand
 import robot, constants
 
 from commands import autoconfig
@@ -32,6 +35,9 @@ from commands.intake.intakecommand import IntakeCommand
 from commands.intake.rejectcommand import RejectCommand
 
 from commands.ballsystem.forwardballsystemcommand import ForwardBallSystemCommand
+from commands.drivetrain.autocollectballscommandgroup import (
+    AutoCollectBallsCommandGroup,
+)
 
 
 class AutonomousCommandGroup(SequentialCommandGroup):
@@ -68,12 +74,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # AimAndShootCommand(),
         )
 
-    def threeBall0(self):
+    def oldthreeBall2(self):
         """
         Currently following the correct path, but sometimes doesn't stop on the long
         forward path.
         """
         self.addCommands(
+            InstantCommand(lambda: robot.ml.setFilterColor("blue")),
             ResetAutoStateCommand(angle=-math.radians(78)),
             # AimAndShootCommand(),
             ParallelRaceGroup(HighGoalFenderCommand(), WaitCommand(3)),
@@ -86,12 +93,33 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                     TurnCommand(-1.48),
                     MoveForwardCommand(2.54),
                 ),
-                ForwardBallSystemCommand(),
+                IntakeBallsCommandGroup(),
             ),
             # StopIntakeCommand(),
             TurnCommand(0.79),
             # AimAndShootCommand(),
-            HighGoalShootCommand(),
+            ParallelRaceGroup(HighGoalShootCommand(), WaitCommand(3)),
+        )
+
+    def threeBall0(self):
+        """
+        Currently following the correct path, but sometimes doesn't stop on the long
+        forward path.
+        """
+        self.addCommands(
+            ResetAutoStateCommand(angle=-math.radians(78)),
+            # AimAndShootCommand(),
+            ParallelRaceGroup(LowGoalShootCommand(1400, 1000), WaitCommand(3)),
+            # TurnCommand(-math.radians(78), relative=False),
+            # StartIntakeCommand(),
+            AutoCollectBallsCommandGroup(endOnBallPickup=True),
+            TurnCommand(-math.radians(90)),
+            AutoCollectBallsCommandGroup(endOnBallPickup=True),
+            # StopIntakeCommand(),
+            TurnCommand(0.79),
+            # AimAndShootCommand(),
+            ParallelRaceGroup(LowGoalShootCommand(1000, 3000), WaitCommand(3)),
+            AutoCollectBallsCommandGroup(endOnBallPickup=True),
         )
 
     def matthewsMoveCommand(self):

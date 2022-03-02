@@ -31,7 +31,7 @@ class HighGoalShootCommand(BaseShootCommand):
 
     def initialize(self):
         self.distanceFilter.reset()
-
+        self.configureLimelightPipeline()
         # self.setRPMs(0, 0)
         # self.setHoodPosition(0)
 

@@ -31,6 +31,9 @@ class BaseShootCommand(CommandBase):
         robot.ballsystem.stopChamber()
         robot.hood.stop()
 
+    def configureLimelightPipeline(self):
+        robot.limelight.setPipeline(1)
+
     def setRPMs(self, rpm1, rpm2):
         self.rpm1 = rpm1
         self.rpm2 = rpm2
