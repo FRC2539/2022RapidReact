@@ -1,5 +1,6 @@
 from distutils import dist
 from commands.shooter.baseshootcommand import BaseShootCommand
+import math
 
 import robot
 
@@ -63,3 +64,17 @@ class HighGoalShootCommand(BaseShootCommand):
             hoodAngle = self.hoodMult2 * distance + self.hoodBase
 
         self.setHoodPosition(hoodAngle)
+
+    # def calculateHoodAngleFromLimelight(self):
+    #     i = 1 #angle of incedence of the ball
+    #     y = 3 #hight distance
+    #     x = 3 # distance
+
+    #     cot = lambda e : 1/math.tan(e)
+    #     acot = lambda e : (math.atan(-e) + math.pi/2)
+
+    #     a = acot(cot(i) + 2y/x)
+
+    #     return a
+
+    # def calculate

@@ -8,8 +8,8 @@ class BaseShootCommand(CommandBase):
         super().__init__()
 
         self.addRequirements([robot.shooter, robot.hood])
-        self.shooterRPMTolerance = 65
-        self.hoodTolerance = 0.3
+        self.shooterRPMTolerance = 70
+        self.hoodTolerance = 0.6
 
         # These values should be set within the initialize
         # or execute of the child command
@@ -48,7 +48,7 @@ class BaseShootCommand(CommandBase):
         distance = abs(self.hoodAngle - robot.hood.getPosition())
 
         # Calculate a speed based on the hood angle offset
-        speed = 0.1 if distance > 2 else 0.03
+        speed = 0.05 if distance > 2 else 0.02
         direction = 1 if (self.hoodAngle - robot.hood.getPosition()) >= 0 else -1
 
         # Move the hood as long as it is not yet within the tolerance
@@ -61,12 +61,18 @@ class BaseShootCommand(CommandBase):
         targetRPM1 = self.rpm1 if not self.rejectMode else robot.shooter.rejectRPM1
         targetRPM2 = self.rpm2 if not self.rejectMode else robot.shooter.rejectRPM2
 
+        targetHoodPosition = self.hoodAngle
+
         # Check if both of the shooter wheels are up to speed
         shooterAtSpeed1 = (
             abs(robot.shooter.getRPM1() - targetRPM1) <= self.shooterRPMTolerance
         )
         shooterAtSpeed2 = (
             abs(robot.shooter.getRPM2() - targetRPM2) <= self.shooterRPMTolerance
+        )
+
+        hoodAtPosition = (
+            abs(robot.hood.getPosition() - targetHoodPosition) <= self.hoodTolerance
         )
 
         # Set to reject mode if the ball is the wrong color
@@ -86,7 +92,7 @@ class BaseShootCommand(CommandBase):
             robot.shooter.setRPM(self.rpm1, self.rpm2)
 
         # Move the ball through the chamber if the shooter is up to speed
-        if shooterAtSpeed1 and shooterAtSpeed2:
+        if shooterAtSpeed1 and shooterAtSpeed2 and hoodAtPosition:
             robot.ballsystem.forwardChamber()
             robot.ballsystem.forwardConveyor()
         else:

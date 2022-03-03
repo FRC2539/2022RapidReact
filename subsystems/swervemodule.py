@@ -39,7 +39,9 @@ class SwerveModule:
         self.moduleName = name
 
         # Create the drive motor of this specific module.
-        self.driveMotor = WPI_TalonFX(driveMotorID)  # Declare and setup drive motor.
+        self.driveMotor = WPI_TalonFX(
+            driveMotorID, "CANivore"
+        )  # Declare and setup drive motor.
 
         # Configure the drive motor of this module.
         self.driveMotor.setNeutralMode(NeutralMode.Brake)
@@ -74,7 +76,7 @@ class SwerveModule:
         )  # Secondary Integral Zone for the drive.
 
         # Declare and setup the remote encoder.
-        self.cancoder = CANCoder(canCoderID)
+        self.cancoder = CANCoder(canCoderID, "CANivore")
         self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
 
         # self.cancoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 1)
@@ -93,7 +95,7 @@ class SwerveModule:
         self.offsetBasis = offsetBasis
 
         # Declare and setup the turn motor of this module.
-        self.turnMotor = WPI_TalonFX(turnMotorID)
+        self.turnMotor = WPI_TalonFX(turnMotorID, "CANivore")
 
         # Configure the turn motor of this module.
         self.turnMotor.setNeutralMode(NeutralMode.Brake)

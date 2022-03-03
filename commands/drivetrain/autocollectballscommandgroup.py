@@ -7,11 +7,13 @@ from commands.ballsystem.forwardballsystemcommand import ForwardBallSystemComman
 
 
 class AutoCollectBallsCommandGroup(ParallelRaceGroup):
-    def __init__(self, endOnBallPickup=False):
+    def __init__(self, endOnBallPickup=False, pickupTwo=False):
         super().__init__()
 
         self.addCommands(
             IntakeCommand(),
             ForwardBallSystemCommand(useLights=False),
-            AutoCollectBallsCommand(endOnBallPickup=endOnBallPickup),
+            AutoCollectBallsCommand(
+                endOnBallPickup=endOnBallPickup, pickupTwo=pickupTwo
+            ),
         )

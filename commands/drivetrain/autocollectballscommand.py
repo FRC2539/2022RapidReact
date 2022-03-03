@@ -15,11 +15,12 @@ import wpilib
 class AutoCollectBallsCommand(CommandBase):
     """Turns towards ball and then moves at it. The intake is running during the entire command."""
 
-    def __init__(self, endOnBallPickup=False):
+    def __init__(self, endOnBallPickup=False, pickupTwo=False):
         super().__init__()
         self.addRequirements(robot.drivetrain)
 
         self.endOnBallPickup = endOnBallPickup
+        self.pickupTwo = pickupTwo
 
         # sets the proportional value in my made up PID controller
         self.reactionSpeed = 0.03
@@ -54,6 +55,7 @@ class AutoCollectBallsCommand(CommandBase):
         self.lightsTimer.start()
 
         self.ballInChamber = robot.ballsystem.isChamberBallPresent()
+        self.ballInConveyor = robot.ballsystem.isConveyorBallPresent()
 
     def execute(self):
         self.blinkBallColor()
@@ -67,17 +69,20 @@ class AutoCollectBallsCommand(CommandBase):
         # )
 
     def isFinished(self):
-        if not self.endOnBallPickup:
-            return False
-
         conveyorBall = robot.ballsystem.isConveyorBallPresent()
         chamberBall = robot.ballsystem.isChamberBallPresent()
 
-        return (
-            (conveyorBall and chamberBall)
-            or (self.ballInChamber and conveyorBall)
-            or (not self.ballInChamber and chamberBall)
-        )
+        if not self.endOnBallPickup:
+            return False
+
+        elif not self.pickupTwo:
+            return (
+                (conveyorBall and chamberBall)
+                or (self.ballInChamber and conveyorBall)
+                or (not self.ballInChamber and chamberBall)
+            )
+
+        return conveyorBall and chamberBall
 
     def end(self, interrupted):
         robot.drivetrain.stop()

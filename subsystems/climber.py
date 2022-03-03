@@ -12,7 +12,7 @@ class Climber(CougarSystem):
         super().__init__("Climber")
 
         # Create the controller for the climber motor
-        self.climberMotor = WPI_TalonFX(ports.climber.motorID)
+        self.climberMotor = WPI_TalonFX(ports.climber.motorID, "CANivore")
 
         # Configure the climber motor
         self.climberMotor.setNeutralMode(NeutralMode.Brake)

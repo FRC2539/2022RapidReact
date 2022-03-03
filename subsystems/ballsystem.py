@@ -178,3 +178,18 @@ class BallSystem(CougarSystem):
         (Return value is a DriverStation.Alliance (kRed, kBlue, kInvalid))
         """
         return DriverStation.getAlliance()
+
+    def getAllianceColorRaw(self):
+        """
+        Returns the current alliance color
+
+        (Return value is a DriverStation.Alliance (kRed, kBlue, kInvalid))
+        """
+        alliance = DriverStation.getAlliance()
+
+        if alliance == DriverStation.Alliance.kBlue:
+            return "blue"
+        elif alliance == DriverStation.Alliance.kRed:
+            return "red"
+        else:
+            return "none"

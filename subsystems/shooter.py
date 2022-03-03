@@ -15,13 +15,13 @@ class Shooter(CougarSystem):
         super().__init__("Shooter")
 
         # Initialize the first motor.
-        self.shooterMotorOne = WPI_TalonFX(ports.shooter.motorOneID)
+        self.shooterMotorOne = WPI_TalonFX(ports.shooter.motorOneID, "CANivore")
         self.shooterMotorOne.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
         )
 
         # Initialize the second motor.
-        self.shooterMotorTwo = WPI_TalonFX(ports.shooter.motorTwoID)
+        self.shooterMotorTwo = WPI_TalonFX(ports.shooter.motorTwoID, "CANivore")
         self.shooterMotorTwo.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
         )
@@ -60,11 +60,12 @@ class Shooter(CougarSystem):
         self.lowGoalRPM2 = 900
 
         # High goal rpms
-        # self.highGoalRPM1 = 900
-        # self.highGoalRPM2 = 2300
+        self.highGoalRPM1 = 900
+        self.highGoalRPM2 = 2300
 
-        self.bindVariable("highGoalRPM1", "High Goal RPM 1", 900)
-        self.bindVariable("highGoalRPM2", "High Goal RPM 2", 2300)
+        self.bindVariable("testRPM1", "Test RPM 1", 1000)
+        self.bindVariable("testRPM2", "Test RPM 2", 2400)
+        self.bindVariable("testAngle", "Test Angle", 12)
 
         # Constantly updates the hood's status.
         self.constantlyUpdate(

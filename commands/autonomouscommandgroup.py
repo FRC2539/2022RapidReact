@@ -11,7 +11,9 @@ from commands2 import (
 from networktables import NetworkTables
 
 import math
+from commands.drivetrain.funnymovecommand import FunnyMoveCommand
 from commands.intakeballscommandgroup import IntakeBallsCommandGroup
+from commands.shooter.customshootcommand import CustomShootCommand
 from commands.shooter.lowgoalshootcommand import LowGoalShootCommand
 import robot, constants
 
@@ -74,39 +76,42 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # AimAndShootCommand(),
         )
 
-    def oldthreeBall2(self):
-        """
-        Currently following the correct path, but sometimes doesn't stop on the long
-        forward path.
-        """
-        self.addCommands(
-            InstantCommand(lambda: robot.ml.setFilterColor("blue")),
-            ResetAutoStateCommand(angle=-math.radians(78)),
-            # AimAndShootCommand(),
-            ParallelRaceGroup(HighGoalFenderCommand(), WaitCommand(3)),
-            TurnCommand(-math.radians(78), relative=False),
-            # StartIntakeCommand(),
-            ParallelRaceGroup(
-                SequentialCommandGroup(
-                    MoveForwardCommand(1.09),
-                    MoveForwardCommand(-0.79),
-                    TurnCommand(-1.48),
-                    MoveForwardCommand(2.54),
-                ),
-                IntakeBallsCommandGroup(),
-            ),
-            # StopIntakeCommand(),
-            TurnCommand(0.79),
-            # AimAndShootCommand(),
-            ParallelRaceGroup(HighGoalShootCommand(), WaitCommand(3)),
-        )
-
     def threeBall0(self):
         """
         Currently following the correct path, but sometimes doesn't stop on the long
         forward path.
         """
         self.addCommands(
+            ResetAutoStateCommand(angle=-math.radians(78)),
+            ParallelRaceGroup(
+                CustomShootCommand(rpm1=1200, rpm2=2400, hoodAngle=14), WaitCommand(3)
+            ),
+            TurnCommand(-math.radians(78), relative=False),
+            ParallelRaceGroup(
+                SequentialCommandGroup(
+                    FunnyMoveCommand(1.09, torySlow=10000),
+                    FunnyMoveCommand(-0.79, torySlow=10000),
+                    TurnCommand(-1.48),
+                    FunnyMoveCommand(2.54, torySlow=10000),
+                    WaitCommand(1),
+                ),
+                IntakeBallsCommandGroup(),
+            ),
+            TurnCommand(0.79),
+            ParallelRaceGroup(
+                CustomShootCommand(rpm1=1400, rpm2=2600, hoodAngle=16), WaitCommand(3)
+            ),
+        )
+
+    def threeBallCrazy(self):
+        """
+        Currently following the correct path, but sometimes doesn't stop on the long
+        forward path.
+        """
+        self.addCommands(
+            InstantCommand(
+                lambda: robot.ml.setFilterColor(robot.ballsystem.getAllianceColorRaw())
+            ),
             ResetAutoStateCommand(angle=-math.radians(78)),
             # AimAndShootCommand(),
             ParallelRaceGroup(LowGoalShootCommand(1400, 1000), WaitCommand(3)),
@@ -119,7 +124,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             TurnCommand(0.79),
             # AimAndShootCommand(),
             ParallelRaceGroup(LowGoalShootCommand(1000, 3000), WaitCommand(3)),
-            AutoCollectBallsCommandGroup(endOnBallPickup=True),
+            AutoCollectBallsCommandGroup(endOnBallPickup=True, pickupTwo=True),
         )
 
     def matthewsMoveCommand(self):
@@ -139,16 +144,10 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def moveTest(self):
         self.addCommands(
             ResetAutoStateCommand(x=0, y=0, angle=0),
-            CustomMoveCommand(x=0.5, y=0.5, relative=False),
-            TurnCommand(3.14 / 2, relative=False),
-            # TurnCommand(0, relative=False),
-            # TurnCommand(-3.14 / 2, relative=False),
-            CustomMoveCommand(x=-0.5, y=-0.5, relative=False),
-            # CustomMoveCommand(x=1, relative=False),
-            # TurnCommand(3.14 / 2, relative=False),
-            # TurnCommand(-3.14 / 2, relative=False),
-            # CustomMoveCommand(x=0, relative=False),
-            # TurnCommand(6.28, relative=False),
+            # FunnyMoveCommand(24),
+            # FunnyMoveCommand(-24),
+            # TurnCommand(math.pi / 2),
+            # FunnyMoveCommand(24),
         )
 
     def trajectory(self):
