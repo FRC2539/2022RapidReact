@@ -31,6 +31,8 @@ class DriveCommand(CommandBase):
         # Reset the PID Controller for use later
         self.resetPIDController()
 
+        robot.limelight.setPipeline(1)
+
     def execute(self):
         # TODO replace the interesting code below with a rate limiter object
         # Avoid quick changes in direction
@@ -74,16 +76,25 @@ class DriveCommand(CommandBase):
 
         Returns radians/second
         """
-        desiredVelocity = self.pidController.calculate(
-            self.getLimelightMeasurement(), 0
-        )
 
-        # Normalize the value to a range of -1 to 1
-        return desiredVelocity / constants.drivetrain.angularSpeedLimit
+        xOffsetP = 0.05
+
+        xOffset = robot.limelight.getX()  # Returns an angle
+
+        try:
+            xPercentError = xOffset * xOffsetP  # This value is found experimentally
+        except (TypeError):
+            xPercentError = 0
+            print("\nERROR: Limelight is broken/unplugged \n")
+
+        if abs(xPercentError) > 0.25:
+            xPercentError = math.copysign(0.15, xPercentError)
+
+        return xPercentError
 
     def getLimelightMeasurement(self):
         """
         Uses the same algorithm as the LimelightAngleLockCommand,
         just in combination with the drive command here.
         """
-        return -1 * robot.limelight.estimateShooterPose().rotation().radians()
+        return robot.limelight.getX()

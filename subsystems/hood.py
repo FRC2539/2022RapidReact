@@ -49,6 +49,8 @@ class Hood(CougarSystem):
         self.lowGoalAngle = 15  # 10
         self.highGoalAngle = 11
 
+        self.bindVariable("testAngle", "Test Angle", 12)
+
     def periodic(self):
         """
         Loops when nothing else is running in

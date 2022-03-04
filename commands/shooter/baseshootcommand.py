@@ -61,8 +61,6 @@ class BaseShootCommand(CommandBase):
         targetRPM1 = self.rpm1 if not self.rejectMode else robot.shooter.rejectRPM1
         targetRPM2 = self.rpm2 if not self.rejectMode else robot.shooter.rejectRPM2
 
-        targetHoodPosition = self.hoodAngle
-
         # Check if both of the shooter wheels are up to speed
         shooterAtSpeed1 = (
             abs(robot.shooter.getRPM1() - targetRPM1) <= self.shooterRPMTolerance
@@ -71,9 +69,7 @@ class BaseShootCommand(CommandBase):
             abs(robot.shooter.getRPM2() - targetRPM2) <= self.shooterRPMTolerance
         )
 
-        hoodAtPosition = (
-            abs(robot.hood.getPosition() - targetHoodPosition) <= self.hoodTolerance
-        )
+        hoodAtPosition = abs(self.hoodAngle - robot.hood.getPosition()) <= 1.5
 
         # Set to reject mode if the ball is the wrong color
         if (
@@ -92,7 +88,7 @@ class BaseShootCommand(CommandBase):
             robot.shooter.setRPM(self.rpm1, self.rpm2)
 
         # Move the ball through the chamber if the shooter is up to speed
-        if shooterAtSpeed1 and shooterAtSpeed2 and hoodAtPosition:
+        if shooterAtSpeed1 and shooterAtSpeed2:
             robot.ballsystem.forwardChamber()
             robot.ballsystem.forwardConveyor()
         else:

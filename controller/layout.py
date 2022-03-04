@@ -56,6 +56,9 @@ from commands.shooter.lowgoalshootcommand import LowGoalShootCommand
 
 from commands.shooter.highgoalshootcommand import HighGoalShootCommand
 from commands.shooter.highgoalfendercommand import HighGoalFenderCommand
+from commands.shooter.highgoallinecommand import HighGoalLineCommand
+
+from commands.shooter.customshootcommand import CustomShootCommand
 
 
 import constants
@@ -130,7 +133,9 @@ def init():
 
     componentController.LeftTrigger.whileHeld(LowerHoodCommand())
     componentController.LeftBumper.whileHeld(RaiseHoodCommand())
-    componentController.RightTrigger.whileHeld(HighGoalShootCommand())
+    # componentController.RightTrigger.whileHeld(HighGoalShootCommand())
+    componentController.RightTrigger.whileHeld(HighGoalLineCommand())
+
     # componentController.RightBumper.whileHeld()
 
     # componentController.A.whileHeld()

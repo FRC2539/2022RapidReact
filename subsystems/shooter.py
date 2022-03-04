@@ -53,19 +53,27 @@ class Shooter(CougarSystem):
 
         # Reject ball velocity
         self.rejectRPM1 = 600
-        self.rejectRPM2 = 900
+        self.rejectRPM2 = 800
 
         # Low goal rpms
-        self.lowGoalRPM1 = 1150
-        self.lowGoalRPM2 = 900
+        # self.lowGoalRPM1 = 1150
+        # self.lowGoalRPM2 = 900
+        self.lowGoalRPM1 = 1100
+        self.lowGoalRPM2 = 850
 
         # High goal rpms
+        # self.highGoalRPM1 = 900
+        # self.highGoalRPM2 = 2300
         self.highGoalRPM1 = 900
-        self.highGoalRPM2 = 2300
+        self.highGoalRPM2 = 2400
+
+        # High goal slightly behind line
+        self.behindLineRPM1 = 1300
+        self.behindLineRPM2 = 2350
+        self.behindLineAngle = 25
 
         self.bindVariable("testRPM1", "Test RPM 1", 1000)
         self.bindVariable("testRPM2", "Test RPM 2", 2400)
-        self.bindVariable("testAngle", "Test Angle", 12)
 
         # Constantly updates the hood's status.
         self.constantlyUpdate(

@@ -7,16 +7,18 @@ class CustomShootCommand(BaseShootCommand):
     def __init__(self, rpm1=None, rpm2=None, hoodAngle=None):
         super().__init__()
 
-        self.rpm1 = rpm1
-        self.rpm2 = rpm2
-        self.hoodAngle = hoodAngle
+        self.customrpm1 = rpm1
+        self.customrpm2 = rpm2
+        self.angle = hoodAngle
 
     def initialize(self):
-        rpm1 = self.rpm1 if self.rpm1 is not None else robot.shooter.testRPM1
-        rpm2 = self.rpm2 if self.rpm2 is not None else robot.shooter.testRPM2
-        angle = (
-            self.hoodAngle if self.hoodAngle is not None else robot.hood.highGoalAngle
+        rpm1 = (
+            self.customrpm1 if self.customrpm1 is not None else robot.shooter.testRPM1
         )
+        rpm2 = (
+            self.customrpm2 if self.customrpm2 is not None else robot.shooter.testRPM2
+        )
+        angle = self.angle if self.angle is not None else robot.hood.testAngle
 
         self.setRPMs(rpm1, rpm2)
         self.setHoodPosition(angle)

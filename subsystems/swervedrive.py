@@ -178,13 +178,13 @@ class SwerveDrive(BaseDrive):
 
         # Create a theta controller used for driving
         self.driveThetaController = ProfiledPIDControllerRadians(
-            3.5,
+            0.15,
             # 2,
             0,
-            0.035,
+            0,
             TrapezoidProfileRadians.Constraints(
-                math.pi * 1.5,
-                math.pi * 1.25,
+                math.pi * 1 / 3,
+                math.pi * 1 / 6,
             ),
         )
         self.driveThetaController.enableContinuousInput(-math.pi, math.pi)

@@ -156,7 +156,7 @@ shooter.gearRatio = 1.5
 # See here for more information: https://docs.limelightvision.io/en/latest/networktables_api.html
 limelight.captureLatency = 0.011
 
-limelight.xOffset = 0
+limelight.xOffset = 2
 limelight.yOffset = 0
 
 limelight.xOffsetStep = 0
@@ -171,7 +171,7 @@ limelight.limelightAngle = math.radians(60)  # 10 degrees (angle in radians)
 limelight.defaultPipeline = 1
 
 limelight.drivetrainAngleTolerance = math.radians(
-    1.5
+    0.1
 )  # the tolerance for limelight aiming
 
 limelight.limelightToShooterTransform = Transform2d(
