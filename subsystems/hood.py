@@ -46,10 +46,13 @@ class Hood(CougarSystem):
         self.constantlyUpdate("Hood Moving", lambda: self.motor.get() != 0)
         self.constantlyUpdate("Hood Position", self.getPosition)
 
-        self.lowGoalAngle = 15  # 10
-        self.highGoalAngle = 11
+        self.lowGoalAngle = 16  # 10
+        self.highGoalAngle = 12
 
         self.bindVariable("testAngle", "Test Angle", 12)
+
+        self.hoodAngleOffset = 0
+        self.hoodAngleStep = 1
 
     def periodic(self):
         """
@@ -57,6 +60,12 @@ class Hood(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
+
+    def increaseHoodOffset(self):
+        self.hoodAngleOffset += self.hoodAngleStep
+
+    def decreaseHoodOffset(self):
+        self.hoodAngleOffset -= self.hoodAngleStep
 
     def getPosition(self):
         """

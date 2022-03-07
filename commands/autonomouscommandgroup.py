@@ -17,6 +17,7 @@ from commands.limelight.limelightanglelockcommand import LimelightAngleLockComma
 from commands.shooter.customshootcommand import CustomShootCommand
 from commands.shooter.highgoallinecommand import HighGoalLineCommand
 from commands.shooter.lowgoalshootcommand import LowGoalShootCommand
+from commands.shooter.sethoodanglecommand import SetInitialHoodAngleCommand
 import robot, constants
 
 from commands import autoconfig
@@ -63,37 +64,84 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         eval("self." + toRun + "()")  # Runs the method
 
-    def threeBall0(self):
-        """
-        Currently following the correct path, needs limelight aiming and shooting
-        """
+    # def threeBall(self):
+    #     """
+    #     Currently following the correct path, needs limelight aiming and shooting
+    #     """
+    #     self.addCommands(
+    #         ResetAutoStateCommand(angle=-math.radians(78)),
+    #         ParallelRaceGroup(SetInitialHoodAngleCommand(), WaitCommand(0.5)),
+    #         ParallelRaceGroup(
+    #             CustomShootCommand(rpm1=1200, rpm2=2300, hoodAngle=18), WaitCommand(3)
+    #         ),
+    #         TurnCommand(-math.radians(78), relative=False),
+    #         ParallelRaceGroup(
+    #             SequentialCommandGroup(
+    #                 FunnyMoveCommand(1.09, torySlow=12000),
+    #                 FunnyMoveCommand(-0.79, torySlow=12000),
+    #                 TurnCommand(-1.38),
+    #             ),
+    #             IntakeBallsCommandGroup(),
+    #         ),
+    #         AutoCollectBallsCommandGroup(endOnBallPickup=True),
+    #         TurnCommand(0.79),
+    #         FunnyMoveCommand(-1.5),
+    #         ParallelRaceGroup(
+    #             HighGoalLineCommand(), LimelightAngleLockCommand(), WaitCommand(3)
+    #         ),
+    #     )
+
+    def twoBall0(self):
         self.addCommands(
-            ResetAutoStateCommand(angle=-math.radians(78)),
+            ResetAutoStateCommand(angle=0),
+            ParallelRaceGroup(SetInitialHoodAngleCommand(), WaitCommand(2)),
             ParallelRaceGroup(
-                CustomShootCommand(rpm1=1100, rpm2=2200, hoodAngle=16), WaitCommand(3)
-            ),
-            TurnCommand(-math.radians(78), relative=False),
-            ParallelRaceGroup(
-                SequentialCommandGroup(
-                    FunnyMoveCommand(1.09, torySlow=11000),
-                    FunnyMoveCommand(-0.79, torySlow=11000),
-                    TurnCommand(-1.38),
-                ),
                 IntakeBallsCommandGroup(),
+                SequentialCommandGroup(
+                    FunnyMoveCommand(1.1),
+                    WaitCommand(0.5),
+                ),
             ),
-            AutoCollectBallsCommandGroup(endOnBallPickup=True),
-            TurnCommand(0.79),
-            FunnyMoveCommand(-0.3),
+            FunnyMoveCommand(-0.1),
             ParallelRaceGroup(HighGoalLineCommand(), WaitCommand(3)),
         )
 
-    def twoBall():
+    def tweeBall(self):
         self.addCommands(
             ResetAutoStateCommand(angle=0),
-            AutoCollectBallsCommandGroup(endOnBallPickup=True),
-            FunnyMoveCommand(-0.3),
+            ParallelRaceGroup(
+                IntakeBallsCommandGroup(),
+                SequentialCommandGroup(
+                    FunnyMoveCommand(1.1),
+                    WaitCommand(0.3),
+                ),
+                SetInitialHoodAngleCommand(),
+            ),
+            FunnyMoveCommand(-0.1),
             ParallelRaceGroup(HighGoalLineCommand(), WaitCommand(3)),
+            TurnCommand(90),
+            FunnyMoveCommand(0.5),
         )
+
+    def playerStationPickup(self):
+        self.addCommands(
+            ResetAutoStateCommand(angle=0),
+            ParallelRaceGroup(SetInitialHoodAngleCommand(), WaitCommand(0.5)),
+            FunnyMoveCommand(0.5),
+            ParallelRaceGroup(HighGoalLineCommand(), WaitCommand(2.5)),
+            FunnyMoveCommand(2),
+            AutoCollectBallsCommandGroup(endOnBallPickup=True, pickupTwo=True),
+            FunnyMoveCommand(-2),
+        )
+
+    # def shootTest(self):
+    #     self.addCommands(
+    #         ResetAutoStateCommand(angle=0),
+    #         FunnyMoveCommand(1.3),
+    #         ParallelRaceGroup(
+    #             HighGoalLineCommand(), LimelightAngleLockCommand(), WaitCommand(2.5)
+    #         ),
+    #     )
 
     # def fiveBall(self):
     # """Immediately shoots a red ball, collects 2 balls and shoots them, then collects a red ball + one from the human player station."""

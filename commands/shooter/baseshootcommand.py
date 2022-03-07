@@ -41,7 +41,7 @@ class BaseShootCommand(CommandBase):
         robot.shooter.setRPM(self.rpm1, self.rpm2)
 
     def setHoodPosition(self, position):
-        self.hoodAngle = position
+        self.hoodAngle = position + robot.hood.hoodAngleOffset
 
     def updateHoodPosition(self):
         # Calculate the hood angle offset

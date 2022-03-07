@@ -42,7 +42,8 @@ class LimelightAngleLockCommand(CommandBase):
         Returns radians/second
         """
 
-        xOffsetP = 0.05
+        # xOffsetP = 0.05
+        xOffsetP = 0.03
 
         xOffset = robot.limelight.getX()  # Returns an angle
 
@@ -53,6 +54,6 @@ class LimelightAngleLockCommand(CommandBase):
             print("\nERROR: Limelight is broken/unplugged \n")
 
         if abs(xPercentError) > 0.25:
-            xPercentError = math.copysign(0.15, xPercentError)
+            xPercentError = math.copysign(0.14, xPercentError)
 
         return xPercentError

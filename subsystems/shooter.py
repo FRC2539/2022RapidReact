@@ -64,13 +64,13 @@ class Shooter(CougarSystem):
         # High goal rpms
         # self.highGoalRPM1 = 900
         # self.highGoalRPM2 = 2300
-        self.highGoalRPM1 = 900
+        self.highGoalRPM1 = 1100
         self.highGoalRPM2 = 2400
 
         # High goal slightly behind line
         self.behindLineRPM1 = 1300
         self.behindLineRPM2 = 2350
-        self.behindLineAngle = 25
+        self.behindLineAngle = 27
 
         self.bindVariable("testRPM1", "Test RPM 1", 1000)
         self.bindVariable("testRPM2", "Test RPM 2", 2400)

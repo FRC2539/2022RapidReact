@@ -60,6 +60,9 @@ from commands.shooter.highgoallinecommand import HighGoalLineCommand
 
 from commands.shooter.customshootcommand import CustomShootCommand
 
+from commands.hood.increasehoodoffsetcommand import IncreaseHoodOffsetCommand
+from commands.hood.decreasehoodoffsetcommand import DecreaseHoodOffsetCommand
+
 
 import constants
 import robot
@@ -138,10 +141,10 @@ def init():
 
     # componentController.RightBumper.whileHeld()
 
-    # componentController.A.whileHeld()
+    componentController.A.whenPressed(DecreaseHoodOffsetCommand())
     componentController.X.whileHeld(RejectCommand())
     componentController.B.whileHeld(RejectCommand())
-    # componentController.Y.whileHeld()
+    componentController.Y.whenPressed(IncreaseHoodOffsetCommand())
 
     # componentController.DPadUp.whenPressed()
     # componentController.DPadDown.whenPressed()

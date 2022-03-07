@@ -156,7 +156,7 @@ shooter.gearRatio = 1.5
 # See here for more information: https://docs.limelightvision.io/en/latest/networktables_api.html
 limelight.captureLatency = 0.011
 
-limelight.xOffset = 2
+limelight.xOffset = 2.5
 limelight.yOffset = 0
 
 limelight.xOffsetStep = 0
@@ -193,7 +193,7 @@ hood.positionConversionFactor = 1 / 210  # This should be the gear ratio
 
 hood.kP = 0.001  # PID
 
-hood.percentOutputSpeed = 0.1
+hood.percentOutputSpeed = 0.12
 
 # Angle range in degrees
 hood.maxAngle = 22  # 28
