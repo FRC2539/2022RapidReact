@@ -7,6 +7,9 @@ import constants
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 from wpilib import Timer
 from wpimath.kinematics import ChassisSpeeds
+from wpimath.controller import ProfiledPIDController, ProfiledPIDControllerRadians
+from wpimath.trajectory import TrapezoidProfileRadians
+from wpimath.filter import MedianFilter
 import constants
 import math
 import wpilib
@@ -17,7 +20,11 @@ class AutoCollectBallsCommand(CommandBase):
 
     def __init__(self, endOnBallPickup=False, pickupTwo=False):
         super().__init__()
+
         self.addRequirements(robot.drivetrain)
+
+        self.mlFilterX = MedianFilter(5)
+        self.mlFilterY = MedianFilter(5)
 
         self.endOnBallPickup = endOnBallPickup
         self.pickupTwo = pickupTwo
@@ -26,7 +33,7 @@ class AutoCollectBallsCommand(CommandBase):
         self.reactionSpeed = 0.03
 
         # sets the min and max speed the robot will spin at
-        self.maxRotationSpeed = constants.drivetrain.angularSpeedLimit / 4
+        self.maxRotationSpeed = constants.drivetrain.angularSpeedLimit / 8
         self.minRotationSpeed = constants.drivetrain.angularSpeedMinimum
 
         # sets the speed the robot will move forwards
@@ -39,6 +46,9 @@ class AutoCollectBallsCommand(CommandBase):
         # the angle the robot will move when it is within
         self.movingRadianTolerance = 0.4
 
+        self.turningConstraints = TrapezoidProfileRadians.Constraints(
+            self.maxRotationSpeed, 2
+        )
         # creates a timer for later letting the robot run slightly after losing sight of the ball
         self.timer = Timer()
 
@@ -48,7 +58,24 @@ class AutoCollectBallsCommand(CommandBase):
 
         self.lightsOn = False
 
+        self.angleController = ProfiledPIDControllerRadians(
+            1, 0, 0, self.turningConstraints
+        )
+
+        self.angleController.setGoal(0)
+        self.angleController.enableContinuousInput(-math.pi, math.pi)
+        self.angleController.setTolerance(self.turningRadianTolerance)
+        # self.forwardController = ProfiledPIDController(1,0,0)
+
     def initialize(self):
+        self.mlFilterX.reset()
+        self.mlFilterY.reset()
+
+        self.angleController.setPID(robot.ml.turnP, robot.ml.turnI, robot.ml.turnD)
+        self.angleController.setConstraints(
+            TrapezoidProfileRadians.Constraints(robot.ml.maxVel, robot.ml.maxAcc)
+        )
+        self.angleController.reset(robot.ml.getXAngle())
         self.timer.reset()
         self.timer.start()
         self.lightsTimer.reset()
@@ -59,14 +86,13 @@ class AutoCollectBallsCommand(CommandBase):
 
     def execute(self):
         self.blinkBallColor()
-
-        robot.drivetrain.setChassisSpeeds(
-            ChassisSpeeds(-self.calcForwardVelocity(), 0, self.calcRotationSpeed())
+        calculatedRotationSpeed = self.angleController.calculate(
+            self.mlFilterX.calculate(robot.ml.getXAngle())
         )
-
-        # print(
-        #     f"{robot.ml.getX()=}, {self.getXNormalized()=}, {self.calcRotationSpeed()}"
-        # )
+        # calculatedForward = self.forwardController.calculate()
+        robot.drivetrain.setChassisSpeeds(
+            ChassisSpeeds(-self.calcForwardVelocity(), 0, calculatedRotationSpeed)
+        )
 
     def isFinished(self):
         conveyorBall = robot.ballsystem.isConveyorBallPresent()
@@ -112,59 +138,10 @@ class AutoCollectBallsCommand(CommandBase):
         velocity = 0
 
         # keeps the velocity zero if the robot is not pointing close enough to the ball
-        if abs(self.getXAngle()) <= self.movingRadianTolerance:
+        if self.angleController.getPositionError() <= self.movingRadianTolerance:
             velocity = self.maxLinearSpeed
 
         return velocity
-
-    def calcRotationSpeed(self):
-        """calculates the rotation speed that the robot should be turning in radians. Counterclockwise positive. (I think)"""
-        # does not spin towards a ball that doesn't exist
-        if not robot.ml.isTargetAcquired():
-            return 0
-
-        # sets the rotational velocity of the robot to be proportional to its offset
-        velocity = self.getXNormalized() * self.reactionSpeed
-
-        # replaces a bunch of copysigns
-        absVel = abs(velocity)
-
-        # limits the speed
-        absVel = max(absVel, self.minRotationSpeed)
-        absVel = min(absVel, self.maxRotationSpeed)
-
-        # checks if we are in the tolerance and stops
-        if abs(self.getXAngle()) <= self.turningRadianTolerance:
-            absVel = 0
-
-        velocity = math.copysign(absVel, velocity)
-
-        return velocity
-
-    def getXNormalized(self):
-        """Returns a value between -1 (left) and 1 (right) for where the ball is on the x axis"""
-        xPosition = robot.ml.getX()
-        xResolution = robot.ml.getResX()
-
-        # normalizes and then moves
-        xNormalized = xPosition / xResolution * 2 - 1
-
-        return xNormalized
-
-    def getYNormalized(self):
-        """Returns a value between -1 (left) and 1 (right) for where the ball is on the x axis"""
-        yPosition = robot.ml.getY()
-        yResolution = robot.ml.getResY()
-
-        # normalizes and then moves
-        yNormalized = -(yPosition / yResolution * 2 - 1)
-
-        return yNormalized
-
-    def getXAngle(self):
-        """calculates the angle of the ball to the robot x"""
-        horizontalAngle = -self.getXNormalized() / constants.ml.horizontalFieldOfView
-        return horizontalAngle  # counter clockwise positive
 
     def blinkBallColor(self):
         blinkColor = self.allianceToColor(robot.ml.getTargetColor())

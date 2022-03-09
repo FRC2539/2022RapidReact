@@ -17,6 +17,12 @@ class ML(CougarSystem):
     def __init__(self):
         super().__init__("ML")
         self.nt = NetworkTables.getTable("ML")
+
+        self.bindVariable("turnP", "turn P", 1)
+        self.bindVariable("turnI", "turn I", 0)
+        self.bindVariable("turnD", "turn D", 0)
+        self.bindVariable("maxVel", "velocity", 1)
+        self.bindVariable("maxAcc", "acceleration", 2)
         # self.driveTable = NetworkTables.getTable("DriveTrain")
 
     def periodic(self):
@@ -80,3 +86,38 @@ class ML(CougarSystem):
         Returns the y resolution of the ml device
         """
         return self.get("resolutionY")
+
+    def getXNormalized(self):
+        """Returns a value between -1 (left) and 1 (right) for where the ball is on the x axis"""
+        xPosition = self.getX()
+        xResolution = self.getResX()
+
+        # normalizes and then moves
+        xNormalized = xPosition / xResolution * 2 - 1
+
+        return xNormalized
+
+    def getYNormalized(self):
+        """Returns a value between -1 (top) and 1 (bottom) for where the ball is on the x axis"""
+        yPosition = self.getY()
+        yResolution = self.getResY()
+
+        # normalizes and then moves
+        yNormalized = -(yPosition / yResolution * 2 - 1)
+
+        return yNormalized
+
+    def getXAngle(self):
+        """calculates the angle of the ball to the robot x"""
+        horizontalAngle = -self.getXNormalized() / constants.ml.horizontalFieldOfView
+        return horizontalAngle  # counter clockwise positive
+
+    def getYAngle(self):
+        """calculates the angle of the ball to the robot y"""
+        verticalAngle = -self.getYNormalized() / constants.ml.verticalFieldOfView
+        return verticalAngle  # up positive
+
+    def getBallDistance(self):
+        # this is equal to the sqrt of the ball area at one meter according to the camera
+        sqrtOfBallSize = 76
+        return sqrtOfBallSize / math.sqrt(self.getArea())
