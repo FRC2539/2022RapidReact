@@ -63,8 +63,8 @@ class BallSystem(CougarSystem):
             "Conveyor distance", lambda: self.conveyorSensor.getValue()
         )
 
-        # self.constantlyUpdate("Ball Present", lambda: self.isChamberBallPresent())
-        # self.constantlyUpdate("Ball Color", lambda: self.getChamberBallColor())
+        self.constantlyUpdate("Conveyor Ball", lambda: self.isConveyorBallPresent())
+        self.constantlyUpdate("Chamber Ball", lambda: self.isChamberBallPresent())
 
     def configureMotor(self, motor):
         motor.setNeutralMode(NeutralMode.Brake)

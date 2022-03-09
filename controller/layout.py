@@ -107,6 +107,7 @@ def init():
     driveControllerTwo.LeftThumb.whileHeld(IntakeBallsCommandGroup())
     driveControllerTwo.RightThumb.whileHeld(AutoCollectBallsCommandGroup())
     driveControllerTwo.BottomThumb.whileHeld(EnableLimelightLockCommand())
+    # driveControllerTwo.BottomThumb.whileHeld(LimelightAngleLockCommand())
 
     # driveControllerTwo.Trigger.whileHeld(
     #     ParallelCommandGroup(
@@ -137,9 +138,10 @@ def init():
     componentController.LeftTrigger.whileHeld(LowerHoodCommand())
     componentController.LeftBumper.whileHeld(RaiseHoodCommand())
     # componentController.RightTrigger.whileHeld(HighGoalShootCommand())
-    componentController.RightTrigger.whileHeld(HighGoalLineCommand())
+    # componentController.RightTrigger.whileHeld(HighGoalLineCommand())
+    componentController.RightTrigger.whileHeld(CustomShootCommand())
 
-    # componentController.RightBumper.whileHeld()
+    componentController.RightBumper.whileHeld(HighGoalShootCommand())
 
     componentController.A.whenPressed(DecreaseHoodOffsetCommand())
     componentController.X.whileHeld(RejectCommand())
