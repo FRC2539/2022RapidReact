@@ -106,6 +106,12 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ParallelRaceGroup(HighGoalLineCommand(), WaitCommand(3)),
         )
 
+    def fourBall(self):
+        self.addCommands(
+            ResetAutoStateCommand(angle=0),
+            TrajectoryFollowerCommand(robot.drivetrain.trajectory),
+        )
+
     def tweeBall(self):
         self.addCommands(
             ResetAutoStateCommand(angle=0),

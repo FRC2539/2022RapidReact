@@ -14,7 +14,7 @@ class HighGoalShootCommand(BaseShootCommand):
         # Create a filter to improve consistency in distance readings
         self.distanceFilter = MedianFilter(3)
 
-        self.startDistance = 1.1  # meters from the target
+        self.startDistance = robot.shooter.startDistance  # meters from the target
 
     def initialize(self):
         self.distanceFilter.reset()
