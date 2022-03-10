@@ -75,6 +75,12 @@ class Shooter(CougarSystem):
         self.bindVariable("testRPM1", "Test RPM 1", 1000)
         self.bindVariable("testRPM2", "Test RPM 2", 2400)
 
+        # Configuration for limelight shooting
+        self.bindVariable("startRPM1", "Start RPM1", 3000)
+        self.bindVariable("startRPM2", "Start RPM2", 1000)
+        self.bindVariable("rpm1Multiplier", "RPM1 Multiplier", 307.69)
+        self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 0)
+
         # Constantly updates the hood's status.
         self.constantlyUpdate(
             "Shooter Running", lambda: self.shooterMotorOne.getMotorOutputPercent() != 0
@@ -146,3 +152,12 @@ class Shooter(CougarSystem):
         Returns the current RPM of motorTwo.
         """
         return self.sensorToRPM(self.shooterMotorTwo.getSelectedSensorVelocity())
+
+    def calculateRPMsFromDistance(self, distance):
+        """
+        Uses the distance from the target to calculate the shooter speeds.
+        """
+        rpm1 = self.startRPM1 + self.rpm1Multiplier * distance
+        rpm2 = self.startRPM2 + self.rpm2Multiplier * distance
+
+        return [rpm1, rpm2]

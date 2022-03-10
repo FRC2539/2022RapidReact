@@ -43,6 +43,11 @@ class Limelight(CougarSystem):
         self.updateXOffsetStep()
         self.updateYOffsetStep()
 
+        # Limelight aim config
+        self.bindVariable("limelightP", "Aim P", 0.02)
+        self.bindVariable("percentErrorThreshold", "Percent Threshold", 0.25)
+        self.bindVariable("minTurnPercent", "Minimum Turn", 0.14)
+
     def periodic(self):
         """
         Loops when nothing else is running in
@@ -216,3 +221,19 @@ class Limelight(CougarSystem):
             abs(self.getY()) < self.aimedDeadband
             and abs(self.getX()) < self.aimedDeadband
         )
+
+    def calculateTurnPercent(self):
+        xOffset = self.getX()  # Returns an angle
+
+        try:
+            xPercentError = (
+                xOffset * self.limelightP
+            )  # This value is found experimentally
+        except (TypeError):
+            xPercentError = 0
+            print("\nERROR: Limelight is broken/unplugged \n")
+
+        if abs(xPercentError) > self.percentErrorThreshold:
+            xPercentError = math.copysign(self.minTurnPercent, xPercentError)
+
+        return xPercentError

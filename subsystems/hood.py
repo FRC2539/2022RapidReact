@@ -54,6 +54,9 @@ class Hood(CougarSystem):
         self.hoodAngleOffset = 0
         self.hoodAngleStep = 1
 
+        self.bindVariable("startHoodAngle", "Start Hood Angle", 15)
+        self.bindVariable("hoodMultiplier", "Hood Multiplier", 7.69)
+
     def periodic(self):
         """
         Loops when nothing else is running in
@@ -155,3 +158,9 @@ class Hood(CougarSystem):
         """
         self.motor.stopMotor()
         # self.sendMessage("Hood Stopped!")
+
+    def calculateHoodAngleFromDistance(self, distance):
+        """
+        Uses the distance from the target to calculate the hood angle.
+        """
+        return self.startHoodAngle + self.hoodMultiplier * distance
