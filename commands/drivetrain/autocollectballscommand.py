@@ -24,13 +24,9 @@ class AutoCollectBallsCommand(CommandBase):
         self.addRequirements(robot.drivetrain)
 
         self.mlFilterX = MedianFilter(5)
-        self.mlFilterY = MedianFilter(5)
 
         self.endOnBallPickup = endOnBallPickup
         self.pickupTwo = pickupTwo
-
-        # sets the proportional value in my made up PID controller
-        self.reactionSpeed = 0.03
 
         # sets the min and max speed the robot will spin at
         self.maxRotationSpeed = constants.drivetrain.angularSpeedLimit / 8
@@ -69,7 +65,6 @@ class AutoCollectBallsCommand(CommandBase):
 
     def initialize(self):
         self.mlFilterX.reset()
-        self.mlFilterY.reset()
 
         self.angleController.setPID(robot.ml.turnP, robot.ml.turnI, robot.ml.turnD)
         self.angleController.setConstraints(
@@ -90,9 +85,7 @@ class AutoCollectBallsCommand(CommandBase):
             self.mlFilterX.calculate(robot.ml.getXAngle())
         )
         # calculatedForward = self.forwardController.calculate()
-        robot.drivetrain.setChassisSpeeds(
-            ChassisSpeeds(-self.calcForwardVelocity(), 0, calculatedRotationSpeed)
-        )
+        robot.drivetrain.setChassisSpeeds(ChassisSpeeds(0, 0, calculatedRotationSpeed))
 
     def isFinished(self):
         conveyorBall = robot.ballsystem.isConveyorBallPresent()

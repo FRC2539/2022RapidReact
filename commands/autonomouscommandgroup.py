@@ -31,6 +31,7 @@ from commands.drivetrain.turntocommand import TurnToCommand
 from commands.drivetrain.pointfollowcommand import PointFollowCommand
 from commands.drivetrain.moveforwardcommand import MoveForwardCommand
 from commands.drivetrain.trajectoryfollowercommand import TrajectoryFollowerCommand
+from commands.drivetrain.bezierpathcommand import BezierPathCommand
 
 from commands.shooter.surrogateshootercommand import SurrogateShooterCommand
 from commands.shooter.highgoalshootcommand import HighGoalShootCommand
@@ -90,6 +91,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #             HighGoalLineCommand(), LimelightAngleLockCommand(), WaitCommand(3)
     #         ),
     #     )
+
+    def definitelyNotBensAuto(self):
+        self.addCommands(
+            BezierPathCommand(
+                [[0,0], [0,36]], speed=0.5, stopWhenDone=True
+                )
+            )
 
     def twoBall0(self):
         self.addCommands(
