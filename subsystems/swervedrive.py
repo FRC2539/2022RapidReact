@@ -157,21 +157,37 @@ class SwerveDrive(BaseDrive):
         # Sync that value with network tables
         self.put("sendOffsets", self.sendOffsets)
 
-        self.hPk = constants.drivetrain.hPk
-        self.hIk = constants.drivetrain.hIk
-        self.hDk = constants.drivetrain.hDk
+        # self.hPk = constants.drivetrain.hPk
+        # self.hIk = constants.drivetrain.hIk
+        # self.hDk = constants.drivetrain.hDk
 
-        xController = PIDController(self.hPk, self.hIk, self.hDk)
-        yController = PIDController(self.hPk, self.hIk, self.hDk)
+        # self.bindVariable("hPk", "hPk", 2)
+        # self.bindVariable("hIk", "hIk", 0)
+        # self.bindVariable("hDk", "hDk", 0)
+
+        xController = PIDController(0, 0, 0)
+        yController = PIDController(0, 0, 0)
+
+        # xController = PIDController(0.8, 0, 0)
+        # yController = PIDController(1.8, 0, 0)
+
+        self.bindVariable("htPk", "htPk", 0.08)
+        self.bindVariable("htIk", "htIk", 0)
+        self.bindVariable("htDk", "htDk", 0)
+
+        self.bindVariable("autoAngularSpeedLimit", "autoAngularSpeedLimit", math.pi * 4)
+        self.bindVariable(
+            "autoMaxAngularAcceleration", "autoMaxAngularAcceleration", 2 * math.pi
+        )
 
         # Create a theta controller used for autonomous
         thetaController = ProfiledPIDControllerRadians(
-            constants.drivetrain.htPk,
-            constants.drivetrain.htIk,
-            constants.drivetrain.htDk,
+            self.htPk,
+            self.htIk,
+            self.htDk,
             TrapezoidProfileRadians.Constraints(
-                constants.drivetrain.angularSpeedLimit,
-                constants.drivetrain.maxAngularAcceleration,
+                self.autoAngularSpeedLimit,
+                self.autoMaxAngularAcceleration,
             ),
         )
         thetaController.enableContinuousInput(-math.pi, math.pi)
@@ -196,20 +212,34 @@ class SwerveDrive(BaseDrive):
             thetaController,
         )
 
+        self.bindVariable("autoSpeedLimit", "autoSpeedLimit", 2)
+        self.bindVariable("maxAcceleration", "maxAcceleration", 1)
+
         self.trajectoryConfig = TrajectoryConfig(
-            constants.drivetrain.autoSpeedLimit, constants.drivetrain.maxAcceleration
+            self.autoSpeedLimit, self.maxAcceleration
         )
 
         self.trajectoryConfig.setKinematics(self.swerveKinematics)
 
         # Create a sample trajectory
+        # self.trajectory = TrajectoryGenerator.generateTrajectory(
+        #     Pose2d(0, 0, Rotation2d(0)),
+        #     [
+        #         Translation2d(-1, 0),
+        #         Translation2d(-1, 1),
+        #     ],
+        #     Pose2d(-2, 1, Rotation2d(0)),
+        #     self.trajectoryConfig,
+        # )
+
         self.trajectory = TrajectoryGenerator.generateTrajectory(
             Pose2d(0, 0, Rotation2d(0)),
             [
                 Translation2d(-1, 0),
-                Translation2d(-1, 1),
+                Translation2d(0, 1.7),
+                Translation2d(0, 3),
             ],
-            Pose2d(-2, 1, Rotation2d(0)),
+            Pose2d(0, 3.6, Rotation2d(0)),
             self.trajectoryConfig,
         )
 

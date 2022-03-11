@@ -76,10 +76,11 @@ class Shooter(CougarSystem):
         self.bindVariable("testRPM2", "Test RPM 2", 2400)
 
         # Configuration for limelight shooting
-        self.bindVariable("startRPM1", "Start RPM1", 3000)
+        self.bindVariable("startRPM1", "Start RPM1", 2800)
         self.bindVariable("startRPM2", "Start RPM2", 1000)
         self.bindVariable("rpm1Multiplier", "RPM1 Multiplier", 307.69)
         self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 0)
+        self.bindVariable("startDistance", "Start Distance", 1.05)
 
         # Constantly updates the hood's status.
         self.constantlyUpdate(
