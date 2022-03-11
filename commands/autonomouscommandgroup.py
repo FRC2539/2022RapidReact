@@ -94,10 +94,10 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def definitelyNotBensAuto(self):
         self.addCommands(
-            BezierPathCommand(
-                [[0,0], [0,36]], speed=0.5, stopWhenDone=True
-                )
-            )
+            # BezierPathCommand([[0, 0], [0, 24]], speed=0.45, stopWhenDone=True),
+            TurnCommand(3.1415956535 / 2),
+            # BezierPathCommand([[0, 0], [20, 80]], speed=0.8, stopWhenDone=True),
+        )
 
     def twoBall0(self):
         self.addCommands(

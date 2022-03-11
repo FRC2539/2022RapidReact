@@ -78,7 +78,7 @@ drivetrain.htIk = 0
 drivetrain.htDk = 0
 
 # Gear ratios on the drivetrain.
-drivetrain.driveMotorGearRatio = 6.86
+drivetrain.driveMotorGearRatio = 6.75
 drivetrain.turnMotorGearRatio = 12.8
 
 # Motion magic velocities and accelerations

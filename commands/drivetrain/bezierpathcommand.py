@@ -63,7 +63,7 @@ class BezierPathCommand(CommandBase):
         self.points = points
         self.speed = speed
         self.stopWhenDone = stopWhenDone
-        self.kP = 0.0285
+        self.kP = 0.0185
 
         # Set the 't' of the parametric function.
         self.t = 0.2
@@ -110,18 +110,12 @@ class BezierPathCommand(CommandBase):
         if self.t != 1:
             robot.drivetrain.setUniformModuleAngle(angle)
 
-        # Adjust for angle.
-        if abs(angle) < 90:
-            speedOffset = robot.drivetrain.getAngleTo(0) * -self.kP
-        else:
-            speedOffset = robot.drivetrain.getAngleTo(0) * self.kP
-
         robot.drivetrain.setSpeeds(
             [
-                self.speed + speedOffset,
-                self.speed - speedOffset,
-                self.speed + speedOffset,
-                self.speed - speedOffset,
+                self.speed,
+                self.speed,
+                self.speed,
+                self.speed,
             ]
         )
 
