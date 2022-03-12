@@ -18,6 +18,7 @@ from commands.shooter.customshootcommand import CustomShootCommand
 from commands.shooter.highgoallinecommand import HighGoalLineCommand
 from commands.shooter.lowgoalshootcommand import LowGoalShootCommand
 from commands.shooter.sethoodanglecommand import SetInitialHoodAngleCommand
+from commands.shooter.setshooterrpmscommand import SetShooterRPMsCommand
 import robot, constants
 
 from commands import autoconfig
@@ -146,12 +147,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                     FunnyMoveCommand(1.6),
                 ),
                 SetInitialHoodAngleCommand(),
+                # SetInitialHoodAngleCommand(),
+                # SetShooterRPMsCommand(1000, 1000),
                 # HighGoalShootCommand(),
             ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 HighGoalShootCommand(),
-                WaitCommand(6.5),
+                WaitCommand(3.5),
             ),
             TurnCommand(-0.842 / 2),
             ParallelRaceGroup(
@@ -163,11 +166,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
             ParallelRaceGroup(
                 FunnyMoveCommand(-3),
+                SetInitialHoodAngleCommand(),
             ),
             TurnCommand(1.042 / 2),
             ParallelRaceGroup(
                 LimelightAngleLockCommand(),
                 WaitCommand(0.3),
+                SetInitialHoodAngleCommand(),
+                # SetShooterRPMsCommand(1000, 1000),
             ),
             ParallelRaceGroup(
                 HighGoalShootCommand(),

@@ -165,8 +165,8 @@ class SwerveDrive(BaseDrive):
         # self.bindVariable("hIk", "hIk", 0)
         # self.bindVariable("hDk", "hDk", 0)
 
-        xController = PIDController(0, 0, 0)
-        yController = PIDController(0, 0, 0)
+        xController = PIDController(1.5, 0, 0)
+        yController = PIDController(1.5, 0, 0)
 
         # xController = PIDController(0.8, 0, 0)
         # yController = PIDController(1.8, 0, 0)
@@ -194,7 +194,8 @@ class SwerveDrive(BaseDrive):
 
         # Create a theta controller used for driving
         self.driveThetaController = ProfiledPIDControllerRadians(
-            0.15,
+            3,
+            # 0.15,
             # 2,
             0,
             0,
