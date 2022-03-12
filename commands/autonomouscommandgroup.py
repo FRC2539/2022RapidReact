@@ -151,20 +151,24 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 HighGoalShootCommand(),
-                WaitCommand(3.5),
+                WaitCommand(6.5),
             ),
             TurnCommand(-0.842 / 2),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
                     FunnyMoveCommand(4),
-                    WaitCommand(2.5),
+                    WaitCommand(2),
                 ),
             ),
             ParallelRaceGroup(
                 FunnyMoveCommand(-3),
             ),
-            TurnCommand(1.242 / 2),
+            TurnCommand(1.042 / 2),
+            ParallelRaceGroup(
+                LimelightAngleLockCommand(),
+                WaitCommand(0.3),
+            ),
             ParallelRaceGroup(
                 HighGoalShootCommand(),
                 WaitCommand(3),
