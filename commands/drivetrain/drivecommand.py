@@ -55,6 +55,9 @@ class DriveCommand(CommandBase):
             else logicalaxes.rotate.get()
         )
 
+        if robot.drivetrain.isLimelightLockEnabled():
+            print(robot.limelight.calculateTurnPercent())
+
         # x - forward and backward axis (these axes are relative to the field)
         # y - side to side axis
         # rotate - counterclockwise rotation is positive

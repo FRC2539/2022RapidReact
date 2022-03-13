@@ -44,9 +44,10 @@ class Limelight(CougarSystem):
         self.updateYOffsetStep()
 
         # Limelight aim config
-        self.bindVariable("limelightP", "Aim P", 0.02)
-        self.bindVariable("percentErrorThreshold", "Percent Threshold", 0.25)
+        self.bindVariable("limelightP", "Aim P", 0.04)
+        self.bindVariable("percentErrorThreshold", "Percent Threshold", 0.15)
         self.bindVariable("minTurnPercent", "Minimum Turn", 0.14)
+        self.bindVariable("aimedThreshold", "Aimed Threshold", 0.3)
 
     def periodic(self):
         """
@@ -186,7 +187,12 @@ class Limelight(CougarSystem):
         The limelight constants must be correct (limelight height, angle, target height).
         """
 
-        totalAngle = constants.limelight.limelightAngle + math.radians(self.getY())
+        try:
+            yOffset = self.getY()
+        except (TypeError):
+            yOffset = 0
+
+        totalAngle = constants.limelight.limelightAngle + math.radians(yOffset)
 
         return constants.limelight.heightOffset / math.tan(totalAngle)
 
@@ -224,6 +230,9 @@ class Limelight(CougarSystem):
 
     def calculateTurnPercent(self):
         xOffset = self.getX()  # Returns an angle
+
+        if abs(xOffset) < self.aimedThreshold:
+            return 0
 
         try:
             xPercentError = (

@@ -156,11 +156,11 @@ shooter.gearRatio = 1.5
 # See here for more information: https://docs.limelightvision.io/en/latest/networktables_api.html
 limelight.captureLatency = 0.011
 
-limelight.xOffset = 2.5
+limelight.xOffset = 3.5  # 2.5
 limelight.yOffset = 0
 
-limelight.xOffsetStep = 0
-limelight.yOffsetStep = 0
+limelight.xOffsetStep = 0.5
+limelight.yOffsetStep = 0.5
 
 limelight.targetHeight = 2.62  # in meters (bottom of tape is 2.58, top is 2.64)
 limelight.limelightHeight = 0.635  # meters (height of limelight camera from the ground)

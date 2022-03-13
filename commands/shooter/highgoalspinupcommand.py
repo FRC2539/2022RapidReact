@@ -6,7 +6,7 @@ import robot
 from wpimath.filter import MedianFilter
 
 
-class HighGoalShootCommand(BaseShootCommand):
+class HighGoalSpinupCommand(BaseShootCommand):
     def __init__(self):
         super().__init__()
 
@@ -34,5 +34,4 @@ class HighGoalShootCommand(BaseShootCommand):
         self.setHoodPosition(hoodAngle)
 
         # Run core class methods
-        self.shootIfShooterAtSpeed()
         self.updateHoodPosition()

@@ -16,6 +16,7 @@ from commands.autonomouscommandgroup import AutonomousCommandGroup
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
+
 from subsystems.limelight import Limelight as limelight
 from subsystems.intake import Intake as intake
 
@@ -27,6 +28,7 @@ from subsystems.pneumatics import Pneumatics as pneumatics
 from subsystems.shooter import Shooter as shooter
 
 from subsystems.climber import Climber as climber
+
 from subsystems.hood import Hood as hood
 
 
@@ -60,14 +62,16 @@ class KryptonBot(TimedCommandRobot):
             robot.drivetrain.callAutoPeriodicFunctions,
             constants.drivetrain.autoPeriodicPeriod,
         )
+        pass
 
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
 
-        # Send field data to the dashboard
+        # # Send field data to the dashboard
         driverhud.showField()
 
         self.auto.schedule()
+        pass
 
     def teleopInit(self):
         self.auto.cancel()
@@ -75,9 +79,11 @@ class KryptonBot(TimedCommandRobot):
         import robot
 
         robot.lights.showTeamColor()
+        pass
 
     def disabledInit(self):
         self.auto.cancel()
+        pass
 
     def disabledPeriodic(self):
         if autoconfig.getAutoProgram() != self.selectedAuto:
@@ -85,10 +91,12 @@ class KryptonBot(TimedCommandRobot):
             self.auto = AutonomousCommandGroup()
             print("\n\nAuto Loaded: " + str(self.selectedAuto) + "\n\n")
             # Recreate the auto and its counterparts if the selection changes.
+        pass
 
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert("Fatal Error: %s" % error)
+        pass
 
     @classmethod
     def subsystems(cls):
@@ -114,3 +122,4 @@ if __name__ == "__main__":
         shutil.rmtree("pip_cache", ignore_errors=True)
 
     run(KryptonBot)
+    pass

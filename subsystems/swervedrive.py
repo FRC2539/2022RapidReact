@@ -124,9 +124,9 @@ class SwerveDrive(BaseDrive):
             )
         )
 
-        for module in self.modules:  # Add the motors to the robot's orchestra.
-            self.addOrchestraInstrument(module.getDriveMotor())
-            self.addOrchestraInstrument(module.getTurnMotor())
+        # for module in self.modules:  # Add the motors to the robot's orchestra.
+        #     self.addOrchestraInstrument(module.getDriveMotor())
+        #     self.addOrchestraInstrument(module.getTurnMotor())
 
         self.swervePoseEstimator = SwerveDrive4PoseEstimator(
             self.getRotationForPoseEstimator(),
@@ -144,12 +144,12 @@ class SwerveDrive(BaseDrive):
         self.resetGyro()
         self.resetPoseEstimate()
 
-        getcontext().prec = constants.drivetrain.decimalPlaces
+        # getcontext().prec = constants.drivetrain.decimalPlaces
 
         self.put("wheelAngles", self.getModuleAngles())
         self.put("wheelSpeeds", self.getSpeeds())
-        self.put("robotVector", [0, 0])
-        self.put("correctedOffsets", [0])
+        # self.put("robotVector", [0, 0])
+        # self.put("correctedOffsets", [0])
 
         # Stores whether or not the robot should send over the corrected wheel angle offsets
         self.sendOffsets = False
@@ -244,6 +244,8 @@ class SwerveDrive(BaseDrive):
             self.trajectoryConfig,
         )
 
+        # self.constantlyUpdate("Pose", self.getSwervePose)
+
     def periodic(self):
         """
         Loops whenever there is robot code. I recommend
@@ -252,19 +254,14 @@ class SwerveDrive(BaseDrive):
 
         self.feed()
 
+        self.sendMessage("Drivetrain says hi!")
+
         # Update's the robot's pose estimate.
         self.updatePoseEstimate()
 
         # Update networktables.
         self.put("wheelAngles", self.getModuleAngles())
         self.put("wheelSpeeds", self.getSpeeds())
-
-        x, y = self.generateRobotVector()
-
-        r = abs(math.sqrt(x ** 2 + y ** 2)) / 12  # Provides speed in fps.
-        theta = (math.atan2(y, x) * 180 / math.pi) - 180  # Provides angle in degrees.
-
-        self.put("robotVector", [r, theta])
 
         controllerR = math.sqrt(
             logicalaxes.forward.get() ** 2 + logicalaxes.strafe.get() ** 2

@@ -41,6 +41,10 @@ from commands.drivetrain.autocollectballscommandgroup import (
 
 from commands.limelight.limelightanglelockcommand import LimelightAngleLockCommand
 from commands.drivetrain.enablelimelightlockcommand import EnableLimelightLockCommand
+from commands.limelight.moveupoffsetcommand import MoveUpOffsetCommand
+from commands.limelight.movedownoffsetcommand import MoveDownOffsetCommand
+from commands.limelight.moveleftoffsetcommand import MoveLeftOffsetCommand
+from commands.limelight.moverightoffsetcommand import MoveRightOffsetCommand
 
 
 from commands.lights.lightsbluecommand import LightsBlueCommand
@@ -57,6 +61,7 @@ from commands.shooter.lowgoalshootcommand import LowGoalShootCommand
 from commands.shooter.highgoalshootcommand import HighGoalShootCommand
 from commands.shooter.highgoalfendercommand import HighGoalFenderCommand
 from commands.shooter.highgoallinecommand import HighGoalLineCommand
+from commands.shooter.highgoalspinupcommand import HighGoalSpinupCommand
 
 from commands.shooter.customshootcommand import CustomShootCommand
 
@@ -135,22 +140,24 @@ def init():
 
     componentController.Back.whenPressed(ResetCommand())
 
-    componentController.LeftTrigger.whileHeld(LowerHoodCommand())
-    componentController.LeftBumper.whileHeld(RaiseHoodCommand())
+    # componentController.LeftTrigger.whileHeld(LowerHoodCommand())
+    # componentController.LeftBumper.whileHeld(RaiseHoodCommand())
+    componentController.LeftTrigger.whenPressed(MoveLeftOffsetCommand())
+    componentController.LeftBumper.whenPressed(MoveRightOffsetCommand())
     # componentController.RightTrigger.whileHeld(HighGoalShootCommand())
     # componentController.RightTrigger.whileHeld(HighGoalLineCommand())
-    componentController.RightTrigger.whileHeld(CustomShootCommand())
+    componentController.RightTrigger.whileHeld(HighGoalShootCommand())
 
-    componentController.RightBumper.whileHeld(HighGoalShootCommand())
+    componentController.RightBumper.whileHeld(HighGoalSpinupCommand())
 
     componentController.A.whenPressed(DecreaseHoodOffsetCommand())
     componentController.X.whileHeld(RejectCommand())
     componentController.B.whileHeld(RejectCommand())
     componentController.Y.whenPressed(IncreaseHoodOffsetCommand())
 
-    # componentController.DPadUp.whenPressed()
-    # componentController.DPadDown.whenPressed()
-    # componentController.DPadRight.whenPressed()
-    # componentController.DPadLeft.whenPressed()
+    componentController.DPadUp.whenPressed(MoveUpOffsetCommand())
+    componentController.DPadDown.whenPressed(MoveDownOffsetCommand())
+    componentController.DPadRight.whenPressed(MoveRightOffsetCommand())
+    componentController.DPadLeft.whenPressed(MoveLeftOffsetCommand())
 
     # componentController.Start.toggleWhenPressed()
