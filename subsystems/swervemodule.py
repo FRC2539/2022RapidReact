@@ -201,6 +201,21 @@ class SwerveModule:
             Rotation2d.fromDegrees(self.getWheelAngle()),
         )
 
+    def getReverseModuleState(self):
+        """
+        Returns the state of the swerve module as a generic
+        Swerve Module State object.
+
+        REVERSED - SPEED is * -1
+
+        Angle - angle of swerve module
+        Speed - meters per second
+        """
+        return SwerveModuleState(
+            self.getWheelSpeed() * -1,
+            Rotation2d.fromDegrees(self.getWheelAngle()),
+        )
+
     def getWheelAngle(self):
         """
         Get wheel angle relative to the robot.

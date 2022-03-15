@@ -1,4 +1,5 @@
 from commands2 import InstantCommand
+from numpy import angle
 from wpilib import DriverStation
 
 from commands2 import (
@@ -100,7 +101,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # BezierPathCommand([[0, 0], [20, 80]], speed=0.8, stopWhenDone=True),
         )
 
-    def twoBall0(self):
+    def twoBall(self):
         self.addCommands(
             ResetAutoStateCommand(angle=0),
             ParallelRaceGroup(SetInitialHoodAngleCommand(), WaitCommand(2)),
@@ -115,7 +116,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ParallelRaceGroup(HighGoalLineCommand(), WaitCommand(3)),
         )
 
-    def fourBall(self):
+    def fourBall0(self):
         self.addCommands(
             ResetAutoStateCommand(angle=0),
             TrajectoryFollowerCommand(robot.drivetrain.trajectory),
@@ -165,13 +166,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 ),
             ),
             ParallelRaceGroup(
-                FunnyMoveCommand(-3),
+                FunnyMoveCommand(-3.2),
                 SetInitialHoodAngleCommand(),
             ),
             TurnCommand(1.042 / 2),
             ParallelRaceGroup(
                 LimelightAngleLockCommand(),
-                WaitCommand(0.3),
+                WaitCommand(0.5),
                 SetInitialHoodAngleCommand(),
                 # SetShooterRPMsCommand(1000, 1000),
             ),
@@ -190,6 +191,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             FunnyMoveCommand(2),
             AutoCollectBallsCommandGroup(endOnBallPickup=True, pickupTwo=True),
             FunnyMoveCommand(-2),
+        )
+
+    def testing(self):
+        self.addCommands(
+            ResetAutoStateCommand(angle=0),
+            FunnyMoveCommand(1),
+            WaitCommand(1),
+            FunnyMoveCommand(-1),
         )
 
     # def shootTest(self):

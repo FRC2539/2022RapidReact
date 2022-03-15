@@ -22,7 +22,11 @@ class ForwardBallSystemCommand(CommandBase):
         self.timer.start()
 
     def execute(self):
-        self.ballPresentStopping()
+        # Commmented out for testing
+        # self.ballPresentStopping()
+
+        robot.ballsystem.forwardChamber()
+        robot.ballsystem.forwardConveyor()
 
         if self.useLights:
             self.blinkBallColor()

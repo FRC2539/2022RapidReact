@@ -77,8 +77,8 @@ class Shooter(CougarSystem):
 
         # Configuration for limelight shooting
         self.bindVariable("startRPM1", "Start RPM1", 2800)
-        self.bindVariable("startRPM2", "Start RPM2", 1000)
-        self.bindVariable("rpm1Multiplier", "RPM1 Multiplier", 312)
+        self.bindVariable("startRPM2", "Start RPM2", 800)
+        self.bindVariable("rpm1Multiplier", "RPM1 Multiplier", 300)
         self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 0)
         self.bindVariable("startDistance", "Start Distance", 1.05)
 

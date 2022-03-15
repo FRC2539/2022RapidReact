@@ -165,8 +165,8 @@ class SwerveDrive(BaseDrive):
         # self.bindVariable("hIk", "hIk", 0)
         # self.bindVariable("hDk", "hDk", 0)
 
-        xController = PIDController(1.5, 0, 0)
-        yController = PIDController(1.5, 0, 0)
+        xController = PIDController(1.4, 0, 0.0001)
+        yController = PIDController(1.4, 0, 0.0001)
 
         # xController = PIDController(0.8, 0, 0)
         # yController = PIDController(1.8, 0, 0)
@@ -175,9 +175,9 @@ class SwerveDrive(BaseDrive):
         self.bindVariable("htIk", "htIk", 0)
         self.bindVariable("htDk", "htDk", 0)
 
-        self.bindVariable("autoAngularSpeedLimit", "autoAngularSpeedLimit", math.pi * 4)
+        self.bindVariable("autoAngularSpeedLimit", "autoAngularSpeedLimit", math.pi)
         self.bindVariable(
-            "autoMaxAngularAcceleration", "autoMaxAngularAcceleration", 2 * math.pi
+            "autoMaxAngularAcceleration", "autoMaxAngularAcceleration", 0.5 * math.pi
         )
 
         # Create a theta controller used for autonomous
@@ -214,7 +214,7 @@ class SwerveDrive(BaseDrive):
         )
 
         self.bindVariable("autoSpeedLimit", "autoSpeedLimit", 2)
-        self.bindVariable("maxAcceleration", "maxAcceleration", 1)
+        self.bindVariable("maxAcceleration", "maxAcceleration", 1.3)
 
         self.trajectoryConfig = TrajectoryConfig(
             self.autoSpeedLimit, self.maxAcceleration
@@ -237,10 +237,9 @@ class SwerveDrive(BaseDrive):
             Pose2d(0, 0, Rotation2d(0)),
             [
                 Translation2d(-1, 0),
-                Translation2d(0, 1.7),
-                Translation2d(0, 3),
+                # Translation2d(0, 2),
             ],
-            Pose2d(0, 3.6, Rotation2d(0)),
+            Pose2d(0, 2.5, Rotation2d(0)),
             self.trajectoryConfig,
         )
 
@@ -254,10 +253,10 @@ class SwerveDrive(BaseDrive):
 
         self.feed()
 
-        self.sendMessage("Drivetrain says hi!")
-
         # Update's the robot's pose estimate.
         self.updatePoseEstimate()
+
+        self.sendMessage(self.swervePoseToString())
 
         # Update networktables.
         self.put("wheelAngles", self.getModuleAngles())
@@ -276,6 +275,17 @@ class SwerveDrive(BaseDrive):
         # if that has been indicated in the dashboard
         if self.sendOffsets:
             self.put("correctedOffsets", self.getCorrectedModuleOffsets())
+
+    def swervePoseToString(self):
+        pose = self.getSwervePose()
+
+        translation = pose.translation()
+
+        x = round(translation.X(), 3)
+        y = round(translation.Y(), 3)
+        angle = round(pose.rotation().degrees(), 3)
+
+        return f"x: {x}  y: {y}  angle: {angle}"
 
     def enableLimelightLock(self):
         self.limelightLock = True
@@ -521,6 +531,13 @@ class SwerveDrive(BaseDrive):
         """
 
         return [module.getModuleState() for module in self.modules]
+
+    def getReverseModuleStates(self):
+        """
+        Returns the module state objects that represent each swerve module
+        """
+
+        return [module.getReverseModuleState() for module in self.modules]
 
     def setModuleStates(self, moduleStates):
         """
