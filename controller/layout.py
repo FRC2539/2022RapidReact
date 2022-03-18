@@ -140,14 +140,11 @@ def init():
 
     componentController.Back.whenPressed(ResetCommand())
 
-    # componentController.LeftTrigger.whileHeld(LowerHoodCommand())
-    # componentController.LeftBumper.whileHeld(RaiseHoodCommand())
-    componentController.LeftTrigger.whenPressed(MoveLeftOffsetCommand())
-    componentController.LeftBumper.whenPressed(MoveRightOffsetCommand())
-    # componentController.RightTrigger.whileHeld(HighGoalShootCommand())
-    # componentController.RightTrigger.whileHeld(HighGoalLineCommand())
+    componentController.LeftTrigger.whileHeld(LowerHoodCommand())
+    componentController.LeftBumper.whileHeld(RaiseHoodCommand())
+    # componentController.LeftTrigger.whenPressed(MoveLeftOffsetCommand())
+    # componentController.LeftBumper.whenPressed(MoveRightOffsetCommand())
     componentController.RightTrigger.whileHeld(HighGoalShootCommand())
-
     componentController.RightBumper.whileHeld(HighGoalSpinupCommand())
 
     componentController.A.whenPressed(DecreaseHoodOffsetCommand())

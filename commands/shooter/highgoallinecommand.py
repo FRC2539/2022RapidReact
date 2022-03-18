@@ -10,6 +10,7 @@ class HighGoalLineCommand(BaseShootCommand):
     def initialize(self):
         self.setRPMs(robot.shooter.behindLineRPM1, robot.shooter.behindLineRPM2)
         self.setHoodPosition(robot.shooter.behindLineAngle)
+        self.resetShooterAtRPM()
 
     def execute(self):
         self.shootIfShooterAtSpeed()

@@ -189,15 +189,15 @@ climber.lowerLimit = 16000  # Give some wiggle room.
 
 # The conversion factor is basically mapping
 # one rotation of the motor to one rotation of the shooter
-hood.positionConversionFactor = 1 / 210  # This should be the gear ratio
+hood.positionConversionFactor = 1 / 20  # This should be the gear ratio
 
 hood.kP = 0.001  # PID
 
 hood.percentOutputSpeed = 0.12
 
 # Angle range in degrees
-hood.maxAngle = 22  # 28
-hood.minAngle = -32  # -37.8
+hood.maxAngle = 30  # 22
+hood.minAngle = 0  # -32
 
 # sets ml constants
 

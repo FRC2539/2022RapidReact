@@ -32,14 +32,14 @@ class Shooter(CougarSystem):
 
         # Set the PID configuration.
         self.shooterMotorOne.config_kF(0, 0.05, 0)  # Ben, no FF! -Ben
-        self.shooterMotorOne.config_kP(0, 0.1, 0)
+        self.shooterMotorOne.config_kP(0, 0.13, 0)
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 0.05, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
 
         # Set the PID configuration.
         self.shooterMotorTwo.config_kF(0, 0.05, 0)  # Ben, no FF! -Ben
-        self.shooterMotorTwo.config_kP(0, 0.1, 0)
+        self.shooterMotorTwo.config_kP(0, 0.13, 0)
         self.shooterMotorTwo.config_kI(0, 0, 0)
         self.shooterMotorTwo.config_kD(0, 0.05, 0)
         self.shooterMotorTwo.config_IntegralZone(0, 0, 0)
@@ -64,8 +64,8 @@ class Shooter(CougarSystem):
         # High goal rpms
         # self.highGoalRPM1 = 900
         # self.highGoalRPM2 = 2300
-        self.highGoalRPM1 = 1100
-        self.highGoalRPM2 = 2400
+        self.highGoalRPM1 = 1000
+        self.highGoalRPM2 = 2500
 
         # High goal slightly behind line
         self.behindLineRPM1 = 1300
@@ -76,9 +76,9 @@ class Shooter(CougarSystem):
         self.bindVariable("testRPM2", "Test RPM 2", 2400)
 
         # Configuration for limelight shooting
-        self.bindVariable("startRPM1", "Start RPM1", 2800)
-        self.bindVariable("startRPM2", "Start RPM2", 800)
-        self.bindVariable("rpm1Multiplier", "RPM1 Multiplier", 300)
+        self.bindVariable("startRPM1", "Start RPM1", 3200)
+        self.bindVariable("startRPM2", "Start RPM2", 900)
+        self.bindVariable("rpm1Multiplier", "RPM1 Multiplier", 380)
         self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 0)
         self.bindVariable("startDistance", "Start Distance", 1.05)
 

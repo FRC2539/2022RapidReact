@@ -20,6 +20,8 @@ class BaseShootCommand(CommandBase):
         # Reject balls of the wrong color
         self.rejectMode = False
 
+        self.shooterAtRPM = False
+
     # This is a demo execute command
     # def execute(self):
     #     self.shootIfShooterAtSpeed()
@@ -33,6 +35,9 @@ class BaseShootCommand(CommandBase):
 
     def configureLimelightPipeline(self):
         robot.limelight.setPipeline(1)
+
+    def resetShooterAtRPM(self):
+        self.shooterAtRPM = False
 
     def setRPMs(self, rpm1, rpm2):
         self.rpm1 = rpm1
@@ -48,7 +53,7 @@ class BaseShootCommand(CommandBase):
         distance = abs(self.hoodAngle - robot.hood.getPosition())
 
         # Calculate a speed based on the hood angle offset
-        speed = 0.05 if distance > 2 else 0.02
+        speed = robot.hood.speed if distance > 2 else 0.03
         direction = 1 if (self.hoodAngle - robot.hood.getPosition()) >= 0 else -1
 
         # Move the hood as long as it is not yet within the tolerance
@@ -69,26 +74,29 @@ class BaseShootCommand(CommandBase):
             abs(robot.shooter.getRPM2() - targetRPM2) <= self.shooterRPMTolerance
         )
 
-        hoodAtPosition = abs(self.hoodAngle - robot.hood.getPosition()) <= 1.5
+        hoodAtPosition = abs(self.hoodAngle - robot.hood.getPosition()) <= 0.9
 
-        # Set to reject mode if the ball is the wrong color
-        if (
-            robot.ballsystem.isChamberBallPresent()
-            and robot.ballsystem.getChamberBallColor()
-            != robot.ballsystem.getAllianceColor()
-        ):
-            self.rejectMode = True
-        else:
-            self.rejectMode = False
+        if shooterAtSpeed1 and shooterAtSpeed2 and hoodAtPosition:
+            self.shooterAtRPM = True
 
-        # Switch to reject rpms if we must reject the ball
-        if self.rejectMode:
-            robot.shooter.setRPM(robot.shooter.rejectRPM1, robot.shooter.rejectRPM2)
-        else:
-            robot.shooter.setRPM(self.rpm1, self.rpm2)
+        # # Set to reject mode if the ball is the wrong color
+        # if (
+        #     robot.ballsystem.isChamberBallPresent()
+        #     and robot.ballsystem.getChamberBallColor()
+        #     != robot.ballsystem.getAllianceColor()
+        # ):
+        #     self.rejectMode = True
+        # else:
+        #     self.rejectMode = False
+
+        # # Switch to reject rpms if we must reject the ball
+        # if self.rejectMode:
+        #     robot.shooter.setRPM(robot.shooter.rejectRPM1, robot.shooter.rejectRPM2)
+        # else:
+        #     robot.shooter.setRPM(self.rpm1, self.rpm2)
 
         # Move the ball through the chamber if the shooter is up to speed
-        if shooterAtSpeed1 and shooterAtSpeed2:
+        if self.shooterAtRPM:
             robot.ballsystem.forwardChamber()
             robot.ballsystem.forwardConveyor()
         else:

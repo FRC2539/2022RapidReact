@@ -31,6 +31,12 @@ class BallSystem(CougarSystem):
         self.bindVariable("conveyorSpeed", "Conveyor Speed", 1.0)
         self.bindVariable("chamberSpeed", "Chamber Speed", 1)  # 1.0
 
+        # self.intakeConveyorSpeed = 0.75
+        # self.intakeChamberSpeed = 0.75
+
+        self.bindVariable("intakeConveyorSpeed", "Conveyor Intake", 0.75)
+        self.bindVariable("intakeChamberSpeed", "Chamber Intake", 0.75)
+
         # Initialize the sensor that detects the presence of balls in the conveyor area
         self.conveyorSensor = AnalogInput(ports.ballsystem.conveyorSensor)
 
@@ -46,7 +52,7 @@ class BallSystem(CougarSystem):
         self.conveyorSensorThreshold = 50
 
         # Set a threshold for the chamber sensor
-        self.chamberSensorThreshold = 100  # 0 to 2047 (higher is closer)
+        self.chamberSensorThreshold = 102  # 0 to 2047 (higher is closer)
         # last used - 150
         # Partial ball - 180
         # Full ball - 360 - 380
@@ -66,7 +72,9 @@ class BallSystem(CougarSystem):
         self.constantlyUpdate("Conveyor Ball", lambda: self.isConveyorBallPresent())
         self.constantlyUpdate("Chamber Ball", lambda: self.isChamberBallPresent())
 
-        # self.constantlyUpdate("Chamber Distance", lam)
+        self.constantlyUpdate(
+            "Chamber Distance", lambda: self.chamberSensor.getProximity()
+        )
 
     def configureMotor(self, motor):
         motor.setNeutralMode(NeutralMode.Brake)
@@ -100,6 +108,20 @@ class BallSystem(CougarSystem):
         forwards.
         """
         self.moveChamber(self.chamberSpeed)
+
+    def forwardConveyorIntake(self):
+        """
+        Run the conveyor so the balls move
+        forwards.
+        """
+        self.moveConveyor(self.intakeConveyorSpeed)
+
+    def forwardChamberIntake(self):
+        """
+        Run the chamber so the balls move
+        forwards.
+        """
+        self.moveChamber(self.intakeChamberSpeed)
 
     def backwardConveyor(self):
         """

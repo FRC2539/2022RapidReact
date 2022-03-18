@@ -16,6 +16,7 @@ class HighGoalShootCommand(BaseShootCommand):
         self.startDistance = robot.shooter.startDistance  # meters from the target
 
     def initialize(self):
+        self.resetShooterAtRPM()
         self.distanceFilter.reset()
 
     def execute(self):

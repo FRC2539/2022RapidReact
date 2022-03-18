@@ -22,17 +22,18 @@ class Hood(CougarSystem):
 
         # Get the motor's encoder
         self.encoder = self.motor.getEncoder()
-        self.encoder.setPositionConversionFactor(  # See the constant for an explanation
-            constants.hood.positionConversionFactor
-        )
         self.encoder.setPosition(0)
+        # self.encoder.setPositionConversionFactor(  # See the constant for an explanation
+        #     20.0
+        #     # constants.hood.positionConversionFactor
+        # )
 
         # Adjust the hood's PID control values.
-        # self.controller.setP(0.1)
-        # self.controller.setI(0)
-        # self.controller.setD(0)
-        # self.controller.setFF(0)
-        # self.controller.setIZone(0)
+        self.controller.setP(0.01)
+        self.controller.setI(0)
+        self.controller.setD(0)
+        self.controller.setFF(0)
+        self.controller.setIZone(0)
         # self.controller.setOutputRange(-1, 1)
 
         # The hood's max and min angle.
@@ -40,14 +41,16 @@ class Hood(CougarSystem):
         self.minAngle = constants.hood.minAngle
 
         # The percent to run the hood motor at by default.
-        self.speed = constants.hood.percentOutputSpeed
+        # self.speed = constants.hood.percentOutputSpeed
+        self.bindVariable("speed", "Speed Percent", 0.5)
 
         # Constantly updates the hood's status.
         self.constantlyUpdate("Hood Moving", lambda: self.motor.get() != 0)
         self.constantlyUpdate("Hood Position", self.getPosition)
 
         self.lowGoalAngle = 16  # 10
-        self.highGoalAngle = 12
+        # self.highGoalAngle = 13
+        self.bindVariable("highGoalAngle", "High Hood Angle", 13)
 
         self.bindVariable("testAngle", "Test Angle", 12)
 
@@ -55,7 +58,7 @@ class Hood(CougarSystem):
         self.hoodAngleStep = 1
 
         self.bindVariable("startHoodAngle", "Start Hood Angle", 15)
-        self.bindVariable("hoodMultiplier", "Hood Multiplier", 7.69)
+        self.bindVariable("hoodMultiplier", "Hood Multiplier", 9)
 
     def periodic(self):
         """
@@ -75,7 +78,9 @@ class Hood(CougarSystem):
         Returns the position of the hood's encoder
         in degrees, -360 to 360 (not physically possible).
         """
-        return self.encoder.getPosition() * 360
+        return (
+            self.encoder.getPosition() * 20 * -1
+        )  # Motor runs backwards when positive
 
     def setPosition(self, position):
         """
@@ -87,7 +92,7 @@ class Hood(CougarSystem):
         # if not self.angleIsWithinBounds(position):
         #     return
 
-        self.controller.setReference(position / 360, CANSparkMax.ControlType.kPosition)
+        self.controller.setReference(position, CANSparkMax.ControlType.kPosition, 0, 0)
 
     def setPercent(self, speed):
         """
@@ -113,7 +118,7 @@ class Hood(CougarSystem):
         speed.
         """
         if self.isInAngleBounds(speed):
-            self.motor.set(speed)
+            self.motor.set(-1 * speed)  # Motor runs backwards when positive
         else:
             self.stop()
 

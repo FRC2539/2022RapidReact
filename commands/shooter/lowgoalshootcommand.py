@@ -13,6 +13,7 @@ class LowGoalShootCommand(BaseShootCommand):
     def initialize(self):
         self.setRPMs(self.rpm1, self.rpm2)
         self.setHoodPosition(robot.hood.lowGoalAngle)
+        self.resetShooterAtRPM()
 
     def execute(self):
         self.shootIfShooterAtSpeed()
