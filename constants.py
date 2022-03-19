@@ -181,8 +181,8 @@ limelight.limelightToShooterTransform = Transform2d(
 
 # Constants for the climber
 
-climber.speed = 0.92  # 100% Speed
-climber.upperLimit = 408000
+climber.speed = 1.0  # 0.92  # 100% Speed
+climber.upperLimit = 400000  # 408000
 climber.lowerLimit = 16000  # Give some wiggle room.
 
 # Constants for the hood

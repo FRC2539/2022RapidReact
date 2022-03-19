@@ -50,15 +50,16 @@ class BaseShootCommand(CommandBase):
 
     def updateHoodPosition(self):
         # Calculate the hood angle offset
-        distance = abs(self.hoodAngle - robot.hood.getPosition())
+        # distance = abs(self.hoodAngle - robot.hood.getPosition())
 
         # Calculate a speed based on the hood angle offset
-        speed = robot.hood.speed if distance > 2 else 0.03
-        direction = 1 if (self.hoodAngle - robot.hood.getPosition()) >= 0 else -1
+        # speed = robot.hood.speed if distance > 2 else 0.03
+        # direction = 1 if (self.hoodAngle - robot.hood.getPosition()) >= 0 else -1
 
         # Move the hood as long as it is not yet within the tolerance
         if abs(self.hoodAngle - robot.hood.getPosition()) > self.hoodTolerance:
-            robot.hood.move(speed * direction)
+            # robot.hood.move(speed * direction)
+            robot.hood.move(robot.hood.getAdjustSpeed(self.hoodAngle))
         else:
             robot.hood.stop()
 

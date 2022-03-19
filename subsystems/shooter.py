@@ -52,8 +52,8 @@ class Shooter(CougarSystem):
         self.minVel = 100
 
         # Reject ball velocity
-        self.rejectRPM1 = 600
-        self.rejectRPM2 = 800
+        self.rejectRPM1 = 800
+        self.rejectRPM2 = 1000
 
         # Low goal rpms
         # self.lowGoalRPM1 = 1150
@@ -68,17 +68,19 @@ class Shooter(CougarSystem):
         self.highGoalRPM2 = 2500
 
         # High goal slightly behind line
-        self.behindLineRPM1 = 1300
-        self.behindLineRPM2 = 2350
+        self.behindLineRPM1 = 2900
+        self.behindLineRPM2 = 1200
         self.behindLineAngle = 27
 
         self.bindVariable("testRPM1", "Test RPM 1", 1000)
         self.bindVariable("testRPM2", "Test RPM 2", 2400)
 
         # Configuration for limelight shooting
-        self.bindVariable("startRPM1", "Start RPM1", 3200)
-        self.bindVariable("startRPM2", "Start RPM2", 900)
-        self.bindVariable("rpm1Multiplier", "RPM1 Multiplier", 380)
+        self.bindVariable("startRPM1", "Start RPM1", 2900)
+        self.bindVariable("startRPM2", "Start RPM2", 1200)
+        self.bindVariable(
+            "rpm1Multiplier", "RPM1 Multiplier", 356
+        )  # 350 was working well
         self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 0)
         self.bindVariable("startDistance", "Start Distance", 1.05)
 

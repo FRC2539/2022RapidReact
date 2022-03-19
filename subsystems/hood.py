@@ -2,6 +2,7 @@ from .cougarsystem import *
 
 import ports
 import constants
+import math
 
 from rev import CANSparkMax
 
@@ -57,8 +58,11 @@ class Hood(CougarSystem):
         self.hoodAngleOffset = 0
         self.hoodAngleStep = 1
 
-        self.bindVariable("startHoodAngle", "Start Hood Angle", 15)
+        self.bindVariable("startHoodAngle", "Start Hood Angle", 25)
         self.bindVariable("hoodMultiplier", "Hood Multiplier", 9)
+
+        self.bindVariable("kP", "kP", 0.065)
+        self.bindVariable("maxAdjust", "maxAdjust", 0.9)
 
     def periodic(self):
         """
@@ -169,3 +173,12 @@ class Hood(CougarSystem):
         Uses the distance from the target to calculate the hood angle.
         """
         return self.startHoodAngle + self.hoodMultiplier * distance
+
+    def getAdjustSpeed(self, position):
+        currentPosition = self.getPosition()
+        distance = abs(currentPosition - position)
+        direction = math.copysign(1, position - currentPosition)
+
+        adjust = distance * self.kP
+
+        return min(self.maxAdjust, max(adjust, 0.03)) * direction
