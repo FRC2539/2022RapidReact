@@ -28,9 +28,11 @@ class AutoCollectBallsCommand(CommandBase):
         # sets the min and max speed the robot will spin at
         self.maxRotationSpeed = constants.drivetrain.angularSpeedLimit / 4
         self.minRotationSpeed = constants.drivetrain.angularSpeedMinimum
+        self.maxAngularAccelerationRate = constants.drivetrain.maxAngularAcceleration
 
         # sets the speed the robot will move forwards
         self.maxLinearSpeed = constants.drivetrain.speedLimit / 4
+        self.maxAccelerationRate = constants.drivetrain.maxAcceleration
 
         self.pickupSpeed = self.maxLinearSpeed / 2
 
@@ -56,6 +58,9 @@ class AutoCollectBallsCommand(CommandBase):
 
         self.ballInChamber = robot.ballsystem.isChamberBallPresent()
         self.ballInConveyor = robot.ballsystem.isConveyorBallPresent()
+        
+        self.currentRotationSpeed = 0
+        self.currentForwardVelocity = 0
 
     def execute(self):
         self.blinkBallColor()
@@ -65,7 +70,7 @@ class AutoCollectBallsCommand(CommandBase):
         )
 
         # print(
-        #     f"{robot.ml.getX()=}, {self.getXNormalized()=}, {self.calcRotationSpeed()}"
+        #     f"{robot.ml.getX()=}, {self.getXNormalized()=}, {self.calcDesiredRotationSpeed()}"
         # )
 
     def isFinished(self):
@@ -114,9 +119,16 @@ class AutoCollectBallsCommand(CommandBase):
         # keeps the velocity zero if the robot is not pointing close enough to the ball
         if abs(self.getXAngle()) <= self.movingRadianTolerance:
             velocity = self.maxLinearSpeed
+        
+        if velocity > self.currentForwardVelocity:
+            self.currentForwardVelocity += self.maxAccelerationRate * 0.02
+        elif velocity < self.currentForwardVelocity:
+            self.currentForwardVelocity -= self.maxAccelerationRate * 0.02
 
-        return velocity
-
+        return self.currentForwardVelocity
+    
+        
+    
     def calcRotationSpeed(self):
         """calculates the rotation speed that the robot should be turning in radians. Counterclockwise positive. (I think)"""
         # does not spin towards a ball that doesn't exist
@@ -124,10 +136,10 @@ class AutoCollectBallsCommand(CommandBase):
             return 0
 
         # sets the rotational velocity of the robot to be proportional to its offset
-        velocity = self.getXNormalized() * self.reactionSpeed
+        desiredSpeed = self.getXNormalized() * self.reactionSpeed
 
         # replaces a bunch of copysigns
-        absVel = abs(velocity)
+        absVel = abs(desiredSpeed)
 
         # limits the speed
         absVel = max(absVel, self.minRotationSpeed)
@@ -137,9 +149,14 @@ class AutoCollectBallsCommand(CommandBase):
         if abs(self.getXAngle()) <= self.turningRadianTolerance:
             absVel = 0
 
-        velocity = math.copysign(absVel, velocity)
-
-        return velocity
+        desiredSpeed = math.copysign(absVel, desiredSpeed)
+        
+        if desiredSpeed > self.currentRotationSpeed:
+            self.currentRotationSpeed += self.maxAngularAccelerationRate * 0.02
+        elif desiredSpeed < self.currentRotationSpeed:
+            self.currentRotationSpeed -= self.maxAngularAccelerationRate * 0.02
+        
+        return self.currentRotationSpeed
 
     def getXNormalized(self):
         """Returns a value between -1 (left) and 1 (right) for where the ball is on the x axis"""
