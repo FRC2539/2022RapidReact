@@ -151,10 +151,16 @@ class AutoCollectBallsCommand(CommandBase):
 
         desiredSpeed = math.copysign(absVel, desiredSpeed)
         
+        #if (self.estimateStoppingDistance() - self.getXAngle()) * math.copysign(1, self.currentRotationSpeed):
+            
+        #accelerationcapping
         if desiredSpeed > self.currentRotationSpeed:
             self.currentRotationSpeed += self.maxAngularAccelerationRate * 0.02
         elif desiredSpeed < self.currentRotationSpeed:
             self.currentRotationSpeed -= self.maxAngularAccelerationRate * 0.02
+        
+        # caps the speed
+        self.currentRotationSpeed = math.copysign(min(abs(self.currentRotationSpeed), self.maxRotationSpeed), self.currentRotationSpeed)
         
         return self.currentRotationSpeed
 
@@ -205,3 +211,6 @@ class AutoCollectBallsCommand(CommandBase):
             blinkColor = robot.lights.colors["yellow"]
 
         return blinkColor
+    
+    def estimateStoppingDistance(self):
+        return self.currentRotationSpeed ** 3 / (2 * self.maxAngularAccelerationRate * abs(self.currentRotationSpeed))
