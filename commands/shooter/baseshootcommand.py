@@ -40,6 +40,8 @@ class BaseShootCommand(CommandBase):
         self.shooterAtRPM = False
 
     def setRPMs(self, rpm1, rpm2):
+        robot.shooter.sendMessage(f"{rpm1}")
+
         self.rpm1 = rpm1
         self.rpm2 = rpm2
 

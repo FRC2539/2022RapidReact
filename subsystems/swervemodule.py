@@ -407,11 +407,19 @@ class SwerveModule:
                 constants.drivetrain.driveMotionCruiseVelocity, 0
             )
 
+    def setDriveCruiseAcceleration(self):
+        self.driveMotor.configMotionAcceleration(
+            constants.drivetrain.driveMotionAcceleration, 0
+        )
+
     def setVariableDriveCruiseVelocity(self, speed):
         """
         Sets the mm speed of the drive motors to any given speed.
         """
         self.driveMotor.configMotionCruiseVelocity(speed, 0)
+
+    def setVariableDriveCruiseAcceleration(self, acceleration):
+        self.driveMotor.configMotionAcceleration(acceleration, 0)
 
     def inchesToMeters(self, num):
         """

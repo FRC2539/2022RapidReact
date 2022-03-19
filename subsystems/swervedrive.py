@@ -245,6 +245,9 @@ class SwerveDrive(BaseDrive):
 
         # self.constantlyUpdate("Pose", self.getSwervePose)
 
+        self.bindVariable("testAcc", "testAcc", 20000)
+        self.bindVariable("testSlow", "testSlow", 30000)
+
     def periodic(self):
         """
         Loops whenever there is robot code. I recommend
@@ -256,7 +259,7 @@ class SwerveDrive(BaseDrive):
         # Update's the robot's pose estimate.
         self.updatePoseEstimate()
 
-        self.sendMessage(self.swervePoseToString())
+        # self.sendMessage(self.swervePoseToString())
 
         # Update networktables.
         self.put("wheelAngles", self.getModuleAngles())
@@ -1247,12 +1250,23 @@ class SwerveDrive(BaseDrive):
         for module in self.modules:
             module.setDriveCruiseVelocity(slow)
 
+    def setCruiseAcceleration(self):
+        for module in self.modules:
+            module.setDriveCruiseAcceleration()
+
     def setVariableCruiseVelocity(self, speed):
         """
         Sets the cruise velocity to any speed.
         """
         for module in self.modules:
             module.setVariableDriveCruiseVelocity(speed)
+
+    def setVariableCruiseAcceleration(self, acceleration):
+        """
+        Sets the cruise acceleration.
+        """
+        for module in self.modules:
+            module.setVariableDriveCruiseAcceleration(acceleration)
 
 
 class Position:

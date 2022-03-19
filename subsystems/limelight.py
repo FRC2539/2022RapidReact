@@ -49,6 +49,9 @@ class Limelight(CougarSystem):
         self.bindVariable("minTurnPercent", "Minimum Turn", 0.14)
         self.bindVariable("aimedThreshold", "Aimed Threshold", 0.3)
 
+        self.bindVariable("kP", "kP", 0.02)
+        self.bindVariable("maxAdjust", "maxAdjust", 0.35)
+
     def periodic(self):
         """
         Loops when nothing else is running in
@@ -246,3 +249,21 @@ class Limelight(CougarSystem):
             xPercentError = math.copysign(self.minTurnPercent, xPercentError)
 
         return xPercentError
+
+    def getAdjustSpeed(self):
+        limelightDistance = self.calculateDistance()
+
+        if limelightDistance > 3:
+            distanceMultiplier = 1.8
+        elif limelightDistance > 2:
+            distanceMultiplier = 1.2
+        else:
+            distanceMultiplier = 1
+
+        currentPosition = self.getX()
+        distance = abs(currentPosition)
+        direction = math.copysign(1, currentPosition)
+
+        adjust = distance * self.kP / distanceMultiplier
+
+        return min(self.maxAdjust, max(adjust, 0.05)) * direction

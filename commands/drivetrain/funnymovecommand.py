@@ -4,7 +4,14 @@ import robot
 
 class FunnyMoveCommand(CommandBase):
     def __init__(
-        self, distance, angle=0, tolerance=5, slow=False, torySlow=None, name=None
+        self,
+        distance,
+        angle=0,
+        tolerance=5,
+        slow=False,
+        torySlow=None,
+        toryAcc=None,
+        name=None,
     ):
         """
         I have actually gone crazy now
@@ -20,6 +27,7 @@ class FunnyMoveCommand(CommandBase):
         self.tol = tolerance  # Angle tolerance in degrees.
         self.isSlow = slow
         self.torySlow = torySlow
+        self.toryAcc = toryAcc
 
         self.moveSet = False
         self.addRequirements(robot.drivetrain)
@@ -29,7 +37,14 @@ class FunnyMoveCommand(CommandBase):
             robot.drivetrain.setCruiseVelocity(True)
 
         if self.torySlow != None:  # This IF overrides the previous one.
-            robot.drivetrain.setVariableCruiseVelocity(self.torySlow)
+            robot.drivetrain.setVariableCruiseVelocity(
+                self.torySlow if self.torySlow != "test" else robot.drivetrain.testSlow
+            )
+
+        if self.toryAcc != None:
+            robot.drivetrain.setVariableCruiseAcceleration(
+                self.toryAcc if self.toryAcc != "test" else robot.drivetrain.testAcc
+            )
 
         robot.drivetrain.setModuleProfiles(1, turn=False)
 
@@ -76,6 +91,7 @@ class FunnyMoveCommand(CommandBase):
     def end(self, interrupted):
         robot.drivetrain.stop()
         robot.drivetrain.setCruiseVelocity()
+        robot.drivetrain.setCruiseAcceleration()
         robot.drivetrain.setModuleProfiles(0, turn=False)
         self.moveSet = False
         print("\n\n\nDone\n\n\n")

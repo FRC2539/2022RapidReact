@@ -11,12 +11,13 @@ class ForwardBallSystemCommand(CommandBase):
     Run the conveyor and chamber/launcher forward.
     """
 
-    def __init__(self, useLights=True):
+    def __init__(self, useLights=True, rejectBalls=False):
         super().__init__()
         self.addRequirements([robot.ballsystem, robot.lights])
         self.timer = wpilib.Timer()
         self.lightsOn = False
         self.useLights = useLights
+        self.rejectBalls = rejectBalls
 
     def initialize(self):
         self.timer.start()
@@ -48,7 +49,8 @@ class ForwardBallSystemCommand(CommandBase):
             robot.ballsystem.forwardChamberIntake()
             robot.shooter.stopShooter()
         elif (
-            robot.ballsystem.getChamberBallColor()
+            self.rejectBalls
+            and robot.ballsystem.getChamberBallColor()
             != robot.ballsystem.getAllianceColor()
             and chamberBall
         ):

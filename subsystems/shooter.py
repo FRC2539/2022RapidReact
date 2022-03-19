@@ -58,8 +58,8 @@ class Shooter(CougarSystem):
         # Low goal rpms
         # self.lowGoalRPM1 = 1150
         # self.lowGoalRPM2 = 900
-        self.lowGoalRPM1 = 1100
-        self.lowGoalRPM2 = 850
+        self.lowGoalRPM1 = 1150
+        self.lowGoalRPM2 = 900
 
         # High goal rpms
         # self.highGoalRPM1 = 900

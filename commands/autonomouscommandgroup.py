@@ -139,29 +139,30 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             FunnyMoveCommand(0.5),
         )
 
-    def fourBallStraightUp(self):
+    def fourBallStraightUp0(self):
         self.addCommands(
             ResetAutoStateCommand(angle=0),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(1.6, angle=-15, torySlow=31000),
+                    FunnyMoveCommand(1.6, angle=-15, torySlow=30000, toryAcc=19000),
                 ),
                 SetInitialHoodAngleCommand(),
             ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
+                LimelightAngleLockCommand(),
                 HighGoalShootCommand(),
                 WaitCommand(3.5),
             ),
-            TurnCommand(math.radians(-24.12)),
+            TurnCommand(math.radians(-22.12)),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(4, torySlow=31000),
-                    WaitCommand(2),
+                    FunnyMoveCommand(3.9, torySlow=30000),
+                    WaitCommand(1.5),
                     ParallelRaceGroup(
-                        FunnyMoveCommand(-3.2, torySlow=31000),
+                        FunnyMoveCommand(-3.2, torySlow=30000),
                         SetInitialHoodAngleCommand(),
                     ),
                 ),
@@ -178,7 +179,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
         )
 
-    def fiveBallStraightUp0(self):
+    def fiveBallStraightUp(self):
         self.addCommands(
             ResetAutoStateCommand(angle=0),
             ParallelRaceGroup(
@@ -231,6 +232,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 WaitCommand(3),
             ),
         )
+
+    # def testAuto0(self):
+    #     self.addCommands(
+    #         ResetAutoStateCommand(),
+    #         FunnyMoveCommand(4, angle=0, torySlow="test", toryAcc="test"),
+    #         FunnyMoveCommand(-4, angle=0, torySlow="test", toryAcc="test"),
+    #     )
 
     # def shootTest(self):
     #     self.addCommands(

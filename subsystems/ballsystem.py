@@ -34,7 +34,7 @@ class BallSystem(CougarSystem):
         # self.intakeConveyorSpeed = 0.75
         # self.intakeChamberSpeed = 0.75
 
-        self.bindVariable("intakeConveyorSpeed", "Conveyor Intake", 0.75)
+        self.bindVariable("intakeConveyorSpeed", "Conveyor Intake", 1)
         self.bindVariable("intakeChamberSpeed", "Chamber Intake", 0.75)
 
         # Initialize the sensor that detects the presence of balls in the conveyor area
@@ -59,22 +59,22 @@ class BallSystem(CougarSystem):
         # No ball - 70
 
         # Constantly updates the ballsystem's status.
-        self.constantlyUpdate(
-            "Conveyor Running", lambda: self.conveyorMotor.getMotorOutputPercent() != 0
-        )
-        self.constantlyUpdate(
-            "Chamber Running", lambda: self.chamberMotor.getMotorOutputPercent() != 0
-        )
-        self.constantlyUpdate(
-            "Conveyor distance", lambda: self.conveyorSensor.getValue()
-        )
+        # self.constantlyUpdate(
+        #     "Conveyor Running", lambda: self.conveyorMotor.getMotorOutputPercent() != 0
+        # )
+        # self.constantlyUpdate(
+        #     "Chamber Running", lambda: self.chamberMotor.getMotorOutputPercent() != 0
+        # )
+        # self.constantlyUpdate(
+        #     "Conveyor distance", lambda: self.conveyorSensor.getValue()
+        # )
 
         self.constantlyUpdate("Conveyor Ball", lambda: self.isConveyorBallPresent())
         self.constantlyUpdate("Chamber Ball", lambda: self.isChamberBallPresent())
 
-        self.constantlyUpdate(
-            "Chamber Distance", lambda: self.chamberSensor.getProximity()
-        )
+        # self.constantlyUpdate(
+        #     "Chamber Distance", lambda: self.chamberSensor.getProximity()
+        # )
 
     def configureMotor(self, motor):
         motor.setNeutralMode(NeutralMode.Brake)
