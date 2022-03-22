@@ -51,7 +51,7 @@ class Hood(CougarSystem):
 
         self.lowGoalAngle = 16  # 10
         # self.highGoalAngle = 13
-        self.bindVariable("highGoalAngle", "High Hood Angle", 18)
+        self.bindVariable("highGoalAngle", "High Hood Angle", 15.5)
 
         self.bindVariable("testAngle", "Test Angle", 12)
 
@@ -59,7 +59,7 @@ class Hood(CougarSystem):
         self.hoodAngleStep = 1
 
         self.bindVariable("startHoodAngle", "Start Hood Angle", 25)
-        self.bindVariable("hoodMultiplier", "Hood Multiplier", 9)
+        self.bindVariable("hoodMultiplier", "Hood Multiplier", 9.3)
 
         self.bindVariable("kP", "kP", 0.065)
         self.bindVariable("maxAdjust", "maxAdjust", 0.9)

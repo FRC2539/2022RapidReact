@@ -29,7 +29,7 @@ class BallSystem(CougarSystem):
 
         # INFO: Percentages are from 0 - 1, 1 being 100%
         self.bindVariable("conveyorSpeed", "Conveyor Speed", 1.0)
-        self.bindVariable("chamberSpeed", "Chamber Speed", 1)  # 1.0
+        self.bindVariable("chamberSpeed", "Chamber Speed", 0.9)  # 1.0
 
         # self.intakeConveyorSpeed = 0.75
         # self.intakeChamberSpeed = 0.75

@@ -81,7 +81,7 @@ class Shooter(CougarSystem):
         self.bindVariable(
             "rpm1Multiplier", "RPM1 Multiplier", 356
         )  # 350 was working well
-        self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 0)
+        self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 35)
         self.bindVariable("startDistance", "Start Distance", 1.05)
 
         # Constantly updates the hood's status.

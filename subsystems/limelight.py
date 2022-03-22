@@ -45,7 +45,7 @@ class Limelight(CougarSystem):
 
         # Limelight aim config
         self.bindVariable("limelightP", "Aim P", 0.04)
-        self.bindVariable("percentErrorThreshold", "Percent Threshold", 0.15)
+        self.bindVariable("percentErrorThreshold", "Percent Threshold", 0.14)
         self.bindVariable("minTurnPercent", "Minimum Turn", 0.14)
         self.bindVariable("aimedThreshold", "Aimed Threshold", 0.3)
 
@@ -69,7 +69,7 @@ class Limelight(CougarSystem):
 
         self.aimedDeadband = self.get("aimedDeadband", self.aimedDeadband)
 
-        # self.put("Distance", self.calculateDistance())
+        self.put("Distance", self.calculateDistance())
 
     def setPipeline(self, pipeline: int):
         """
