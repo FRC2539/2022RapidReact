@@ -140,8 +140,8 @@ def init():
 
     componentController.Back.whenPressed(ResetCommand())
 
-    componentController.LeftTrigger.whileHeld(LowerHoodCommand())
-    componentController.LeftBumper.whileHeld(RaiseHoodCommand())
+    componentController.LeftTrigger.whileHeld(RaiseHoodCommand())
+    componentController.LeftBumper.whileHeld(LowerHoodCommand())
     # componentController.LeftTrigger.whenPressed(MoveLeftOffsetCommand())
     # componentController.LeftBumper.whenPressed(MoveRightOffsetCommand())
     componentController.RightTrigger.whileHeld(HighGoalShootCommand())
