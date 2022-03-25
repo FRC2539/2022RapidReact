@@ -47,7 +47,7 @@ class AutoCollectBallsCommand(CommandBase):
         self.timerStarted = False
 
         self.lightsOn = False
-        
+
         self.atBallPickupVar = False
 
     def initialize(self):
@@ -58,8 +58,10 @@ class AutoCollectBallsCommand(CommandBase):
 
         self.ballInChamber = robot.ballsystem.isChamberBallPresent()
         self.ballInConveyor = robot.ballsystem.isConveyorBallPresent()
-        
+
         self.atBallPickupVar = False
+
+        robot.ml.setFilterColor(self.allianceToRawColor(robot.ml.getTargetColor()))
 
     def execute(self):
         self.blinkBallColor()
@@ -95,10 +97,10 @@ class AutoCollectBallsCommand(CommandBase):
 
     def calcForwardVelocity(self):
         """calculates the velocity the robot should be moving forwards at. m/s"""
-        
+
         if self.atBallPickup():
             return 0
-        
+
         # resets the timer everytime a target is aquired for later
         if robot.ml.isTargetAcquired():
             self.timerStarted = True
@@ -196,13 +198,24 @@ class AutoCollectBallsCommand(CommandBase):
             blinkColor = robot.lights.colors["yellow"]
 
         return blinkColor
-    
+
+    def allianceToRawColor(self, alliance):
+
+        if alliance == wpilib.DriverStation.Alliance.kRed:
+            blinkColor = "red"
+        elif alliance == wpilib.DriverStation.Alliance.kBlue:
+            blinkColor = "blue"
+        else:
+            blinkColor = "yellow"
+
+        return blinkColor
+
     def atBallPickup(self):
         """checks if the robot is at the proper ball pickup location"""
-        
+
         if robot.ml.getArea() > robot.ml.stopSize:
             self.atBallPickupVar = True
         elif robot.ml.isTargetAcquired():
             self.atBallPickupVar = False
-        
+
         return self.atBallPickupVar

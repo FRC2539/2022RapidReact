@@ -68,6 +68,8 @@ from commands.shooter.customshootcommand import CustomShootCommand
 from commands.hood.increasehoodoffsetcommand import IncreaseHoodOffsetCommand
 from commands.hood.decreasehoodoffsetcommand import DecreaseHoodOffsetCommand
 
+from commands.ballsystem.enablemanualmodecommand import EnableManualModeCommand
+from commands.ballsystem.disablemanualmodecommand import DisableManualModeCommand
 
 import constants
 import robot
@@ -123,8 +125,9 @@ def init():
 
     driveControllerTwo.Trigger.whileHeld(LowGoalShootCommand())
 
-    driveControllerTwo.LeftTopMiddle.whenPressed(MoveForwardCommand(3))
-    # driveControllerTwo.LeftBottomLeft.whileHeld()
+    # driveControllerTwo.LeftTopMiddle.whenPressed(MoveForwardCommand(3))
+    driveControllerTwo.LeftBottomLeft.whenPressed(EnableManualModeCommand())
+    driveControllerTwo.LeftBottomMiddle.whenPressed(DisableManualModeCommand())
 
     # driveControllerOne.LeftTopRight.whileHeld()
     driveControllerOne.LeftTopRight.whenPressed(LightsSeizureCommand())
@@ -145,7 +148,7 @@ def init():
     # componentController.LeftTrigger.whenPressed(MoveLeftOffsetCommand())
     # componentController.LeftBumper.whenPressed(MoveRightOffsetCommand())
     # componentController.RightTrigger.whileHeld(HighGoalShootCommand())
-    componentController.RightTrigger.whileHeld(HighGoalLineCommand())
+    componentController.RightTrigger.whileHeld(HighGoalShootCommand())
     componentController.RightBumper.whileHeld(HighGoalSpinupCommand())
 
     componentController.A.whenPressed(DecreaseHoodOffsetCommand())
