@@ -64,26 +64,29 @@ class Shooter(CougarSystem):
         # High goal rpms
         # self.highGoalRPM1 = 900
         # self.highGoalRPM2 = 2300
-        self.highGoalRPM1 = 1000
-        self.highGoalRPM2 = 2500
+
+        # self.highGoalRPM1 = 1000
+        # self.highGoalRPM2 = 2500
+        self.bindVariable("highGoalRPM1", "highGoalRPM1", 980)
+        self.bindVariable("highGoalRPM2", "highGoalRPM2", 2480)
 
         # High goal slightly behind line
         # self.behindLineRPM1 = 2600
         # self.behindLineRPM2 = 900
 
-        self.bindVariable("behindLineRPM1", "behindLineRPM1", 900)
-        self.bindVariable("behindLineRPM2", "behindLineRPM2", 3000)
+        self.bindVariable("behindLineRPM1", "behindLineRPM1", 950)
+        self.bindVariable("behindLineRPM2", "behindLineRPM2", 2950)
 
-        self.behindLineAngle = 26
+        self.behindLineAngle = 24
 
         self.bindVariable("testRPM1", "Test RPM 1", 1000)
         self.bindVariable("testRPM2", "Test RPM 2", 2400)
 
         # Configuration for limelight shooting
-        self.bindVariable("startRPM1", "Start RPM1", 2900)
-        self.bindVariable("startRPM2", "Start RPM2", 1200)
+        self.bindVariable("startRPM1", "Start RPM1", 2500)
+        self.bindVariable("startRPM2", "Start RPM2", 1500)
         self.bindVariable(
-            "rpm1Multiplier", "RPM1 Multiplier", 356
+            "rpm1Multiplier", "RPM1 Multiplier", 286
         )  # 350 was working well
         self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 35)
         self.bindVariable("startDistance", "Start Distance", 1.05)

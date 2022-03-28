@@ -71,6 +71,9 @@ from commands.hood.decreasehoodoffsetcommand import DecreaseHoodOffsetCommand
 from commands.ballsystem.enablemanualmodecommand import EnableManualModeCommand
 from commands.ballsystem.disablemanualmodecommand import DisableManualModeCommand
 
+from commands.shooter.lowfenderspinupcommand import LowFenderSpinupCommand
+from commands.shooter.highfenderspinupcommand import HighFenderSpinupCommand
+
 import constants
 import robot
 
@@ -141,10 +144,11 @@ def init():
 
     # logicalaxes.TURRETmOVE = componentController.LeftX
 
-    componentController.Back.whenPressed(ResetCommand())
+    # componentController.Back.whenPressed(ResetCommand())
+    componentController.Back.whileHeld(RejectCommand())
 
-    componentController.LeftTrigger.whileHeld(RaiseHoodCommand())
-    componentController.LeftBumper.whileHeld(LowerHoodCommand())
+    componentController.LeftTrigger.whileHeld(HighFenderSpinupCommand())
+    componentController.LeftBumper.whileHeld(LowFenderSpinupCommand())
     # componentController.LeftTrigger.whenPressed(MoveLeftOffsetCommand())
     # componentController.LeftBumper.whenPressed(MoveRightOffsetCommand())
     # componentController.RightTrigger.whileHeld(HighGoalShootCommand())
@@ -152,8 +156,10 @@ def init():
     componentController.RightBumper.whileHeld(HighGoalSpinupCommand())
 
     componentController.A.whenPressed(DecreaseHoodOffsetCommand())
-    componentController.X.whileHeld(RejectCommand())
-    componentController.B.whileHeld(RejectCommand())
+    # componentController.X.whileHeld(RejectCommand())
+    # componentController.B.whileHeld(RejectCommand())
+    componentController.X.whenPressed(MoveDownOffsetCommand())
+    componentController.B.whenPressed(MoveUpOffsetCommand())
     componentController.Y.whenPressed(IncreaseHoodOffsetCommand())
 
     componentController.DPadUp.whenPressed(MoveUpOffsetCommand())

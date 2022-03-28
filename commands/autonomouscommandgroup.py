@@ -127,11 +127,12 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
                     FunnyMoveCommand(1.1, torySlow=speed, toryAcc=acc),
-                    WaitCommand(0.45),
+                    WaitCommand(0.55),
                 ),
                 HighFenderSpinupCommand(),
             ),
             ParallelRaceGroup(
+                IntakeBallsCommandGroup(),
                 FunnyMoveCommand(-2, angle=13, torySlow=speed, toryAcc=acc),
                 HighFenderSpinupCommand(),
             ),
@@ -219,7 +220,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 SetInitialHoodAngleCommand(),
             ),
             ParallelRaceGroup(
-                TurnCommand(math.radians(-59)),
+                TurnCommand(math.radians(-57)),
                 SetInitialHoodAngleCommand(),
             ),
             ParallelRaceGroup(
