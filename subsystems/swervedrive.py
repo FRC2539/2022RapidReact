@@ -448,13 +448,31 @@ class SwerveDrive(BaseDrive):
 
         targetChassisSpeeds = self.convertControllerToChassisSpeeds(x, y, rotate)
 
-        # print("speeds")
-        # print(targetChassisSpeeds)
-        # print("angle")
-        # print(self.navX.getRotation2d())
-        # print()
-
         self.setChassisSpeeds(targetChassisSpeeds)
+
+    def moveRawRotation(self, x, y, rotate):
+        """
+        Turns coordinate arguments into motor outputs.
+        Short-circuits the rather expensive movement calculations if the
+        coordinates have not changed.
+        """
+
+        """Prevent drift caused by small input values"""
+        x = math.copysign(max(abs(x) - self.deadband, 0), x)
+        y = math.copysign(max(abs(y) - self.deadband, 0), y)
+        rotate = math.copysign(max(abs(rotate) - (self.deadband + 0.05), 0), rotate)
+
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
+
+        targetChassisSpeeds = self.convertControllerToChassisSpeeds(x, y, rotate)
+
+        rawRotateSpeeds = ChassisSpeeds(
+            targetChassisSpeeds.vx, targetChassisSpeeds.vy, rotate
+        )
+
+        self.setChassisSpeeds(rawRotateSpeeds)
 
     def convertControllerToChassisSpeeds(self, x, y, rotate):
         # Convert the percent outputs from the joysticks

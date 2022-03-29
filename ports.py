@@ -51,6 +51,8 @@ intake.reverseChannel = 1
 
 hood = PortsList()
 hood.motorID = 13
+# hood.forwardChannel = 2
+# hood.backwardChannel = 3
 
 ballsystem = PortsList()
 ballsystem.conveyorMotorID = 11

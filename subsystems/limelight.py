@@ -24,6 +24,8 @@ class Limelight(CougarSystem):
         self.aimedDeadband = 0.25
         self.put("aimedDeadband", self.aimedDeadband)
 
+        self.currentDistance = 0
+
         # Grabs the offset.
         constants.limelight.xOffset = self.get("xOffset", constants.limelight.xOffset)
         constants.limelight.yOffset = self.get("yOffset", constants.limelight.yOffset)
@@ -69,7 +71,15 @@ class Limelight(CougarSystem):
 
         self.aimedDeadband = self.get("aimedDeadband", self.aimedDeadband)
 
-        self.put("Distance", self.calculateDistance())
+        self.updateCurrentDistance()
+
+        self.put("Distance", self.currentDistance)
+
+    def updateCurrentDistance(self):
+        self.currentDistance = self.calculateDistance()
+
+    def getDistance(self):
+        return self.currentDistance
 
     def setPipeline(self, pipeline: int):
         """
@@ -204,7 +214,7 @@ class Limelight(CougarSystem):
         Calculates the limelight pose relative to the target.
         """
         return Pose2d(
-            -self.calculateDistance(),  # Treats the target as being "forward"
+            -self.getDistance(),  # Treats the target as being "forward"
             0,  # Given that the target is a circle, there is no real sideways offset
             math.radians(robot.limelight.getX()),
         )
@@ -249,21 +259,3 @@ class Limelight(CougarSystem):
             xPercentError = math.copysign(self.minTurnPercent, xPercentError)
 
         return xPercentError
-
-    def getAdjustSpeed(self):
-        limelightDistance = self.calculateDistance()
-
-        if limelightDistance > 3:
-            distanceMultiplier = 1.8
-        elif limelightDistance > 2:
-            distanceMultiplier = 1.2
-        else:
-            distanceMultiplier = 1
-
-        currentPosition = self.getX()
-        distance = abs(currentPosition)
-        direction = math.copysign(1, currentPosition)
-
-        adjust = distance * self.kP / distanceMultiplier
-
-        return min(self.maxAdjust, max(adjust, 0.05)) * direction

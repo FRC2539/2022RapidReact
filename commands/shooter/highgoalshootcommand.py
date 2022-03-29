@@ -18,10 +18,11 @@ class HighGoalShootCommand(BaseShootCommand):
     def initialize(self):
         self.resetShooterAtRPM()
         self.distanceFilter.reset()
+        self.setHoodPosition(25.7)
 
     def execute(self):
         distance = (
-            self.distanceFilter.calculate(robot.limelight.calculateDistance())
+            self.distanceFilter.calculate(robot.limelight.getDistance())
             - self.startDistance
         )
 
@@ -30,9 +31,9 @@ class HighGoalShootCommand(BaseShootCommand):
 
         self.setRPMs(rpm1, rpm2)
 
-        hoodAngle = robot.hood.calculateHoodAngleFromDistance(distance)
+        # hoodAngle = robot.hood.calculateHoodAngleFromDistance(distance)
 
-        self.setHoodPosition(hoodAngle)
+        # self.setHoodPosition(hoodAngle)
 
         # Run core class methods
         self.shootIfShooterAtSpeed()

@@ -28,14 +28,14 @@ class BallSystem(CougarSystem):
         self.configureMotor(self.chamberMotor)
 
         # INFO: Percentages are from 0 - 1, 1 being 100%
-        self.bindVariable("conveyorSpeed", "Conveyor Speed", 0.9)  # 1
-        self.bindVariable("chamberSpeed", "Chamber Speed", 0.9)  # 1.0
+        self.bindVariable("conveyorSpeed", "Conveyor Speed", 1)  # 1
+        self.bindVariable("chamberSpeed", "Chamber Speed", 1)  # 1.0
 
         # self.intakeConveyorSpeed = 0.75
         # self.intakeChamberSpeed = 0.75
 
         self.bindVariable("intakeConveyorSpeed", "Conveyor Intake", 1)
-        self.bindVariable("intakeChamberSpeed", "Chamber Intake", 0.75)  # 0.75
+        self.bindVariable("intakeChamberSpeed", "Chamber Intake", 1)  # 0.75
 
         # Initialize the sensor that detects the presence of balls in the conveyor area
         self.conveyorSensor = AnalogInput(ports.ballsystem.conveyorSensor)

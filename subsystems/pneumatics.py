@@ -12,8 +12,6 @@ class Pneumatics(CougarSystem):
     def __init__(self):
         super().__init__("Pneumatics")
 
-        # self.hub = PneumaticHub()
-
         # Create the controller for the compressor
         self.compressor = Compressor(ports.pneumatics.pcmID, PneumaticsModuleType.REVPH)
 
@@ -32,6 +30,14 @@ class Pneumatics(CougarSystem):
             ports.climber.forwardChannel,
             ports.climber.reverseChannel,
         )
+
+        # Create the controller for the hood solenoid
+        # self.hoodSolenoid = DoubleSolenoid(
+        #     ports.pneumatics.pcmID,
+        #     PneumaticsModuleType.REVPH,
+        #     ports.hood.forwardChannel,
+        #     ports.hood.reverseChannel,
+        # )
 
     def periodic(self):
         """
@@ -53,7 +59,11 @@ class Pneumatics(CougarSystem):
     def retractIntake(self):
         self.intakeSolenoid.set(DoubleSolenoid.Value.kReverse)
 
-    # Below was done by Ben
+    def extendHood(self):
+        self.hoodSolenoid.set(DoubleSolenoid.Value.kForward)
+
+    def retractHood(self):
+        self.hoodSolenoid.set(DoubleSolenoid.Value.kReverse)
 
     def extendClimberArm(self):
         """

@@ -4,6 +4,8 @@ import ports
 import constants
 import math
 
+import robot
+
 from rev import CANSparkMax
 
 
@@ -70,6 +72,12 @@ class Hood(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
+
+    def setFarHoodPosition(self):
+        robot.pneumatics.extendHood()
+
+    def setCloseHoodPosition(self):
+        robot.pneumatics.retractHood()
 
     def increaseHoodOffset(self):
         self.hoodAngleOffset += self.hoodAngleStep
