@@ -28,20 +28,18 @@ class BallSystem(CougarSystem):
         self.configureMotor(self.chamberMotor)
 
         # INFO: Percentages are from 0 - 1, 1 being 100%
-        self.bindVariable("conveyorSpeed", "Conveyor Speed", 1)  # 1
-        self.bindVariable("chamberSpeed", "Chamber Speed", 1)  # 1.0
-
-        # self.intakeConveyorSpeed = 0.75
-        # self.intakeChamberSpeed = 0.75
+        self.bindVariable("conveyorSpeed", "Conveyor Speed", 1)
+        self.bindVariable("chamberSpeed", "Chamber Speed", 1)
 
         self.bindVariable("intakeConveyorSpeed", "Conveyor Intake", 1)
-        self.bindVariable("intakeChamberSpeed", "Chamber Intake", 1)  # 0.75
+        self.bindVariable("intakeChamberSpeed", "Chamber Intake", 1)
 
         # Initialize the sensor that detects the presence of balls in the conveyor area
         self.conveyorSensor = AnalogInput(ports.ballsystem.conveyorSensor)
 
         # Initialize the color sensor in the chamber
         self.chamberSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
+        self.chamberProximitySensor = AnalogInput(ports.ballsystem.chamberSensor)
 
         self.chamberSensor.configureColorSensor(
             ColorSensorV3.ColorResolution.k18bit,
@@ -49,32 +47,13 @@ class BallSystem(CougarSystem):
         )
 
         # Set a threshold for the conveyor sensor
-        self.conveyorSensorThreshold = 50
+        self.analogSensorThreshold = 50
 
         # Set a threshold for the chamber sensor
         self.chamberSensorThreshold = 102  # 0 to 2047 (higher is closer)
-        # last used - 150
-        # Partial ball - 180
-        # Full ball - 360 - 380
-        # No ball - 70
-
-        # Constantly updates the ballsystem's status.
-        # self.constantlyUpdate(
-        #     "Conveyor Running", lambda: self.conveyorMotor.getMotorOutputPercent() != 0
-        # )
-        # self.constantlyUpdate(
-        #     "Chamber Running", lambda: self.chamberMotor.getMotorOutputPercent() != 0
-        # )
-        # self.constantlyUpdate(
-        #     "Conveyor distance", lambda: self.conveyorSensor.getValue()
-        # )
 
         self.constantlyUpdate("Conveyor Ball", lambda: self.isConveyorBallPresent())
         self.constantlyUpdate("Chamber Ball", lambda: self.isChamberBallPresent())
-
-        # self.constantlyUpdate(
-        #     "Chamber Distance", lambda: self.chamberSensor.getProximity()
-        # )
 
         self.manualBallIntake = False
 
@@ -173,13 +152,13 @@ class BallSystem(CougarSystem):
         """
         Returns if the sensor in the conveyor sees a ball
         """
-        return self.conveyorSensor.getValue() < self.conveyorSensorThreshold
+        return self.conveyorSensor.getValue() < self.analogSensorThreshold
 
     def isChamberBallPresent(self):
         """
         Returns if the sensor in the chamber sees a ball
         """
-        return self.chamberSensor.getProximity() > self.chamberSensorThreshold
+        return self.chamberProximitySensor.getValue() < self.analogSensorThreshold
 
     def getChamberBallColorRaw(self):
         """

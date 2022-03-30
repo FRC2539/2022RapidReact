@@ -18,7 +18,7 @@ class HighGoalShootCommand(BaseShootCommand):
     def initialize(self):
         self.resetShooterAtRPM()
         self.distanceFilter.reset()
-        self.setHoodPosition(25.7)
+        self.setFarHoodPosition()
 
     def execute(self):
         distance = (
@@ -31,10 +31,5 @@ class HighGoalShootCommand(BaseShootCommand):
 
         self.setRPMs(rpm1, rpm2)
 
-        # hoodAngle = robot.hood.calculateHoodAngleFromDistance(distance)
-
-        # self.setHoodPosition(hoodAngle)
-
         # Run core class methods
         self.shootIfShooterAtSpeed()
-        self.updateHoodPosition()

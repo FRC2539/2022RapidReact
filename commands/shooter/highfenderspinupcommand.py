@@ -9,8 +9,5 @@ class HighFenderSpinupCommand(BaseShootCommand):
 
     def initialize(self):
         self.setRPMs(robot.shooter.highGoalRPM1, robot.shooter.highGoalRPM2)
-        self.setHoodPosition(robot.hood.highGoalAngle)
+        self.setCloseHoodPosition()
         self.resetShooterAtRPM()
-
-    def execute(self):
-        self.updateHoodPosition()

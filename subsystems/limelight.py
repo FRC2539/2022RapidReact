@@ -241,6 +241,19 @@ class Limelight(CougarSystem):
             and abs(self.getX()) < self.aimedDeadband
         )
 
+    def calculateFutureRobotVector(self):
+        [robotX, robotY] = robot.drivetrain.calculateRobotRelativeVector()
+
+        normalizedX, normalizedY = robotX * 0.02, robotY * 0.02
+
+        theta = math.radians(self.getX())
+
+        limelightX, limelightY = self.currentDistance * math.cos(
+            theta
+        ) + self.currentDistance * math.sin(theta)
+
+        return [limelightX + normalizedX, limelightY + normalizedY]
+
     def calculateTurnPercent(self):
         xOffset = self.getX()  # Returns an angle
 

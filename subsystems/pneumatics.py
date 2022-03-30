@@ -32,12 +32,12 @@ class Pneumatics(CougarSystem):
         )
 
         # Create the controller for the hood solenoid
-        # self.hoodSolenoid = DoubleSolenoid(
-        #     ports.pneumatics.pcmID,
-        #     PneumaticsModuleType.REVPH,
-        #     ports.hood.forwardChannel,
-        #     ports.hood.reverseChannel,
-        # )
+        self.hoodSolenoid = DoubleSolenoid(
+            ports.pneumatics.pcmID,
+            PneumaticsModuleType.REVPH,
+            ports.hood.forwardChannel,
+            ports.hood.reverseChannel,
+        )
 
     def periodic(self):
         """

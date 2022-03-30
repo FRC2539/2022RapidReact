@@ -17,6 +17,8 @@ class HighGoalSpinupCommand(BaseShootCommand):
 
     def initialize(self):
         self.distanceFilter.reset()
+        self.setFarHoodPosition()
+        self.resetShooterAtRPM()
 
     def execute(self):
         distance = (
@@ -28,10 +30,3 @@ class HighGoalSpinupCommand(BaseShootCommand):
         [rpm1, rpm2] = robot.shooter.calculateRPMsFromDistance(distance)
 
         self.setRPMs(rpm1, rpm2)
-
-        hoodAngle = robot.hood.calculateHoodAngleFromDistance(distance)
-
-        self.setHoodPosition(hoodAngle)
-
-        # Run core class methods
-        self.updateHoodPosition()

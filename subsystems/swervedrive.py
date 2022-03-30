@@ -248,6 +248,9 @@ class SwerveDrive(BaseDrive):
         self.bindVariable("testAcc", "testAcc", 20000)
         self.bindVariable("testSlow", "testSlow", 30000)
 
+        self.vx = 0
+        self.vy = 0
+
     def periodic(self):
         """
         Loops whenever there is robot code. I recommend
@@ -278,6 +281,23 @@ class SwerveDrive(BaseDrive):
         # if that has been indicated in the dashboard
         if self.sendOffsets:
             self.put("correctedOffsets", self.getCorrectedModuleOffsets())
+
+    def updateCurrentSpeeds(self, chassisSpeeds):
+        self.vx = chassisSpeeds.vx
+        self.vy = chassisSpeeds.vy
+
+        self.sendMessage(f"vx: {self.vx}, vy: {self.vy}")
+
+    def calculateRobotRelativeVector(self):
+        thetaInRadians = math.radians(self.getAngle())
+
+        cosComponent = math.cos(thetaInRadians)
+        sinComponent = math.sin(thetaInRadians)
+
+        x = self.vx * cosComponent + self.vy * -1 * sinComponent
+        y = self.vx * sinComponent + self.vy * cosComponent
+
+        return [x, y]
 
     def swervePoseToString(self):
         pose = self.getSwervePose()
@@ -448,6 +468,8 @@ class SwerveDrive(BaseDrive):
 
         targetChassisSpeeds = self.convertControllerToChassisSpeeds(x, y, rotate)
 
+        self.updateCurrentSpeeds(targetChassisSpeeds)
+
         self.setChassisSpeeds(targetChassisSpeeds)
 
     def moveRawRotation(self, x, y, rotate):
@@ -471,6 +493,8 @@ class SwerveDrive(BaseDrive):
         rawRotateSpeeds = ChassisSpeeds(
             targetChassisSpeeds.vx, targetChassisSpeeds.vy, rotate
         )
+
+        self.updateCurrentSpeeds(rawRotateSpeeds)
 
         self.setChassisSpeeds(rawRotateSpeeds)
 
