@@ -83,8 +83,8 @@ class Shooter(CougarSystem):
         self.bindVariable("testRPM2", "Test RPM 2", 1500)
 
         # Configuration for limelight shooting
-        self.bindVariable("startRPM1", "Start RPM1", 3000)
-        self.bindVariable("startRPM2", "Start RPM2", 850)
+        self.bindVariable("startRPM1", "Start RPM1", 2600)  # 2650
+        self.bindVariable("startRPM2", "Start RPM2", 1075)
 
         # 3200, 1200
 
@@ -95,9 +95,9 @@ class Shooter(CougarSystem):
         # 930, 850 mult
 
         self.bindVariable(
-            "rpm1Multiplier", "RPM1 Multiplier", 930
+            "rpm1Multiplier", "RPM1 Multiplier", 800
         )  # 350 was working well
-        self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 850)
+        self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 500)
         self.bindVariable("startDistance", "Start Distance", 0.8)
 
         # Constantly updates the hood's status.

@@ -163,7 +163,7 @@ limelight.xOffsetStep = 0.5
 limelight.yOffsetStep = 0.5
 
 limelight.targetHeight = 2.62  # in meters (bottom of tape is 2.58, top is 2.64)
-limelight.limelightHeight = 0.635  # meters (height of limelight camera from the ground)
+limelight.limelightHeight = 0.737  # meters (height of limelight camera from the ground)
 limelight.heightOffset = limelight.targetHeight - limelight.limelightHeight
 
 limelight.limelightAngle = math.radians(60)  # 10 degrees (angle in radians)

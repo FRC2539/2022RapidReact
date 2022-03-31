@@ -1,4 +1,5 @@
 from commands2 import InstantCommand
+from numpy import angle
 from wpilib import DriverStation
 
 from commands2 import (
@@ -210,14 +211,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 SetInitialHoodAngleCommand(),
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(1.1, torySlow=speed, toryAcc=acc),
-                    WaitCommand(0.3),
+                    FunnyMoveCommand(1.2, angle=15, torySlow=speed, toryAcc=acc),
+                    WaitCommand(0.55),
                 ),
             ),
-            ParallelRaceGroup(HighGoalShootCommand(), WaitCommand(1.6)),
+            ParallelRaceGroup(HighGoalShootCommand(), WaitCommand(1.7)),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
-                FunnyMoveCommand(2.6, angle=-130, torySlow=speed, toryAcc=acc),
+                FunnyMoveCommand(2.9, angle=-133, torySlow=speed, toryAcc=acc),
             ),
             ParallelRaceGroup(
                 TurnCommand(math.radians(-57)),
@@ -228,21 +229,26 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 WaitCommand(0.5),
                 SetInitialHoodAngleCommand(),
             ),
+            # ParallelRaceGroup(
+            #     IntakeBallsCommandGroup(),
+            #     SequentialCommandGroup(
+            #         FunnyMoveCommand(0.5, torySlow=speed, toryAcc=acc),
+            #     ),
+            #     SetInitialHoodAngleCommand(),
+            # ),
+            ParallelRaceGroup(
+                HighGoalShootCommand(), WaitCommand(1.6), IntakeCommand()
+            ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(0.5, torySlow=speed, toryAcc=acc),
+                    FunnyMoveCommand(4, angle=-24, torySlow=speed, toryAcc=acc),
+                    WaitCommand(2),
                 ),
-                SetInitialHoodAngleCommand(),
-            ),
-            ParallelRaceGroup(HighGoalShootCommand(), WaitCommand(1), IntakeCommand()),
-            ParallelRaceGroup(
-                IntakeBallsCommandGroup(),
-                FunnyMoveCommand(3.9, angle=-10, torySlow=speed, toryAcc=acc),
             ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
-                FunnyMoveCommand(-2, angle=-20, torySlow=speed, toryAcc=acc),
+                FunnyMoveCommand(-3, angle=-26, torySlow=speed, toryAcc=acc),
                 SetInitialHoodAngleCommand(),
             ),
             ParallelRaceGroup(HighGoalShootCommand(), WaitCommand(5), IntakeCommand()),
