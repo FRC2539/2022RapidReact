@@ -1,5 +1,7 @@
 from commands2 import CommandBase
 import robot
+from wpimath.kinematics import ChassisSpeeds
+import math
 
 
 class FunnyMoveCommand(CommandBase):
@@ -7,7 +9,8 @@ class FunnyMoveCommand(CommandBase):
         self,
         distance,
         angle=0,
-        tolerance=5,
+        wheelAngles=0,
+        tolerance=3,
         slow=False,
         torySlow=None,
         toryAcc=None,
@@ -24,6 +27,7 @@ class FunnyMoveCommand(CommandBase):
 
         self.distance = -robot.drivetrain.metersToInches(distance)
         self.angle = angle
+        self.wheelAngles = wheelAngles
         self.tol = tolerance  # Angle tolerance in degrees.
         self.isSlow = slow
         self.torySlow = torySlow
@@ -51,7 +55,19 @@ class FunnyMoveCommand(CommandBase):
         self.count = 0
         self.startPos = robot.drivetrain.getPositions()
 
+        # sin = math.sin(self.angle)
+        # cos = math.cos(self.angle)
+
+        # moduleStates = robot.drivetrain.swerveKinematics.toSwerveModuleStates(
+        #     ChassisSpeeds(cos, sin, self.wheelAngles)
+        # )
+
+        # self.angles = [moduleState.angle.degrees() for moduleState in moduleStates]
+
         robot.drivetrain.setUniformModuleAngle(self.angle)
+        # robot.drivetrain.setModuleAngles(self.angles)
+
+        # robot.drivetrain.sendMessage(f"{self.angles}")
 
     def execute(self):
         self.count = 0
@@ -74,6 +90,7 @@ class FunnyMoveCommand(CommandBase):
 
             self.moveSet = True
 
+        # robot.drivetrain.setModuleAngles(self.angles)
         robot.drivetrain.setUniformModuleAngle(self.angle)
 
     def isFinished(self):

@@ -8,5 +8,5 @@ class SetInitialHoodAngleCommand(BaseShootCommand):
         super().__init__()
 
     def initialize(self):
-        self.setRPMs(robot.shooter.behindLineRPM1, robot.shooter.behindLineRPM2)
+        self.setRPMs(robot.shooter.startRPM1, robot.shooter.startRPM2)
         self.setFarHoodPosition()
