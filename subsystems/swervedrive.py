@@ -288,16 +288,8 @@ class SwerveDrive(BaseDrive):
 
         self.sendMessage(f"vx: {self.vx}, vy: {self.vy}")
 
-    def calculateRobotRelativeVector(self):
-        thetaInRadians = math.radians(self.getAngle())
-
-        cosComponent = math.cos(thetaInRadians)
-        sinComponent = math.sin(thetaInRadians)
-
-        x = self.vx * cosComponent + self.vy * -1 * sinComponent
-        y = self.vx * sinComponent + self.vy * cosComponent
-
-        return [x, y]
+    def getCurrentRelativeVector(self):
+        return [self.vx, self.vy]
 
     def swervePoseToString(self):
         pose = self.getSwervePose()
@@ -464,6 +456,7 @@ class SwerveDrive(BaseDrive):
 
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
+            self.updateCurrentSpeeds(ChassisSpeeds(0, 0, 0))
             return
 
         targetChassisSpeeds = self.convertControllerToChassisSpeeds(x, y, rotate)
@@ -486,6 +479,7 @@ class SwerveDrive(BaseDrive):
 
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
+            self.updateCurrentSpeeds(ChassisSpeeds(0, 0, 0))
             return
 
         targetChassisSpeeds = self.convertControllerToChassisSpeeds(x, y, rotate)

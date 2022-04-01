@@ -3,26 +3,20 @@ import math
 
 import robot
 
-from wpimath.filter import MedianFilter
-
 
 class HighGoalSpinupCommand(BaseShootCommand):
     def __init__(self):
         super().__init__()
 
-        # Create a filter to improve consistency in distance readings
-        self.distanceFilter = MedianFilter(3)
-
         self.startDistance = robot.shooter.startDistance  # meters from the target
 
     def initialize(self):
-        self.distanceFilter.reset()
         self.setFarHoodPosition()
         self.resetShooterAtRPM()
 
     def execute(self):
         distance = (
-            self.distanceFilter.calculate(robot.limelight.calculateDistance())
+            robot.limelight.getDistance()
             - self.startDistance
         )
 

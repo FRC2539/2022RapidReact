@@ -9,6 +9,8 @@ from wpimath.geometry import Pose2d
 
 from networktables import NetworkTables
 
+from wpimath.filter import MedianFilter
+
 
 class Limelight(CougarSystem):
     """Subsystem for interacting with the limelight."""
@@ -25,6 +27,8 @@ class Limelight(CougarSystem):
         self.put("aimedDeadband", self.aimedDeadband)
 
         self.currentDistance = 0
+
+        self.distanceFilter = MedianFilter(3)
 
         # Grabs the offset.
         constants.limelight.xOffset = self.get("xOffset", constants.limelight.xOffset)
@@ -54,6 +58,12 @@ class Limelight(CougarSystem):
         self.bindVariable("kP", "kP", 0.02)
         self.bindVariable("maxAdjust", "maxAdjust", 0.35)
 
+        self.bindVariable("maxOffsetAngle", "maxOffsetAngle", 5)
+        self.bindVariable("distanceMult", "distanceMult", 0.25)
+        self.bindVariable("tangentMult", "tangentMult", 0.67)
+
+        self.fDistance = 0
+
     def periodic(self):
         """
         Loops when nothing else is running in
@@ -76,7 +86,7 @@ class Limelight(CougarSystem):
         self.put("Distance", self.currentDistance)
 
     def updateCurrentDistance(self):
-        self.currentDistance = self.calculateDistance()
+        self.currentDistance = self.distanceFilter.calculate(self.calculateDistance())
 
     def getDistance(self):
         return self.currentDistance
@@ -127,7 +137,10 @@ class Limelight(CougarSystem):
         """
         Return the x-value
         """
-        return self.get("tx") + constants.limelight.xOffset
+        try:
+            return self.get("tx") + constants.limelight.xOffset
+        except:
+            return 0
 
     def getA(self):
         """
@@ -241,18 +254,43 @@ class Limelight(CougarSystem):
             and abs(self.getX()) < self.aimedDeadband
         )
 
-    def calculateFutureRobotVector(self):
-        [robotX, robotY] = robot.drivetrain.calculateRobotRelativeVector()
+    def calculateFutureForAim(self):
+        [vx, vy] = robot.drivetrain.getCurrentRelativeVector()
 
-        normalizedX, normalizedY = robotX * 0.02, robotY * 0.02
+        pvx, pvy = self.secondToPeriod(vx), self.secondToPeriod(vy)
 
-        theta = math.radians(self.getX())
+        hubTheta = math.radians(self.getX())
 
-        limelightX, limelightY = self.currentDistance * math.cos(
-            theta
-        ) + self.currentDistance * math.sin(theta)
+        hubX, hubY = self.currentDistance * math.cos(
+            hubTheta
+        ) + self.currentDistance * math.sin(hubTheta)
 
-        return [limelightX + normalizedX, limelightY + normalizedY]
+        tangentTheta = math.atan2(hubY, hubX) + math.pi / 2
+
+        ux, uy = math.cos(tangentTheta), math.sin(tangentTheta)
+
+        tangentVelocity = self.periodToSecond(ux * pvx + uy * pvy)
+
+        fHubX, fHubY = hubX - pvx, hubY - pvy
+
+        self.fDistance = math.sqrt(math.pow(fHubX, 2) + math.pow(fHubY, 2))
+
+        fTheta = math.atan2(fHubY, fHubX)
+
+        return [tangentVelocity, fTheta]
+
+    def calculateTurnVelocity(self):
+        [tangentVelocity, fTheta] = self.calculateFutureForAim()
+
+        targetTheta = math.radians(self.maxOffsetAngle) * (self.fDistance * self.distanceMult) * (tangentVelocity * self.tangentMult) * -1
+        
+        return self.periodToSecond(fTheta - targetTheta) * -1
+
+    def secondToPeriod(self, velocity):
+        return velocity * 0.02
+    
+    def periodToSecond(self, velocity):
+        return velocity / 0.02
 
     def calculateTurnPercent(self):
         xOffset = self.getX()  # Returns an angle

@@ -1,5 +1,4 @@
 from commands2 import InstantCommand
-from numpy import angle
 from wpilib import DriverStation
 
 from commands2 import (
