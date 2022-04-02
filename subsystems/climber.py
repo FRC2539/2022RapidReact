@@ -26,11 +26,14 @@ class Climber(CougarSystem):
         )  # Start at zero so we don't risk over-driving downwards.
 
         # Standard speed of the climber, up and down.
-        self.speed = constants.climber.speed
+        # self.speed = constants.climber.speed
+        self.bindVariable("speed", "speed", 1)
+        self.bindVariable("upperLimit", "upperLimit", 224000)
+        self.bindVariable("lowerLimit", "lowerLimit", 18000)
 
         # Climber limits.
-        self.upperLimit = constants.climber.upperLimit
-        self.lowerLimit = constants.climber.lowerLimit
+        # self.upperLimit = constants.climber.upperLimit
+        # self.lowerLimit = constants.climber.lowerLimit
 
         # Send the climber position to networktables
         self.constantlyUpdate("Climber Position", self.getPosition)

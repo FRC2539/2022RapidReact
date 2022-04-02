@@ -97,27 +97,27 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #         ),
     #     )
 
-    def definitelyNotBensAuto(self):
-        self.addCommands(
-            # BezierPathCommand([[0, 0], [0, 24]], speed=0.45, stopWhenDone=True),
-            TurnCommand(3.1415956535 / 2),
-            # BezierPathCommand([[0, 0], [20, 80]], speed=0.8, stopWhenDone=True),
-        )
+    # def definitelyNotBensAuto(self):
+    #     self.addCommands(
+    #         # BezierPathCommand([[0, 0], [0, 24]], speed=0.45, stopWhenDone=True),
+    #         TurnCommand(3.1415956535 / 2),
+    #         # BezierPathCommand([[0, 0], [20, 80]], speed=0.8, stopWhenDone=True),
+    #     )
 
-    def twoBall(self):
-        self.addCommands(
-            ResetAutoStateCommand(angle=0),
-            ParallelRaceGroup(SetInitialHoodAngleCommand(), WaitCommand(2)),
-            ParallelRaceGroup(
-                IntakeBallsCommandGroup(),
-                SequentialCommandGroup(
-                    FunnyMoveCommand(1.1),
-                    WaitCommand(0.5),
-                ),
-            ),
-            FunnyMoveCommand(-0.1),
-            ParallelRaceGroup(HighGoalLineCommand(), WaitCommand(3)),
-        )
+    # def twoBall(self):
+    #     self.addCommands(
+    #         ResetAutoStateCommand(angle=0),
+    #         ParallelRaceGroup(SetInitialHoodAngleCommand(), WaitCommand(2)),
+    #         ParallelRaceGroup(
+    #             IntakeBallsCommandGroup(),
+    #             SequentialCommandGroup(
+    #                 FunnyMoveCommand(1.1),
+    #                 WaitCommand(0.5),
+    #             ),
+    #         ),
+    #         FunnyMoveCommand(-0.1),
+    #         ParallelRaceGroup(HighGoalLineCommand(), WaitCommand(3)),
+    #     )
 
     def twoBallPlus(self):
         speed = 30000
@@ -162,45 +162,45 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #         TrajectoryFollowerCommand(robot.drivetrain.trajectory),
     #     )
 
-    def tweeBallWorking(self):
-        speed = 30000
-        acc = 16000
+    # def tweeBallWorking(self):
+    #     speed = 30000
+    #     acc = 16000
 
-        self.addCommands(
-            ResetAutoStateCommand(angle=0),
-            ParallelRaceGroup(
-                IntakeBallsCommandGroup(),
-                SequentialCommandGroup(
-                    FunnyMoveCommand(1.1, torySlow=speed, toryAcc=acc),
-                    WaitCommand(0.45),
-                ),
-                HighFenderSpinupCommand(),
-            ),
-            ParallelRaceGroup(
-                FunnyMoveCommand(-2, angle=-13, torySlow=speed, toryAcc=acc),
-                HighFenderSpinupCommand(),
-            ),
-            TurnCommand(math.radians(-20)),
-            FunnyMoveCommand(-0.2, torySlow=speed, toryAcc=acc),
-            ParallelRaceGroup(HighGoalFenderCommand(), WaitCommand(1.6)),
-            FunnyMoveCommand(0.2, torySlow=speed, toryAcc=acc),
-            ParallelRaceGroup(
-                IntakeBallsCommandGroup(),
-                SequentialCommandGroup(
-                    FunnyMoveCommand(3, -80, torySlow=speed, toryAcc=acc),
-                    FunnyMoveCommand(0.4, torySlow=speed, toryAcc=acc),
-                    WaitCommand(0.3),
-                    FunnyMoveCommand(-0.4, torySlow=speed, toryAcc=acc),
-                ),
-            ),
-            FunnyMoveCommand(-3, -80, torySlow=speed, toryAcc=acc),
-            TurnCommand(math.radians(-10)),
-            ParallelRaceGroup(
-                FunnyMoveCommand(-0.2, torySlow=speed, toryAcc=acc),
-                HighFenderSpinupCommand(),
-            ),
-            ParallelRaceGroup(HighGoalFenderCommand(), WaitCommand(2)),
-        )
+    #     self.addCommands(
+    #         ResetAutoStateCommand(angle=0),
+    #         ParallelRaceGroup(
+    #             IntakeBallsCommandGroup(),
+    #             SequentialCommandGroup(
+    #                 FunnyMoveCommand(1.1, torySlow=speed, toryAcc=acc),
+    #                 WaitCommand(0.45),
+    #             ),
+    #             HighFenderSpinupCommand(),
+    #         ),
+    #         ParallelRaceGroup(
+    #             FunnyMoveCommand(-2, angle=-13, torySlow=speed, toryAcc=acc),
+    #             HighFenderSpinupCommand(),
+    #         ),
+    #         TurnCommand(math.radians(-20)),
+    #         FunnyMoveCommand(-0.2, torySlow=speed, toryAcc=acc),
+    #         ParallelRaceGroup(HighGoalFenderCommand(), WaitCommand(1.6)),
+    #         FunnyMoveCommand(0.2, torySlow=speed, toryAcc=acc),
+    #         ParallelRaceGroup(
+    #             IntakeBallsCommandGroup(),
+    #             SequentialCommandGroup(
+    #                 FunnyMoveCommand(3, -80, torySlow=speed, toryAcc=acc),
+    #                 FunnyMoveCommand(0.4, torySlow=speed, toryAcc=acc),
+    #                 WaitCommand(0.3),
+    #                 FunnyMoveCommand(-0.4, torySlow=speed, toryAcc=acc),
+    #             ),
+    #         ),
+    #         FunnyMoveCommand(-3, -80, torySlow=speed, toryAcc=acc),
+    #         TurnCommand(math.radians(-10)),
+    #         ParallelRaceGroup(
+    #             FunnyMoveCommand(-0.2, torySlow=speed, toryAcc=acc),
+    #             HighFenderSpinupCommand(),
+    #         ),
+    #         ParallelRaceGroup(HighGoalFenderCommand(), WaitCommand(2)),
+    #     )
 
     # def test(self):
     #     self.addCommands(
@@ -208,7 +208,49 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #         # FunnyTurnCommand(90)
     #     )
 
-    def tweeBall0(self):
+    def twoBallSteal(self):
+        speed = 30000
+        acc = 16000
+
+        self.addCommands(
+            ResetAutoStateCommand(angle=0),
+            ParallelRaceGroup(
+                HighGoalSpinupCommand(),
+                IntakeBallsCommandGroup(),
+                SequentialCommandGroup(
+                    FunnyMoveCommand(1.2, angle=12, torySlow=speed, toryAcc=acc),
+                    FunnyTurnCommand(-13),
+                ),
+            ),
+            ParallelRaceGroup(
+                HighGoalShootCommand(),
+                WaitCommand(2.7),
+                IntakeCommand(),
+            ),
+            FunnyTurnCommand(20),
+            ParallelRaceGroup(
+                IntakeBallsCommandGroup(),
+                SequentialCommandGroup(
+                    FunnyMoveCommand(1.8, angle=-95, torySlow=speed, toryAcc=acc),
+                    WaitCommand(0.4),
+                ),
+            ),
+            FunnyTurnCommand(-110, tolerance=10),
+            ParallelRaceGroup(
+                IntakeBallsCommandGroup(),
+                SequentialCommandGroup(
+                    FunnyMoveCommand(4.2, angle=0, torySlow=speed, toryAcc=acc),
+                    WaitCommand(2),
+                ),
+            ),
+        )
+
+    def doNothing(self):
+        self.addCommands(
+            ResetAutoStateCommand(angle=0),
+        )
+
+    def fiveBall0(self):
         speed = 30000
         acc = 16000
 
@@ -232,11 +274,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 FunnyTurnCommand(60),
                 HighGoalSpinupCommand(),
             ),
-            # ParallelRaceGroup(
-            #     LimelightAngleLockCommand(),
-            #     WaitCommand(0.5),
-            #     SetInitialHoodAngleCommand(),
-            # ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
@@ -270,45 +307,45 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
         )
 
-    def fourBallStraightUp(self):
-        self.addCommands(
-            ResetAutoStateCommand(angle=0),
-            ParallelRaceGroup(
-                IntakeBallsCommandGroup(),
-                SequentialCommandGroup(
-                    FunnyMoveCommand(1.6, angle=-15, torySlow=30000, toryAcc=19000),
-                ),
-                SetInitialHoodAngleCommand(),
-            ),
-            ParallelRaceGroup(
-                IntakeBallsCommandGroup(),
-                LimelightAngleLockCommand(),
-                HighGoalShootCommand(),
-                WaitCommand(3.5),
-            ),
-            TurnCommand(math.radians(-22.12)),
-            ParallelRaceGroup(
-                IntakeBallsCommandGroup(),
-                SequentialCommandGroup(
-                    FunnyMoveCommand(3.9, torySlow=30000),
-                    WaitCommand(1.5),
-                    ParallelRaceGroup(
-                        FunnyMoveCommand(-3.2, torySlow=30000),
-                        SetInitialHoodAngleCommand(),
-                    ),
-                ),
-            ),
-            TurnCommand(1.042 / 2),
-            ParallelRaceGroup(
-                LimelightAngleLockCommand(),
-                WaitCommand(0.5),
-                SetInitialHoodAngleCommand(),
-            ),
-            ParallelRaceGroup(
-                HighGoalShootCommand(),
-                WaitCommand(3),
-            ),
-        )
+    # def fourBallStraightUp(self):
+    #     self.addCommands(
+    #         ResetAutoStateCommand(angle=0),
+    #         ParallelRaceGroup(
+    #             IntakeBallsCommandGroup(),
+    #             SequentialCommandGroup(
+    #                 FunnyMoveCommand(1.6, angle=-15, torySlow=30000, toryAcc=19000),
+    #             ),
+    #             SetInitialHoodAngleCommand(),
+    #         ),
+    #         ParallelRaceGroup(
+    #             IntakeBallsCommandGroup(),
+    #             LimelightAngleLockCommand(),
+    #             HighGoalShootCommand(),
+    #             WaitCommand(3.5),
+    #         ),
+    #         TurnCommand(math.radians(-22.12)),
+    #         ParallelRaceGroup(
+    #             IntakeBallsCommandGroup(),
+    #             SequentialCommandGroup(
+    #                 FunnyMoveCommand(3.9, torySlow=30000),
+    #                 WaitCommand(1.5),
+    #                 ParallelRaceGroup(
+    #                     FunnyMoveCommand(-3.2, torySlow=30000),
+    #                     SetInitialHoodAngleCommand(),
+    #                 ),
+    #             ),
+    #         ),
+    #         TurnCommand(1.042 / 2),
+    #         ParallelRaceGroup(
+    #             LimelightAngleLockCommand(),
+    #             WaitCommand(0.5),
+    #             SetInitialHoodAngleCommand(),
+    #         ),
+    #         ParallelRaceGroup(
+    #             HighGoalShootCommand(),
+    #             WaitCommand(3),
+    #         ),
+    #     )
 
     # def fiveBallStraightUp(self):
     #     self.addCommands(

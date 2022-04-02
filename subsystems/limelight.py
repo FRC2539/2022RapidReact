@@ -58,9 +58,9 @@ class Limelight(CougarSystem):
         self.bindVariable("kP", "kP", 0.02)
         self.bindVariable("maxAdjust", "maxAdjust", 0.35)
 
-        self.bindVariable("maxOffsetAngle", "maxOffsetAngle", 5)
+        self.bindVariable("maxOffsetAngle", "maxOffsetAngle", 500)
         self.bindVariable("distanceMult", "distanceMult", 0.25)
-        self.bindVariable("tangentMult", "tangentMult", 0.67)
+        self.bindVariable("tangentMult", "tangentMult", 1)
 
         self.fDistance = 0
 
@@ -249,10 +249,7 @@ class Limelight(CougarSystem):
 
         Note: Best used when the limelight moves with a shooter or mechanism.
         """
-        return (
-            abs(self.getY()) < self.aimedDeadband
-            and abs(self.getX()) < self.aimedDeadband
-        )
+        return abs(self.getX()) < (self.aimedThreshold + 1.4)
 
     def calculateFutureForAim(self):
         [vx, vy] = robot.drivetrain.getCurrentRelativeVector()
@@ -283,21 +280,39 @@ class Limelight(CougarSystem):
         [tangentVelocity, fTheta] = self.calculateFutureForAim()
 
         # targetTheta = math.radians(self.maxOffsetAngle) * (self.fDistance * self.distanceMult) * (tangentVelocity * self.tangentMult) * -1
-        
+
         # return self.periodToSecond(fTheta - targetTheta) * -1
 
-        targetTheta = math.radians(self.maxOffsetAngle) * (self.fDistance * self.distanceMult) * (tangentVelocity * self.tangentMult)
+        targetTheta = (
+            math.radians(self.maxOffsetAngle)
+            * (self.fDistance * self.distanceMult)
+            * (tangentVelocity * self.tangentMult)
+        )
 
-        return self.periodToSecond(math.copysign(abs(fTheta - targetTheta), targetTheta))
+        # turnVelocity = self.periodToSecond(
+        #     math.copysign(abs(fTheta - targetTheta), targetTheta)
+        # )
+
+        # turnVelocity = math.copysign(abs(fTheta - targetTheta), targetTheta)
+
+        # self.sendMessage(f"Target Theta: {targetTheta}")
+
+        return targetTheta
 
     def secondToPeriod(self, velocity):
         return velocity * 0.02
-    
+
     def periodToSecond(self, velocity):
         return velocity / 0.02
 
     def calculateTurnPercent(self):
+        # targetTheta = math.degrees(self.calculateTurnVelocity())
+
         xOffset = self.getX()  # Returns an angle
+
+        # self.sendMessage(f"{targetTheta} {xOffset}")
+
+        # distance = xOffset if targetTheta == 0 else targetTheta - xOffset
 
         if abs(xOffset) < self.aimedThreshold:
             return 0

@@ -9,7 +9,7 @@ import math
 class FunnyTurnCommand(CommandBase):
     """Allows autonomous turning using the drive base encoders."""
 
-    def __init__(self, degrees, tolerance=3):
+    def __init__(self, degrees, tolerance=5):
         super().__init__()
 
         self.degrees = degrees

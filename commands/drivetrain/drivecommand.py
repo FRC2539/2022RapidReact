@@ -49,14 +49,25 @@ class DriveCommand(CommandBase):
 
         # Determine the rotation value (-1 to 1)
         # Note: the method used depends on if the limelight lock is enabled
-        rotate = (
-            robot.limelight.calculateTurnPercent()
-            if robot.drivetrain.isLimelightLockEnabled()
-            else logicalaxes.rotate.get()
-        )
+        # rotate = (
+
+        #     if robot.drivetrain.isLimelightLockEnabled()
+        #     else
+        # )
 
         # x - forward and backward axis (these axes are relative to the field)
         # y - side to side axis
         # rotate - counterclockwise rotation is positive
 
-        robot.drivetrain.move(x, logicalaxes.strafe.get(), rotate)
+        if robot.drivetrain.isLimelightLockEnabled():
+            robot.drivetrain.move(
+                x,
+                logicalaxes.strafe.get(),
+                robot.limelight.calculateTurnPercent(),  # robot.limelight.calculateTurnVelocity()
+            )  # robot.limelight.calculateTurnPercent())
+            if robot.limelight.isAimed():
+                robot.lights.solidGreen()
+            else:
+                robot.lights.showTeamColor()
+        else:
+            robot.drivetrain.move(x, logicalaxes.strafe.get(), logicalaxes.rotate.get())

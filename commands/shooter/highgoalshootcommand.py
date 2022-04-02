@@ -3,6 +3,7 @@ import math
 
 import robot
 
+
 class HighGoalShootCommand(BaseShootCommand):
     def __init__(self):
         super().__init__()
@@ -14,10 +15,13 @@ class HighGoalShootCommand(BaseShootCommand):
         self.setFarHoodPosition()
 
     def execute(self):
-        distance = (
-            robot.limelight.getDistance()
-            - self.startDistance
+        currentDistance = (
+            robot.limelight.fDistance
+            if robot.drivetrain.isLimelightLockEnabled()
+            else robot.limelight.getDistance()
         )
+
+        distance = currentDistance - self.startDistance
 
         # Calculate new rpm and hood values based on the current distance
         [rpm1, rpm2] = robot.shooter.calculateRPMsFromDistance(distance)
@@ -25,4 +29,5 @@ class HighGoalShootCommand(BaseShootCommand):
         self.setRPMs(rpm1, rpm2)
 
         # Run core class methods
-        self.shootIfShooterAtSpeed()
+        if robot.limelight.isVisionTargetDetected():
+            self.shootIfShooterAtSpeed()

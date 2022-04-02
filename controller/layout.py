@@ -127,6 +127,7 @@ def init():
     # )
 
     driveControllerTwo.Trigger.whileHeld(LowGoalShootCommand())
+    # driveControllerTwo.Trigger.whileHeld(HighGoalShootCommand())
 
     # driveControllerTwo.LeftTopMiddle.whenPressed(MoveForwardCommand(3))
     driveControllerTwo.LeftBottomLeft.whenPressed(EnableManualModeCommand())
