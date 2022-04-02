@@ -263,7 +263,7 @@ class Limelight(CougarSystem):
 
         hubX, hubY = self.currentDistance * math.cos(
             hubTheta
-        ) + self.currentDistance * math.sin(hubTheta)
+        ), self.currentDistance * math.sin(hubTheta)
 
         tangentTheta = math.atan2(hubY, hubX) + math.pi / 2
 
@@ -282,9 +282,13 @@ class Limelight(CougarSystem):
     def calculateTurnVelocity(self):
         [tangentVelocity, fTheta] = self.calculateFutureForAim()
 
-        targetTheta = math.radians(self.maxOffsetAngle) * (self.fDistance * self.distanceMult) * (tangentVelocity * self.tangentMult) * -1
+        # targetTheta = math.radians(self.maxOffsetAngle) * (self.fDistance * self.distanceMult) * (tangentVelocity * self.tangentMult) * -1
         
-        return self.periodToSecond(fTheta - targetTheta) * -1
+        # return self.periodToSecond(fTheta - targetTheta) * -1
+
+        targetTheta = math.radians(self.maxOffsetAngle) * (self.fDistance * self.distanceMult) * (tangentVelocity * self.tangentMult)
+
+        return self.periodToSecond(math.copysign(abs(fTheta - targetTheta), targetTheta))
 
     def secondToPeriod(self, velocity):
         return velocity * 0.02
