@@ -23,6 +23,7 @@ class BaseShootCommand(CommandBase):
         robot.shooter.stopShooter()
         robot.ballsystem.stopConveyor()
         robot.ballsystem.stopChamber()
+        robot.drivetrain.disableShootMode()
 
     def configureLimelightPipeline(self):
         robot.limelight.setPipeline(1)

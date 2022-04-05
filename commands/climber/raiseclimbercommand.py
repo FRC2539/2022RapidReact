@@ -15,7 +15,7 @@ class RaiseClimberCommand(CommandBase):
         self.addRequirements(robot.climber)
 
     def execute(self):
-        robot.climber.raiseClimber()
+        robot.climber.raiseClimberRamp()
 
     def end(self, interrupted):
         robot.climber.stopClimber()

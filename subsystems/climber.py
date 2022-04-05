@@ -29,7 +29,8 @@ class Climber(CougarSystem):
         # self.speed = constants.climber.speed
         self.bindVariable("speed", "speed", 1)
         self.bindVariable("upperLimit", "upperLimit", 224000)
-        self.bindVariable("lowerLimit", "lowerLimit", 18000)
+        self.bindVariable("lowerLimit", "lowerLimit", 16500)
+        self.bindVariable("lowerLimitRampEnd", "lowerLimitRampEnd", 20500)
 
         # Climber limits.
         # self.upperLimit = constants.climber.upperLimit
@@ -54,6 +55,24 @@ class Climber(CougarSystem):
             self.climberMotor.set(self.speed)
         else:
             self.stopClimber()
+
+    def raiseClimberRamp(self):
+        """
+        Raises the climber using the climber motor.
+        """
+        if not self.atUpperLimit():
+            self.climberMotor.set(self.getRampSpeed())
+        else:
+            self.stopClimber()
+
+    def getRampSpeed(self):
+        speed = min(
+            (self.getPosition() - self.lowerLimit)
+            / (self.lowerLimitRampEnd - self.lowerLimit),
+            1,
+        )
+
+        return max(0.5, speed)
 
     def lowerClimber(self):
         """

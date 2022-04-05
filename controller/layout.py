@@ -148,8 +148,9 @@ def init():
     # componentController.Back.whenPressed(ResetCommand())
     componentController.Back.whileHeld(RejectCommand())
 
-    componentController.LeftTrigger.whileHeld(HighFenderSpinupCommand())
-    componentController.LeftBumper.whileHeld(LowFenderSpinupCommand())
+    # componentController.LeftTrigger.whileHeld(HighFenderSpinupCommand())
+    componentController.LeftTrigger.whileHeld(EnableLimelightLockCommand())
+    # componentController.LeftBumper.whileHeld(LowFenderSpinupCommand())
     # componentController.LeftTrigger.whenPressed(MoveLeftOffsetCommand())
     # componentController.LeftBumper.whenPressed(MoveRightOffsetCommand())
     # componentController.RightTrigger.whileHeld(HighGoalShootCommand())

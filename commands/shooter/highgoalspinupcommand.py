@@ -13,12 +13,10 @@ class HighGoalSpinupCommand(BaseShootCommand):
     def initialize(self):
         self.setFarHoodPosition()
         self.resetShooterAtRPM()
+        robot.drivetrain.enableShootMode()
 
     def execute(self):
-        distance = (
-            robot.limelight.getDistance()
-            - self.startDistance
-        )
+        distance = robot.limelight.getDistance() - self.startDistance
 
         # Calculate new rpm and hood values based on the current distance
         [rpm1, rpm2] = robot.shooter.calculateRPMsFromDistance(distance)

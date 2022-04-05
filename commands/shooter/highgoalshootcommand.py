@@ -13,13 +13,10 @@ class HighGoalShootCommand(BaseShootCommand):
     def initialize(self):
         self.resetShooterAtRPM()
         self.setFarHoodPosition()
+        robot.drivetrain.enableShootMode()
 
     def execute(self):
-        currentDistance = (
-            robot.limelight.fDistance
-            if robot.drivetrain.isLimelightLockEnabled()
-            else robot.limelight.getDistance()
-        )
+        currentDistance = robot.limelight.getDistance()
 
         distance = currentDistance - self.startDistance
 

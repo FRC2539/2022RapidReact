@@ -254,13 +254,15 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         speed = 30000
         acc = 16000
 
+        # go further at station and shoot from further away on last
+
         self.addCommands(
             ResetAutoStateCommand(angle=0),
             ParallelRaceGroup(
                 HighGoalSpinupCommand(),
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(1.2, angle=15, torySlow=speed, toryAcc=acc),
+                    FunnyMoveCommand(1.22, angle=15, torySlow=speed, toryAcc=acc),
                 ),
             ),
             ParallelRaceGroup(
@@ -290,13 +292,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(4, angle=-28, torySlow=speed, toryAcc=acc),
+                    FunnyMoveCommand(4, angle=-34, torySlow=speed, toryAcc=acc),
                     WaitCommand(0.5),
                 ),
             ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
-                FunnyMoveCommand(-2.9, angle=-38, torySlow=speed, toryAcc=acc),
+                FunnyMoveCommand(-2.9, angle=-42, torySlow=speed, toryAcc=acc),
                 HighGoalSpinupCommand(),
             ),
             ParallelRaceGroup(

@@ -141,6 +141,8 @@ class SwerveDrive(BaseDrive):
         # State variable for the drive command
         self.limelightLock = False  # Rotation lock towards the limelight target
 
+        self.shootMode = False
+
         self.resetGyro()
         self.resetPoseEstimate()
 
@@ -310,6 +312,15 @@ class SwerveDrive(BaseDrive):
 
     def isLimelightLockEnabled(self):
         return self.limelightLock
+
+    def enableShootMode(self):
+        self.shootMode = True
+
+    def disableShootMode(self):
+        self.shootMode = False
+
+    def isInShootMode(self):
+        return self.shootMode
 
     def debugPrints(self):
         print("-----------------")
@@ -493,11 +504,13 @@ class SwerveDrive(BaseDrive):
         self.setChassisSpeeds(rawRotateSpeeds)
 
     def convertControllerToChassisSpeeds(self, x, y, rotate):
+        speedLimitModifier = 0.5 if self.isInShootMode() else 1
+
         # Convert the percent outputs from the joysticks
         # to meters per second and radians per second
         vx, vy, omega = (
-            x * self.speedLimit,
-            y * self.speedLimit,
+            x * self.speedLimit * speedLimitModifier,
+            y * self.speedLimit * speedLimitModifier,
             rotate * self.angularSpeedLimit,
         )
 

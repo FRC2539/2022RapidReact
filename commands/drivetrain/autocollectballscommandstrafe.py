@@ -21,7 +21,8 @@ class AutoCollectBallsCommand(CommandBase):
         self.pickupTwo = pickupTwo
 
         # sets the speed the robot will move forwards
-        self.maxLinearSpeed = constants.drivetrain.speedLimit / 4 * (2)
+        # self.maxLinearSpeed = constants.drivetrain.speedLimit / 4 * (2)
+        self.maxLinearSpeed = constants.drivetrain.speedLimit / 3
 
         self.pickupSpeed = self.maxLinearSpeed / 2
 
@@ -49,6 +50,9 @@ class AutoCollectBallsCommand(CommandBase):
         # robot.ml.setFilterColor(self.allianceToRawColor(robot.ml.getTargetColor()))
 
     def execute(self):
+        if self.ballInChamber and self.ballInConveyor:
+            return
+
         self.blinkBallColor()
 
         robot.drivetrain.setChassisSpeeds(
@@ -122,7 +126,7 @@ class AutoCollectBallsCommand(CommandBase):
 
         # keeps the velocity zero if the robot is not pointing close enough to the ball
         if abs(xOffset) >= self.movingRadianTolerance:
-            velocity = self.maxLinearSpeed * xOffset
+            velocity = (self.maxLinearSpeed * 0.8) * xOffset
 
         return velocity
 
