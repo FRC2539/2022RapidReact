@@ -13,12 +13,13 @@ import wpilib
 class AutoCollectBallsCommand(CommandBase):
     """Turns towards ball and then moves at it. The intake is running during the entire command."""
 
-    def __init__(self, endOnBallPickup=True, pickupTwo=True):
+    def __init__(self, endOnBallPickup=True, pickupTwo=True, autonomous=False):
         super().__init__()
         self.addRequirements(robot.drivetrain)
 
         self.endOnBallPickup = endOnBallPickup
         self.pickupTwo = pickupTwo
+        self.autonomous = autonomous
 
         # sets the speed the robot will move forwards
         # self.maxLinearSpeed = constants.drivetrain.speedLimit / 4 * (2)
@@ -50,7 +51,10 @@ class AutoCollectBallsCommand(CommandBase):
         # robot.ml.setFilterColor(self.allianceToRawColor(robot.ml.getTargetColor()))
 
     def execute(self):
-        if self.ballInChamber and self.ballInConveyor:
+        if (
+            robot.ballsystem.isConveyorBallPresent()
+            and robot.ballsystem.isChamberBallPresent()
+        ):
             return
 
         self.blinkBallColor()
@@ -67,7 +71,7 @@ class AutoCollectBallsCommand(CommandBase):
         conveyorBall = robot.ballsystem.isConveyorBallPresent()
         chamberBall = robot.ballsystem.isChamberBallPresent()
 
-        if not self.endOnBallPickup:
+        if not self.endOnBallPickup or not self.autonomous:
             return False
 
         elif not self.pickupTwo:
@@ -126,7 +130,7 @@ class AutoCollectBallsCommand(CommandBase):
 
         # keeps the velocity zero if the robot is not pointing close enough to the ball
         if abs(xOffset) >= self.movingRadianTolerance:
-            velocity = (self.maxLinearSpeed * 0.8) * xOffset
+            velocity = (self.maxLinearSpeed * 0.55) * xOffset
 
         return velocity
 

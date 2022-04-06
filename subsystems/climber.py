@@ -27,10 +27,10 @@ class Climber(CougarSystem):
 
         # Standard speed of the climber, up and down.
         # self.speed = constants.climber.speed
-        self.bindVariable("speed", "speed", 1)
+        self.bindVariable("speed", "speed", 0.87)
         self.bindVariable("upperLimit", "upperLimit", 224000)
-        self.bindVariable("lowerLimit", "lowerLimit", 16500)
-        self.bindVariable("lowerLimitRampEnd", "lowerLimitRampEnd", 20500)
+        self.bindVariable("lowerLimit", "lowerLimit", 9001)
+        self.bindVariable("lowerLimitRampEnd", "lowerLimitRampEnd", 27500)
 
         # Climber limits.
         # self.upperLimit = constants.climber.upperLimit

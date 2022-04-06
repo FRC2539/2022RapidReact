@@ -262,7 +262,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 HighGoalSpinupCommand(),
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(1.22, angle=15, torySlow=speed, toryAcc=acc),
+                    FunnyMoveCommand(1.23, angle=15, torySlow=speed, toryAcc=acc),
                 ),
             ),
             ParallelRaceGroup(
@@ -273,7 +273,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 FunnyMoveCommand(2.9, angle=-134, torySlow=speed, toryAcc=acc),
             ),
             ParallelRaceGroup(
-                FunnyTurnCommand(60),
+                FunnyTurnCommand(63),  # 60
                 HighGoalSpinupCommand(),
             ),
             ParallelRaceGroup(
@@ -287,18 +287,18 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 HighGoalShootCommand(),
                 WaitCommand(1.6),
                 IntakeCommand(),
-                LimelightAngleLockCommand(),
+                # LimelightAngleLockCommand(),
             ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(4, angle=-34, torySlow=speed, toryAcc=acc),
+                    FunnyMoveCommand(4.2, angle=-34, torySlow=speed, toryAcc=acc),
                     WaitCommand(0.5),
                 ),
             ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
-                FunnyMoveCommand(-2.9, angle=-42, torySlow=speed, toryAcc=acc),
+                FunnyMoveCommand(-2.9, angle=-47, torySlow=speed, toryAcc=acc),
                 HighGoalSpinupCommand(),
             ),
             ParallelRaceGroup(
