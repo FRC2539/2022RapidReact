@@ -1,4 +1,5 @@
 from commands2 import ParallelCommandGroup
+from commands.drivetrain.setintakespeedlimitcommand import SetIntakeSpeedLimitCommand
 
 from commands.intake.intakecommand import IntakeCommand
 
@@ -14,6 +15,5 @@ class IntakeBallsCommandGroup(ParallelCommandGroup):
         super().__init__()
 
         self.addCommands(
-            IntakeCommand(),
-            ForwardBallSystemCommand(),
+            IntakeCommand(), ForwardBallSystemCommand(), SetIntakeSpeedLimitCommand()
         )

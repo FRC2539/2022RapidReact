@@ -14,6 +14,7 @@ class HighGoalShootCommand(BaseShootCommand):
         self.resetShooterAtRPM()
         self.setFarHoodPosition()
         robot.drivetrain.enableShootMode()
+        robot.limelight.takeSnapshots()
 
     def execute(self):
         currentDistance = robot.limelight.getDistance()

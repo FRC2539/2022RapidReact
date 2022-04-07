@@ -24,6 +24,7 @@ class BaseShootCommand(CommandBase):
         robot.ballsystem.stopConveyor()
         robot.ballsystem.stopChamber()
         robot.drivetrain.disableShootMode()
+        robot.limelight.stopTakingSnapshots()
 
     def configureLimelightPipeline(self):
         robot.limelight.setPipeline(1)

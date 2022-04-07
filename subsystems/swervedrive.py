@@ -67,6 +67,12 @@ class SwerveDrive(BaseDrive):
             constants.drivetrain.speedLimit
         )  # Override the basedrive without editing the file.
 
+        self.bindVariable(
+            "customSpeedLimit",
+            "customSpeedLimit",
+            constants.drivetrain.customSpeedLimit,
+        )
+
         self.angularSpeedLimit = constants.drivetrain.angularSpeedLimit
 
         # Creates a list of swerve modules.
@@ -76,7 +82,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftDriveID,
                 ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
-                self.speedLimit,
+                constants.drivetrain.speedLimit,
                 299.434,
                 # 321.416,  # -90,  # -255.498047,
                 180,  # Offset basis - used for zeroing CANCoder
@@ -86,7 +92,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontRightDriveID,
                 ports.drivetrain.frontRightTurnID,
                 ports.drivetrain.frontRightCANCoder,
-                self.speedLimit,
+                constants.drivetrain.speedLimit,
                 191.78,
                 # 182.373,  # 15,  # -272.548840625,
                 360,  # Offset basis - used for zeroing CANCoder
@@ -97,7 +103,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backLeftDriveID,
                 ports.drivetrain.backLeftTurnID,
                 ports.drivetrain.backLeftCANCoder,
-                self.speedLimit,
+                constants.drivetrain.speedLimit,
                 20.033,
                 # 349.277,  # 10,  # -40.8692515625,
                 -180,  # Offset basis - used for zeroing CANCoder
@@ -107,7 +113,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backRightDriveID,
                 ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
-                self.speedLimit,
+                constants.drivetrain.speedLimit,
                 84.915,
                 # 4.131,  # 90,  # -128.759766125,
                 -360,  # Offset basis - used for zeroing CANCoder
@@ -289,6 +295,12 @@ class SwerveDrive(BaseDrive):
         self.vy = chassisSpeeds.vy
 
         self.sendMessage(f"vx: {self.vx}, vy: {self.vy}")
+
+    def enableIntakeSpeed(self):
+        self.speedLimit = self.customSpeedLimit
+
+    def disableIntakeSpeed(self):
+        self.speedLimit = constants.drivetrain.speedLimit
 
     def getCurrentRelativeVector(self):
         return [self.vx, self.vy]

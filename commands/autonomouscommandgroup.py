@@ -266,6 +266,23 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
         )
 
+    def oneBall(self):
+        speed = 30000
+        acc = 16000
+
+        self.addCommands(
+            ResetAutoStateCommand(angle=0),
+            ParallelRaceGroup(
+                SequentialCommandGroup(
+                    FunnyMoveCommand(1.3, torySlow=speed, toryAcc=acc),
+                ),
+            ),
+            ParallelRaceGroup(
+                HighGoalShootCommand(),
+                WaitCommand(2.7),
+            ),
+        )
+
     def doNothing(self):
         self.addCommands(
             ResetAutoStateCommand(angle=0),
@@ -284,7 +301,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
                     FunnyMoveCommand(
-                        1.24, angle=17, torySlow=speed, toryAcc=acc
+                        1.24, angle=12, torySlow=speed, toryAcc=acc
                     ),  # 1.23
                 ),
             ),
@@ -315,14 +332,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(4.2, angle=-34, torySlow=speed, toryAcc=acc),
+                    FunnyMoveCommand(4.2, angle=-28, torySlow=speed, toryAcc=acc),
                     WaitCommand(0.5),
                 ),
             ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
-                FunnyMoveCommand(-2.9, angle=-47, torySlow=speed, toryAcc=acc),
-                HighGoalSpinupCommand(),
+                FunnyMoveCommand(-2.9, angle=-44, torySlow=speed, toryAcc=acc),
+                # HighGoalSpinupCommand(),
             ),
             ParallelRaceGroup(
                 HighGoalShootCommand(),
