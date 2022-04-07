@@ -245,6 +245,27 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
         )
 
+    def twoBall(self):
+        speed = 30000
+        acc = 16000
+
+        self.addCommands(
+            ResetAutoStateCommand(angle=0),
+            ParallelRaceGroup(
+                HighGoalSpinupCommand(),
+                IntakeBallsCommandGroup(),
+                SequentialCommandGroup(
+                    FunnyMoveCommand(1.2, angle=12, torySlow=speed, toryAcc=acc),
+                    FunnyTurnCommand(-13),
+                ),
+            ),
+            ParallelRaceGroup(
+                HighGoalShootCommand(),
+                WaitCommand(2.7),
+                IntakeCommand(),
+            ),
+        )
+
     def doNothing(self):
         self.addCommands(
             ResetAutoStateCommand(angle=0),
@@ -259,14 +280,16 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             ResetAutoStateCommand(angle=0),
             ParallelRaceGroup(
-                HighGoalSpinupCommand(),
+                # HighGoalSpinupCommand(),
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(1.23, angle=15, torySlow=speed, toryAcc=acc),
+                    FunnyMoveCommand(
+                        1.24, angle=17, torySlow=speed, toryAcc=acc
+                    ),  # 1.23
                 ),
             ),
             ParallelRaceGroup(
-                HighGoalShootCommand(), WaitCommand(1.25), IntakeCommand()
+                HighGoalShootCommand(), WaitCommand(1.2), IntakeCommand()
             ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
@@ -279,7 +302,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(0.5, torySlow=speed, toryAcc=acc),
+                    FunnyMoveCommand(0.6, torySlow=speed, toryAcc=acc),
                 ),
                 HighGoalSpinupCommand(),
             ),

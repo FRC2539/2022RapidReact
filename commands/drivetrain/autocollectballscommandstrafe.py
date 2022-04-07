@@ -48,7 +48,7 @@ class AutoCollectBallsCommand(CommandBase):
         self.ballInChamber = robot.ballsystem.isChamberBallPresent()
         self.ballInConveyor = robot.ballsystem.isConveyorBallPresent()
 
-        # robot.ml.setFilterColor(self.allianceToRawColor(robot.ml.getTargetColor()))
+        robot.ml.setFilterColor(self.allianceToRawColor(robot.ml.getTargetColor()))
 
     def execute(self):
         if (
