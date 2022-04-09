@@ -45,7 +45,8 @@ class Hood(CougarSystem):
 
         # The percent to run the hood motor at by default.
         # self.speed = constants.hood.percentOutputSpeed
-        self.bindVariable("speed", "Speed Percent", 0.5)
+        # self.bindVariable("speed", "Speed Percent", 0.5)
+        self.speed = 0.5
 
         # Constantly updates the hood's status.
         self.constantlyUpdate("Hood Moving", lambda: self.motor.get() != 0)
@@ -53,18 +54,24 @@ class Hood(CougarSystem):
 
         self.lowGoalAngle = 16  # 10
         # self.highGoalAngle = 13
-        self.bindVariable("highGoalAngle", "High Hood Angle", 13.5)
+        # self.bindVariable("highGoalAngle", "High Hood Angle", 13.5)
+        self.highGoalAngle = 13.5
 
-        self.bindVariable("testAngle", "Test Angle", 12)
+        # self.bindVariable("testAngle", "Test Angle", 12)
+        self.testAngle = 12
 
         self.hoodAngleOffset = 0
         self.hoodAngleStep = 1
 
-        self.bindVariable("startHoodAngle", "Start Hood Angle", 25)
-        self.bindVariable("hoodMultiplier", "Hood Multiplier", 9.3)
+        # self.bindVariable("startHoodAngle", "Start Hood Angle", 25)
+        # self.bindVariable("hoodMultiplier", "Hood Multiplier", 9.3)
+        self.startHoodAngle = 25
+        self.hoodMultiplier = 9.3
 
-        self.bindVariable("kP", "kP", 0.065)
-        self.bindVariable("maxAdjust", "maxAdjust", 0.9)
+        # self.bindVariable("kP", "kP", 0.065)
+        # self.bindVariable("maxAdjust", "maxAdjust", 0.9)
+        self.kP = 0.065
+        self.maxAdjust = 0.9
 
     def periodic(self):
         """

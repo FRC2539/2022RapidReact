@@ -18,9 +18,13 @@ class ML(CougarSystem):
         super().__init__("ML")
         self.nt = NetworkTables.getTable("ML")
 
-        self.bindVariable("turnP", "turn P", 1)
-        self.bindVariable("turnI", "turn I", 0)
-        self.bindVariable("turnD", "turn D", 0)
+        # self.bindVariable("turnP", "turn P", 1)
+        # self.bindVariable("turnI", "turn I", 0)
+        # self.bindVariable("turnD", "turn D", 0)
+        self.turnP = 1
+        self.turnI = 0
+        self.turnD = 0
+
         self.bindVariable("maxVel", "velocity", 1)
         self.bindVariable("maxAcc", "acceleration", 2)
         self.bindVariable("stopSize", "ball stopping size", 11000)

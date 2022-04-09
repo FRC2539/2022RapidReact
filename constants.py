@@ -159,10 +159,10 @@ shooter.gearRatio = 1.5
 limelight.captureLatency = 0.011
 
 limelight.xOffset = 2  # 3.5  # 2.5
-limelight.yOffset = 0
+limelight.yOffset = -0.25
 
 limelight.xOffsetStep = 0.25
-limelight.yOffsetStep = 0.25
+limelight.yOffsetStep = 0.2
 
 limelight.targetHeight = 2.62  # in meters (bottom of tape is 2.58, top is 2.64)
 limelight.limelightHeight = 0.737  # meters (height of limelight camera from the ground)

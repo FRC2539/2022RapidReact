@@ -163,7 +163,7 @@ class SwerveDrive(BaseDrive):
         self.sendOffsets = False
 
         # Sync that value with network tables
-        self.put("sendOffsets", self.sendOffsets)
+        # self.put("sendOffsets", self.sendOffsets)
 
         # self.hPk = constants.drivetrain.hPk
         # self.hIk = constants.drivetrain.hIk
@@ -179,14 +179,21 @@ class SwerveDrive(BaseDrive):
         # xController = PIDController(0.8, 0, 0)
         # yController = PIDController(1.8, 0, 0)
 
-        self.bindVariable("htPk", "htPk", 0.08)
-        self.bindVariable("htIk", "htIk", 0)
-        self.bindVariable("htDk", "htDk", 0)
+        # self.bindVariable("htPk", "htPk", 0.08)
+        # self.bindVariable("htIk", "htIk", 0)
+        # self.bindVariable("htDk", "htDk", 0)
 
-        self.bindVariable("autoAngularSpeedLimit", "autoAngularSpeedLimit", math.pi)
-        self.bindVariable(
-            "autoMaxAngularAcceleration", "autoMaxAngularAcceleration", 0.5 * math.pi
-        )
+        self.htPk = 0.08
+        self.htIk = 0
+        self.htDk = 0
+
+        # self.bindVariable("autoAngularSpeedLimit", "autoAngularSpeedLimit", )
+        # self.bindVariable(
+        #     "autoMaxAngularAcceleration", "autoMaxAngularAcceleration", 0.5 * math.pi
+        # )
+
+        self.autoAngularSpeedLimit = math.pi
+        self.autoMaxAngularAcceleration = 0.5 * math.pi
 
         # Create a theta controller used for autonomous
         thetaController = ProfiledPIDControllerRadians(
@@ -221,8 +228,11 @@ class SwerveDrive(BaseDrive):
             thetaController,
         )
 
-        self.bindVariable("autoSpeedLimit", "autoSpeedLimit", 2)
-        self.bindVariable("maxAcceleration", "maxAcceleration", 1.3)
+        # self.bindVariable("autoSpeedLimit", "autoSpeedLimit", 2)
+        # self.bindVariable("maxAcceleration", "maxAcceleration", 1.3)
+
+        self.autoSpeedLimit = 2
+        self.maxAcceleration = 1.3
 
         self.trajectoryConfig = TrajectoryConfig(
             self.autoSpeedLimit, self.maxAcceleration
@@ -253,7 +263,7 @@ class SwerveDrive(BaseDrive):
 
         # self.constantlyUpdate("Pose", self.getSwervePose)
 
-        self.bindVariable("testAcc", "testAcc", 20000)
+        self.bindVariable("testAcc", "testAcc", 16000)
         self.bindVariable("testSlow", "testSlow", 30000)
 
         self.vx = 0
@@ -276,19 +286,19 @@ class SwerveDrive(BaseDrive):
         self.put("wheelAngles", self.getModuleAngles())
         self.put("wheelSpeeds", self.getSpeeds())
 
-        controllerR = math.sqrt(
-            logicalaxes.forward.get() ** 2 + logicalaxes.strafe.get() ** 2
-        )
+        # controllerR = math.sqrt(
+        #     logicalaxes.forward.get() ** 2 + logicalaxes.strafe.get() ** 2
+        # )
 
-        self.put("joystickPercent", controllerR)
+        # self.put("joystickPercent", controllerR)
         self.put("wheelPercents", self.getPercents())
 
-        self.updateSendOffsetsState()
+        # self.updateSendOffsetsState()
 
         # Send the corrected wheel offsets
         # if that has been indicated in the dashboard
-        if self.sendOffsets:
-            self.put("correctedOffsets", self.getCorrectedModuleOffsets())
+        # if self.sendOffsets:
+        #     self.put("correctedOffsets", self.getCorrectedModuleOffsets())
 
     def updateCurrentSpeeds(self, chassisSpeeds):
         self.vx = chassisSpeeds.vx

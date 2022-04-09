@@ -297,20 +297,24 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             ResetAutoStateCommand(angle=0),
             ParallelRaceGroup(
-                # HighGoalSpinupCommand(),
+                HighGoalSpinupCommand(),
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
                     FunnyMoveCommand(
-                        1.24, angle=12, torySlow=speed, toryAcc=acc
+                        1.15, angle=12, torySlow=speed, toryAcc=acc
                     ),  # 1.23
+                    FunnyMoveCommand(0.2, angle=90, torySlow=speed, toryAcc=acc),
                 ),
             ),
             ParallelRaceGroup(
-                HighGoalShootCommand(), WaitCommand(1.2), IntakeCommand()
+                HighGoalShootCommand(),
+                WaitCommand(1.15),
+                IntakeCommand(),
             ),
+            # FunnyMoveCommand(0.1, angle=-90, torySlow=speed, toryAcc=acc),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
-                FunnyMoveCommand(2.9, angle=-134, torySlow=speed, toryAcc=acc),
+                FunnyMoveCommand(3, angle=-134, torySlow=speed, toryAcc=acc),
             ),
             ParallelRaceGroup(
                 FunnyTurnCommand(63),  # 60
@@ -332,13 +336,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(4.2, angle=-28, torySlow=speed, toryAcc=acc),
+                    FunnyMoveCommand(4.3, angle=-18, torySlow=speed, toryAcc=acc),
                     WaitCommand(0.5),
                 ),
             ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
-                FunnyMoveCommand(-2.9, angle=-44, torySlow=speed, toryAcc=acc),
+                FunnyMoveCommand(-2.6, angle=-47, torySlow=speed, toryAcc=acc),
                 # HighGoalSpinupCommand(),
             ),
             ParallelRaceGroup(
