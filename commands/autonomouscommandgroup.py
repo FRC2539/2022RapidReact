@@ -283,6 +283,24 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
         )
 
+    def oneBallDaisy(self):
+        speed = 30000
+        acc = 16000
+
+        self.addCommands(
+            ResetAutoStateCommand(angle=0),
+            ParallelRaceGroup(
+                SequentialCommandGroup(
+                    FunnyMoveCommand(1.3, torySlow=speed, toryAcc=acc),
+                ),
+            ),
+            ParallelRaceGroup(
+                HighGoalShootCommand(),
+                WaitCommand(1.8),
+            ),
+            FunnyMoveCommand(1.5),
+        )
+
     def doNothing(self):
         self.addCommands(
             ResetAutoStateCommand(angle=0),

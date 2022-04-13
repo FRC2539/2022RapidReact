@@ -8,7 +8,7 @@ class BaseShootCommand(CommandBase):
         super().__init__()
 
         self.addRequirements([robot.shooter, robot.hood])
-        self.shooterRPMTolerance = 60
+        self.shooterRPMTolerance = 40
 
         # These values should be set within the initialize
         # or execute of the child command

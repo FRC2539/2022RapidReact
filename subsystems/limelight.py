@@ -23,7 +23,7 @@ class Limelight(CougarSystem):
         self.setPipeline(constants.limelight.defaultPipeline)
 
         # The deadband for whether we are aimed or not.
-        self.aimedDeadband = 0.25
+        self.aimedDeadband = 0.05
         self.put("aimedDeadband", self.aimedDeadband)
 
         self.currentDistance = 0
@@ -249,7 +249,7 @@ class Limelight(CougarSystem):
 
         Note: Best used when the limelight moves with a shooter or mechanism.
         """
-        return abs(self.getX()) < (self.aimedThreshold + 1.4)
+        return abs(self.getX()) < (self.aimedThreshold - 1.4)
 
     def calculateFutureForAim(self):
         [vx, vy] = robot.drivetrain.getCurrentRelativeVector()

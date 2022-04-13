@@ -31,18 +31,18 @@ class Shooter(CougarSystem):
         self.shooterMotorTwo.setNeutralMode(NeutralMode.Coast)
 
         # Set the PID configuration.
-        self.shooterMotorOne.config_kF(0, 0.05, 0)  # Ben, no FF! -Ben
-        self.shooterMotorOne.config_kP(0, 0.13, 0)
-        self.shooterMotorOne.config_kI(0, 0, 0)
-        self.shooterMotorOne.config_kD(0, 0.05, 0)
-        self.shooterMotorOne.config_IntegralZone(0, 0, 0)
+        self.shooterMotorOne.config_kF(0, 0.045, 0)  # Ben, no FF! -Ben
+        self.shooterMotorOne.config_kP(0, 0.15, 0)
+        self.shooterMotorOne.config_kI(0, 0.001, 0)
+        self.shooterMotorOne.config_kD(0, 0.055, 0)
+        self.shooterMotorOne.config_IntegralZone(0, 100, 0)
 
         # Set the PID configuration.
-        self.shooterMotorTwo.config_kF(0, 0.05, 0)  # Ben, no FF! -Ben
-        self.shooterMotorTwo.config_kP(0, 0.13, 0)
-        self.shooterMotorTwo.config_kI(0, 0, 0)
-        self.shooterMotorTwo.config_kD(0, 0.05, 0)
-        self.shooterMotorTwo.config_IntegralZone(0, 0, 0)
+        self.shooterMotorTwo.config_kF(0, 0.045, 0)  # Ben, no FF! -Ben
+        self.shooterMotorTwo.config_kP(0, 0.15, 0)
+        self.shooterMotorTwo.config_kI(0, 0.001, 0)
+        self.shooterMotorTwo.config_kD(0, 0.055, 0)
+        self.shooterMotorTwo.config_IntegralZone(0, 100, 0)
 
         # Set the second motor to move in the opposite direction of the first.
         self.shooterMotorTwo.setInverted(True)
@@ -83,8 +83,8 @@ class Shooter(CougarSystem):
         self.bindVariable("testRPM2", "Test RPM 2", 1500)
 
         # Configuration for limelight shooting
-        self.bindVariable("startRPM1", "Start RPM1", 2600)  # 2650
-        self.bindVariable("startRPM2", "Start RPM2", 975)
+        self.bindVariable("startRPM1", "Start RPM1", 2150)  # 2650
+        self.bindVariable("startRPM2", "Start RPM2", 1600)
 
         # 3200, 1200
 
