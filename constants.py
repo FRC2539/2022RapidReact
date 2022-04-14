@@ -158,7 +158,7 @@ shooter.gearRatio = 1.5
 # See here for more information: https://docs.limelightvision.io/en/latest/networktables_api.html
 limelight.captureLatency = 0.011
 
-limelight.xOffset = 2  # 3.5  # 2.5
+limelight.xOffset = 0  # 2  # 3.5  # 2.5
 limelight.yOffset = -0.2
 
 limelight.xOffsetStep = 0.25

@@ -50,13 +50,14 @@ class Limelight(CougarSystem):
         self.updateYOffsetStep()
 
         # Limelight aim config
-        self.bindVariable("limelightP", "Aim P", 0.04)
-        self.bindVariable("percentErrorThreshold", "Percent Threshold", 0.14)
-        self.bindVariable("minTurnPercent", "Minimum Turn", 0.14)
-        self.bindVariable("aimedThreshold", "Aimed Threshold", 0.3)
+        self.bindVariable("limelightP", "Aim P", 0.018)
+        # self.bindVariable("percentErrorThreshold", "Percent Threshold", 0.14)
+        self.bindVariable("maxTurnPercent", "Maximum Turn", 0.14)
+        self.bindVariable("minTurnPercent", "Minimum Turn", 0.132)
+        self.bindVariable("aimedThreshold", "Aimed Threshold", 2)
 
-        self.bindVariable("kP", "kP", 0.02)
-        self.bindVariable("maxAdjust", "maxAdjust", 0.35)
+        # self.bindVariable("kP", "kP", 0.02)
+        # self.bindVariable("maxAdjust", "maxAdjust", 0.35)
 
         self.bindVariable("maxOffsetAngle", "maxOffsetAngle", 500)
         self.bindVariable("distanceMult", "distanceMult", 0.25)
@@ -249,7 +250,7 @@ class Limelight(CougarSystem):
 
         Note: Best used when the limelight moves with a shooter or mechanism.
         """
-        return abs(self.getX()) < (self.aimedThreshold - 1.4)
+        return abs(self.getX()) < self.aimedThreshold
 
     def calculateFutureForAim(self):
         [vx, vy] = robot.drivetrain.getCurrentRelativeVector()
@@ -321,11 +322,14 @@ class Limelight(CougarSystem):
             xPercentError = (
                 xOffset * self.limelightP
             )  # This value is found experimentally
+            xPercentError = math.copysign(
+                max(abs(xPercentError), self.minTurnPercent), xOffset
+            )
         except (TypeError):
             xPercentError = 0
             print("\nERROR: Limelight is broken/unplugged \n")
 
-        if abs(xPercentError) > self.percentErrorThreshold:
-            xPercentError = math.copysign(self.minTurnPercent, xPercentError)
+        if abs(xPercentError) > self.maxTurnPercent:
+            xPercentError = math.copysign(self.maxTurnPercent, xPercentError)
 
         return xPercentError

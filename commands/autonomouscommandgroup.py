@@ -306,7 +306,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ResetAutoStateCommand(angle=0),
         )
 
-    def fiveBall0(self):
+    def fiveBall(self):
         speed = 30000
         acc = 16000
 
@@ -368,6 +368,41 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 LimelightAngleLockCommand(),
                 WaitCommand(5),
                 IntakeCommand(),
+            ),
+        )
+
+    def fourBall0(self):
+        speed = 30000
+        acc = 16000
+
+        self.addCommands(
+            ResetAutoStateCommand(angle=0),
+            ParallelRaceGroup(
+                HighGoalSpinupCommand(),
+                IntakeBallsCommandGroup(),
+                SequentialCommandGroup(
+                    FunnyMoveCommand(1.8, angle=-36, torySlow=6000, toryAcc=acc),
+                    FunnyTurnCommand(8),
+                ),
+            ),
+            ParallelRaceGroup(
+                HighGoalShootCommand(),
+                WaitCommand(1.8),
+                IntakeCommand(),
+            ),
+            ParallelRaceGroup(
+                IntakeBallsCommandGroup(),
+                SequentialCommandGroup(
+                    FunnyMoveCommand(4, angle=-38, torySlow=speed, toryAcc=acc),
+                    WaitCommand(0.5),
+                    FunnyMoveCommand(-3.35, angle=-52, torySlow=speed, toryAcc=acc),
+                ),
+            ),
+            FunnyTurnCommand(12),
+            ParallelRaceGroup(
+                HighGoalShootCommand(),
+                # LimelightAngleLockCommand(),
+                WaitCommand(5),
             ),
         )
 
