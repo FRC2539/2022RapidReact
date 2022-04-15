@@ -261,8 +261,8 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
             ParallelRaceGroup(
                 HighGoalShootCommand(),
-                WaitCommand(2.7),
-                IntakeCommand(),
+                WaitCommand(3.5),
+                # IntakeCommand(),
             ),
         )
 
@@ -378,32 +378,34 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             ResetAutoStateCommand(angle=0),
             ParallelRaceGroup(
-                HighGoalSpinupCommand(),
+                # HighGoalSpinupCommand(),
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(1.8, angle=-36, torySlow=6000, toryAcc=acc),
-                    FunnyTurnCommand(8),
+                    FunnyMoveCommand(1.7, angle=-36, torySlow=6000, toryAcc=acc),
+                    FunnyTurnCommand(12),
                 ),
             ),
             ParallelRaceGroup(
                 HighGoalShootCommand(),
                 WaitCommand(1.8),
-                IntakeCommand(),
+                # IntakeCommand(),
             ),
             ParallelRaceGroup(
                 IntakeBallsCommandGroup(),
                 SequentialCommandGroup(
-                    FunnyMoveCommand(4, angle=-38, torySlow=speed, toryAcc=acc),
+                    FunnyMoveCommand(3.95, angle=-38, torySlow=speed, toryAcc=acc),
                     WaitCommand(0.5),
                     FunnyMoveCommand(-3.35, angle=-52, torySlow=speed, toryAcc=acc),
                 ),
             ),
-            FunnyTurnCommand(12),
+            FunnyTurnCommand(9),
             ParallelRaceGroup(
                 HighGoalShootCommand(),
                 # LimelightAngleLockCommand(),
-                WaitCommand(5),
+                WaitCommand(3),
             ),
+            FunnyTurnCommand(-150),
+            ResetAutoStateCommand(),
         )
 
     # def fourBallStraightUp(self):
