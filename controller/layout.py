@@ -74,6 +74,8 @@ from commands.ballsystem.disablemanualmodecommand import DisableManualModeComman
 from commands.shooter.lowfenderspinupcommand import LowFenderSpinupCommand
 from commands.shooter.highfenderspinupcommand import HighFenderSpinupCommand
 
+from commands.climber.lowerclimberrawcommand import LowerClimberRawCommand
+
 import constants
 import robot
 
@@ -130,8 +132,10 @@ def init():
     # driveControllerTwo.Trigger.whileHeld(HighGoalShootCommand())
 
     # driveControllerTwo.LeftTopMiddle.whenPressed(MoveForwardCommand(3))
-    driveControllerTwo.LeftBottomLeft.whenPressed(EnableManualModeCommand())
-    driveControllerTwo.LeftBottomMiddle.whenPressed(DisableManualModeCommand())
+    # driveControllerTwo.LeftBottomLeft.whenPressed(EnableManualModeCommand())
+    # driveControllerTwo.LeftBottomMiddle.whenPressed(DisableManualModeCommand())
+
+    driveControllerTwo.LeftBottomRight.whileHeld(LowerClimberRawCommand())
 
     # driveControllerOne.LeftTopRight.whileHeld()
     driveControllerOne.LeftTopRight.whenPressed(LightsSeizureCommand())
@@ -157,12 +161,15 @@ def init():
     componentController.RightTrigger.whileHeld(HighGoalShootCommand())
     componentController.RightBumper.whileHeld(HighGoalSpinupCommand())
 
-    componentController.A.whenPressed(DecreaseHoodOffsetCommand())
-    # componentController.X.whileHeld(RejectCommand())
-    # componentController.B.whileHeld(RejectCommand())
-    componentController.X.whenPressed(MoveDownOffsetCommand())
-    componentController.B.whenPressed(MoveUpOffsetCommand())
-    componentController.Y.whenPressed(IncreaseHoodOffsetCommand())
+    # componentController.A.whenPressed(MoveLeftOffsetCommand())
+    # componentController.X.whenPressed(MoveDownOffsetCommand())
+    # componentController.B.whenPressed(MoveUpOffsetCommand())
+    # componentController.Y.whenPressed(MoveRightOffsetCommand())
+
+    componentController.A.whenPressed(MoveDownOffsetCommand())
+    componentController.X.whenPressed(MoveLeftOffsetCommand())
+    componentController.B.whenPressed(MoveRightOffsetCommand())
+    componentController.Y.whenPressed(MoveUpOffsetCommand())
 
     componentController.DPadUp.whenPressed(MoveUpOffsetCommand())
     componentController.DPadDown.whenPressed(MoveDownOffsetCommand())

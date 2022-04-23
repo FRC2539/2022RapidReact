@@ -67,24 +67,36 @@ class Shooter(CougarSystem):
 
         # self.highGoalRPM1 = 1000
         # self.highGoalRPM2 = 2500
-        self.bindVariable("highGoalRPM1", "highGoalRPM1", 980)
-        self.bindVariable("highGoalRPM2", "highGoalRPM2", 2480)
+        # self.bindVariable("highGoalRPM1", "highGoalRPM1", 980)
+        # self.bindVariable("highGoalRPM2", "highGoalRPM2", 2480)
+
+        self.highGoalRPM1 = 980
+        self.highGoalRPM2 = 2480
 
         # High goal slightly behind line
         # self.behindLineRPM1 = 2600
         # self.behindLineRPM2 = 900
 
-        self.bindVariable("behindLineRPM1", "behindLineRPM1", 950)
-        self.bindVariable("behindLineRPM2", "behindLineRPM2", 2950)
+        # self.bindVariable("behindLineRPM1", "behindLineRPM1", 950)
+        # self.bindVariable("behindLineRPM2", "behindLineRPM2", 2950)
+
+        self.behindLineRPM1 = 950
+        self.behindLineRPM2 = 2950
 
         self.behindLineAngle = 24
 
-        self.bindVariable("testRPM1", "Test RPM 1", 2500)
-        self.bindVariable("testRPM2", "Test RPM 2", 1500)
+        # self.bindVariable("testRPM1", "Test RPM 1", 2500)
+        # self.bindVariable("testRPM2", "Test RPM 2", 1500)
+
+        self.testRPM1 = 2500
+        self.testRPM2 = 1500
 
         # Configuration for limelight shooting
-        self.bindVariable("startRPM1", "Start RPM1", 2300)  # 2150
-        self.bindVariable("startRPM2", "Start RPM2", 1500)  # 1600
+        # self.bindVariable("startRPM1", "Start RPM1", 2300)  # 2150
+        # self.bindVariable("startRPM2", "Start RPM2", 1500)  # 1600
+
+        self.startRPM1 = 2300
+        self.startRPM2 = 1500
 
         # 3200, 1200
 
@@ -94,18 +106,23 @@ class Shooter(CougarSystem):
         # 3000, 850, 0.8
         # 930, 850 mult
 
-        self.bindVariable(
-            "rpm1Multiplier", "RPM1 Multiplier", 800
-        )  # 350 was working well
-        self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 500)
-        self.bindVariable("startDistance", "Start Distance", 0.8)
+        # self.bindVariable(
+        #     "rpm1Multiplier", "RPM1 Multiplier", 800
+        # )  # 350 was working well
+        # self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 500)
+        # self.bindVariable("startDistance", "Start Distance", 0.8)
+
+        self.rpm1Multiplier = 800
+        self.rpm2Multiplier = 500
+        self.startDistance = 0.8
 
         # Constantly updates the hood's status.
-        self.constantlyUpdate(
-            "Shooter Running", lambda: self.shooterMotorOne.getMotorOutputPercent() != 0
-        )
-        self.constantlyUpdate("Shooter RPM", lambda: float(self.getRPM1()))
-        self.constantlyUpdate("Shooter RPM2", lambda: float(self.getRPM2()))
+        # self.constantlyUpdate(
+        #     "Shooter Running", lambda: self.shooterMotorOne.getMotorOutputPercent() != 0
+        # )
+
+        # self.constantlyUpdate("Shooter RPM", lambda: float(self.getRPM1()))
+        # self.constantlyUpdate("Shooter RPM2", lambda: float(self.getRPM2()))
 
     def periodic(self):
         """

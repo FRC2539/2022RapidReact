@@ -27,18 +27,23 @@ class Climber(CougarSystem):
 
         # Standard speed of the climber, up and down.
         # self.speed = constants.climber.speed
-        self.bindVariable("speed", "speed", 0.87)
-        self.bindVariable("upperLimit", "upperLimit", 224000)
-        self.bindVariable("lowerLimit", "lowerLimit", 9001)
-        self.bindVariable("lowerLimitRampEnd", "lowerLimitRampEnd", 27500)
+        # self.bindVariable("speed", "speed", 0.87)
+        # self.bindVariable("upperLimit", "upperLimit", 224000)
+        # self.bindVariable("lowerLimit", "lowerLimit", 8500)
+        # self.bindVariable("lowerLimitRampEnd", "lowerLimitRampEnd", 27500)
+
+        self.speed = 0.92
+        self.upperLimit = 224000
+        self.lowerLimit = 8200
+        self.lowerLimitRampEnd = 27500
 
         # Climber limits.
         # self.upperLimit = constants.climber.upperLimit
         # self.lowerLimit = constants.climber.lowerLimit
 
         # Send the climber position to networktables
-        self.constantlyUpdate("Climber Position", self.getPosition)
-        self.constantlyUpdate("Climber Running", lambda: self.climberMotor.get() != 0)
+        # self.constantlyUpdate("Climber Position", self.getPosition)
+        # self.constantlyUpdate("Climber Running", lambda: self.climberMotor.get() != 0)
 
     def periodic(self):
         """
@@ -82,6 +87,12 @@ class Climber(CougarSystem):
             self.climberMotor.set(-self.speed)
         else:
             self.stopClimber()
+
+    def lowerClimberRaw(self):
+        """
+        Lowers the climber using the climber motor.
+        """
+        self.climberMotor.set(-self.speed)
 
     def stopClimber(self):
         """

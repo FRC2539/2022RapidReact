@@ -4,6 +4,7 @@ import ports
 
 from ctre import WPI_TalonSRX, NeutralMode, ControlMode
 
+
 class Intake(CougarSystem):
     """Controls the intake."""
 
@@ -16,7 +17,9 @@ class Intake(CougarSystem):
         self.motor.setInverted(True)
 
         # self.speed = 1
-        self.bindVariable("speed", "Intake Speed", 1.0)
+        # self.bindVariable("speed", "Intake Speed", 1.0)
+
+        self.speed = 1
 
     def periodic(self):
         """

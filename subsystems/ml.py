@@ -25,9 +25,13 @@ class ML(CougarSystem):
         self.turnI = 0
         self.turnD = 0
 
-        self.bindVariable("maxVel", "velocity", 1)
-        self.bindVariable("maxAcc", "acceleration", 2)
-        self.bindVariable("stopSize", "ball stopping size", 11000)
+        self.maxVel = 1
+        self.maxAcc = 2
+        self.stopSize = 11000
+
+        # self.bindVariable("maxVel", "velocity", 1)
+        # self.bindVariable("maxAcc", "acceleration", 2)
+        # self.bindVariable("stopSize", "ball stopping size", 11000)
         # self.driveTable = NetworkTables.getTable("DriveTrain")
 
     def periodic(self):
