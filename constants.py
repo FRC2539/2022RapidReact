@@ -159,7 +159,7 @@ shooter.gearRatio = 1.5
 limelight.captureLatency = 0.011
 
 limelight.xOffset = 0.2  # 3.5  # 2.5
-limelight.yOffset = 1.8
+limelight.yOffset = 1.6
 
 limelight.xOffsetStep = 0.2
 limelight.yOffsetStep = 0.2

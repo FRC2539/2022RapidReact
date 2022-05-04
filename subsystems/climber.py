@@ -31,6 +31,15 @@ class Climber(CougarSystem):
         self.bindVariable("upperLimit", "upperLimit", 224000)
         self.bindVariable("lowerLimit", "lowerLimit", 8000)
         self.bindVariable("lowerLimitRampEnd", "lowerLimitRampEnd", 27500)
+        # self.bindVariable("speed", "speed", 0.87)
+        # self.bindVariable("upperLimit", "upperLimit", 224000)
+        # self.bindVariable("lowerLimit", "lowerLimit", 8500)
+        # self.bindVariable("lowerLimitRampEnd", "lowerLimitRampEnd", 27500)
+
+        self.speed = 0.92
+        self.upperLimit = 224000
+        self.lowerLimit = 8200
+        self.lowerLimitRampEnd = 27500
 
         # self.speed = 0.95
         # self.upperLimit = 224000

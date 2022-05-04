@@ -276,7 +276,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ResetAutoStateCommand(angle=0),
             ParallelRaceGroup(
                 SequentialCommandGroup(
+<<<<<<< HEAD
                     FunnyMoveCommand(1.6, torySlow=speed, toryAcc=acc),
+=======
+                    FunnyMoveCommand(1.5, torySlow=speed, toryAcc=acc),
+>>>>>>> 2443518512d7d83d884726f75a8bff3162414eeb
                 ),
             ),
             ParallelRaceGroup(
