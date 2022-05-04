@@ -49,8 +49,8 @@ class Hood(CougarSystem):
         self.speed = 0.5
 
         # Constantly updates the hood's status.
-        self.constantlyUpdate("Hood Moving", lambda: self.motor.get() != 0)
-        self.constantlyUpdate("Hood Position", self.getPosition)
+        # self.constantlyUpdate("Hood Moving", lambda: self.motor.get() != 0)
+        # self.constantlyUpdate("Hood Position", self.getPosition)
 
         self.lowGoalAngle = 16  # 10
         # self.highGoalAngle = 13

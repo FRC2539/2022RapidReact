@@ -50,18 +50,29 @@ class Limelight(CougarSystem):
         self.updateYOffsetStep()
 
         # Limelight aim config
-        self.bindVariable("limelightP", "Aim P", 0.018)
+        # self.bindVariable("limelightP", "Aim P", 0.018)
+
+        self.limelightP = 0.018
+
         # self.bindVariable("percentErrorThreshold", "Percent Threshold", 0.14)
-        self.bindVariable("maxTurnPercent", "Maximum Turn", 0.14)
-        self.bindVariable("minTurnPercent", "Minimum Turn", 0.132)
-        self.bindVariable("aimedThreshold", "Aimed Threshold", 2)
+        # self.bindVariable("maxTurnPercent", "Maximum Turn", 0.14)
+        # self.bindVariable("minTurnPercent", "Minimum Turn", 0.132)
+        # self.bindVariable("aimedThreshold", "Aimed Threshold", 2)
+
+        self.maxTurnPercent = 0.14
+        self.minTurnPercent = 0.132
+        self.aimedThreshold = 2
 
         # self.bindVariable("kP", "kP", 0.02)
         # self.bindVariable("maxAdjust", "maxAdjust", 0.35)
 
-        self.bindVariable("maxOffsetAngle", "maxOffsetAngle", 500)
-        self.bindVariable("distanceMult", "distanceMult", 0.25)
-        self.bindVariable("tangentMult", "tangentMult", 1)
+        # self.bindVariable("maxOffsetAngle", "maxOffsetAngle", 500)
+        # self.bindVariable("distanceMult", "distanceMult", 0.25)
+        # self.bindVariable("tangentMult", "tangentMult", 1)
+
+        self.maxOffsetAngle = 500
+        self.distanceMult = 0.25
+        self.tangentMult = 1
 
         self.fDistance = 0
 
@@ -84,7 +95,7 @@ class Limelight(CougarSystem):
 
         self.updateCurrentDistance()
 
-        self.put("Distance", self.currentDistance)
+        # self.put("Distance", self.currentDistance)
 
     def updateCurrentDistance(self):
         self.currentDistance = self.distanceFilter.calculate(self.calculateDistance())

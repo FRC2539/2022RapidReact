@@ -67,13 +67,17 @@ class SwerveDrive(BaseDrive):
             constants.drivetrain.speedLimit
         )  # Override the basedrive without editing the file.
 
-        self.bindVariable(
-            "customSpeedLimit",
-            "customSpeedLimit",
-            constants.drivetrain.customSpeedLimit,
-        )
+        self.customSpeedLimit = constants.drivetrain.customSpeedLimit
+
+        # self.bindVariable(
+        #     "customSpeedLimit",
+        #     "customSpeedLimit",
+        #     constants.drivetrain.customSpeedLimit,
+        # )
 
         self.angularSpeedLimit = constants.drivetrain.angularSpeedLimit
+
+        self.customAngularSpeedLimit = constants.drivetrain.angularSpeedLimit * (2 / 3)
 
         # Creates a list of swerve modules.
         self.modules = [
@@ -154,8 +158,8 @@ class SwerveDrive(BaseDrive):
 
         # getcontext().prec = constants.drivetrain.decimalPlaces
 
-        self.put("wheelAngles", self.getModuleAngles())
-        self.put("wheelSpeeds", self.getSpeeds())
+        # self.put("wheelAngles", self.getModuleAngles())
+        # self.put("wheelSpeeds", self.getSpeeds())
         # self.put("robotVector", [0, 0])
         # self.put("correctedOffsets", [0])
 
@@ -263,8 +267,8 @@ class SwerveDrive(BaseDrive):
 
         # self.constantlyUpdate("Pose", self.getSwervePose)
 
-        self.bindVariable("testAcc", "testAcc", 16000)
-        self.bindVariable("testSlow", "testSlow", 30000)
+        # self.bindVariable("testAcc", "testAcc", 16000)
+        # self.bindVariable("testSlow", "testSlow", 30000)
 
         self.vx = 0
         self.vy = 0
@@ -283,15 +287,15 @@ class SwerveDrive(BaseDrive):
         # self.sendMessage(self.swervePoseToString())
 
         # Update networktables.
-        self.put("wheelAngles", self.getModuleAngles())
-        self.put("wheelSpeeds", self.getSpeeds())
+        # self.put("wheelAngles", self.getModuleAngles())
+        # self.put("wheelSpeeds", self.getSpeeds())
 
         # controllerR = math.sqrt(
         #     logicalaxes.forward.get() ** 2 + logicalaxes.strafe.get() ** 2
         # )
 
         # self.put("joystickPercent", controllerR)
-        self.put("wheelPercents", self.getPercents())
+        # self.put("wheelPercents", self.getPercents())
 
         # self.updateSendOffsetsState()
 
@@ -308,9 +312,11 @@ class SwerveDrive(BaseDrive):
 
     def enableIntakeSpeed(self):
         self.speedLimit = self.customSpeedLimit
+        self.angularSpeedLimit = self.customAngularSpeedLimit
 
     def disableIntakeSpeed(self):
         self.speedLimit = constants.drivetrain.speedLimit
+        self.angularSpeedLimit = constants.drivetrain.angularSpeedLimit
 
     def getCurrentRelativeVector(self):
         return [self.vx, self.vy]
@@ -494,7 +500,7 @@ class SwerveDrive(BaseDrive):
 
         targetChassisSpeeds = self.convertControllerToChassisSpeeds(x, y, rotate)
 
-        self.updateCurrentSpeeds(targetChassisSpeeds)
+        # self.updateCurrentSpeeds(targetChassisSpeeds)
 
         self.setChassisSpeeds(targetChassisSpeeds)
 

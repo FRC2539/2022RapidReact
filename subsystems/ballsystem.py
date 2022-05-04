@@ -1,8 +1,6 @@
 from .cougarsystem import *
 
-from wpilib import AnalogInput, DriverStation
-
-import wpilib
+from wpilib import AnalogInput, DriverStation, I2C
 
 from rev import ColorSensorV3
 
@@ -28,17 +26,23 @@ class BallSystem(CougarSystem):
         self.configureMotor(self.chamberMotor)
 
         # INFO: Percentages are from 0 - 1, 1 being 100%
-        self.bindVariable("conveyorSpeed", "Conveyor Speed", 1)
-        self.bindVariable("chamberSpeed", "Chamber Speed", 1)
+        # self.bindVariable("conveyorSpeed", "Conveyor Speed", 1)
+        # self.bindVariable("chamberSpeed", "Chamber Speed", 1)
 
-        self.bindVariable("intakeConveyorSpeed", "Conveyor Intake", 1)
-        self.bindVariable("intakeChamberSpeed", "Chamber Intake", 0.9)
+        self.conveyorSpeed = 0.9
+        self.chamberSpeed = 1
+
+        # self.bindVariable("intakeConveyorSpeed", "Conveyor Intake", 1)
+        # self.bindVariable("intakeChamberSpeed", "Chamber Intake", 0.7)
+
+        self.intakeConveyorSpeed = 1
+        self.intakeChamberSpeed = 0.7
 
         # Initialize the sensor that detects the presence of balls in the conveyor area
         self.conveyorSensor = AnalogInput(ports.ballsystem.conveyorSensor)
 
         # Initialize the color sensor in the chamber
-        self.chamberSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
+        self.chamberSensor = ColorSensorV3(I2C.Port.kOnboard)
         self.chamberProximitySensor = AnalogInput(ports.ballsystem.chamberSensor)
 
         self.chamberSensor.configureColorSensor(

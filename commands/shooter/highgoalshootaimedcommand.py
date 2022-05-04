@@ -4,7 +4,7 @@ import math
 import robot
 
 
-class HighGoalShootCommand(BaseShootCommand):
+class HighGoalShootAimedCommand(BaseShootCommand):
     def __init__(self):
         super().__init__()
 
@@ -27,5 +27,5 @@ class HighGoalShootCommand(BaseShootCommand):
         self.setRPMs(rpm1, rpm2)
 
         # Run core class methods
-        if robot.limelight.isVisionTargetDetected():
+        if robot.limelight.isVisionTargetDetected() and robot.limelight.isAimed():
             self.shootIfShooterAtSpeed()

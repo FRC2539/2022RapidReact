@@ -8,7 +8,7 @@ class BaseShootCommand(CommandBase):
         super().__init__()
 
         self.addRequirements([robot.shooter, robot.hood])
-        self.shooterRPMTolerance = 40
+        self.shooterRPMTolerance = 30
 
         # These values should be set within the initialize
         # or execute of the child command
@@ -24,7 +24,7 @@ class BaseShootCommand(CommandBase):
         robot.ballsystem.stopConveyor()
         robot.ballsystem.stopChamber()
         robot.drivetrain.disableShootMode()
-        robot.limelight.stopTakingSnapshots()
+        # robot.limelight.stopTakingSnapshots()
 
     def configureLimelightPipeline(self):
         robot.limelight.setPipeline(1)
