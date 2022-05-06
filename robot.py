@@ -56,12 +56,12 @@ class KryptonBot(TimedCommandRobot):
 
         StartUpCommandGroup().schedule()
 
-        import robot
+        # import robot
 
-        self.addPeriodic(
-            robot.drivetrain.callAutoPeriodicFunctions,
-            constants.drivetrain.autoPeriodicPeriod,
-        )
+        # self.addPeriodic(
+        #     robot.drivetrain.callAutoPeriodicFunctions,
+        #     constants.drivetrain.autoPeriodicPeriod,
+        # )
         pass
 
     def autonomousInit(self):

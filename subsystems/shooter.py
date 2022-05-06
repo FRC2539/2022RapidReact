@@ -92,11 +92,11 @@ class Shooter(CougarSystem):
         self.testRPM2 = 1500
 
         # Configuration for limelight shooting
-        # self.bindVariable("startRPM1", "Start RPM1", 2300)  # 2150
-        # self.bindVariable("startRPM2", "Start RPM2", 1500)  # 1600
+        self.bindVariable("startRPM1", "Start RPM1", 2400)  # 2150
+        self.bindVariable("startRPM2", "Start RPM2", 1800)  # 1600
 
-        self.startRPM1 = 2300
-        self.startRPM2 = 1500
+        # self.startRPM1 = 2300
+        # self.startRPM2 = 1500
 
         # 3200, 1200
 
@@ -106,23 +106,23 @@ class Shooter(CougarSystem):
         # 3000, 850, 0.8
         # 930, 850 mult
 
-        # self.bindVariable(
-        #     "rpm1Multiplier", "RPM1 Multiplier", 800
-        # )  # 350 was working well
-        # self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 500)
-        # self.bindVariable("startDistance", "Start Distance", 0.8)
+        self.bindVariable(
+            "rpm1Multiplier", "RPM1 Multiplier", 800
+        )  # 350 was working well
+        self.bindVariable("rpm2Multiplier", "RPM2 Multiplier", 600)
+        self.bindVariable("startDistance", "Start Distance", 0.8)
 
-        self.rpm1Multiplier = 800
-        self.rpm2Multiplier = 500
-        self.startDistance = 0.8
+        # self.rpm1Multiplier = 800
+        # self.rpm2Multiplier = 500
+        # self.startDistance = 0.8
 
         # Constantly updates the hood's status.
         # self.constantlyUpdate(
         #     "Shooter Running", lambda: self.shooterMotorOne.getMotorOutputPercent() != 0
         # )
 
-        # self.constantlyUpdate("Shooter RPM", lambda: float(self.getRPM1()))
-        # self.constantlyUpdate("Shooter RPM2", lambda: float(self.getRPM2()))
+        self.constantlyUpdate("Shooter RPM", lambda: float(self.getRPM1()))
+        self.constantlyUpdate("Shooter RPM2", lambda: float(self.getRPM2()))
 
     def periodic(self):
         """

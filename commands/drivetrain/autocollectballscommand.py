@@ -61,7 +61,7 @@ class AutoCollectBallsCommand(CommandBase):
 
         self.atBallPickupVar = False
 
-        robot.ml.setFilterColor(self.allianceToRawColor(robot.ml.getTargetColor()))
+        # robot.ml.setFilterColor(self.allianceToRawColor(robot.ml.getTargetColor()))
 
     def execute(self):
         self.blinkBallColor()
